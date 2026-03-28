@@ -15,7 +15,7 @@ public class AdditionalLinkedListExercise1 {
     }
 
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         LinkedList lista = new LinkedList();
 
         lista.add(1);

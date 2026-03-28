@@ -1,6 +1,8 @@
-package org.uade.structure.implementation;
+package org.uade.structure.implementation.dynamic;
 
-public class LinkedListADT implements org.uade.structure.definition.LinkedListADT {
+import org.uade.structure.implementation.Node;
+
+public class DynamicLinkedListADT implements org.uade.structure.definition.LinkedListADT {
     private Node node;
     private int count;
 

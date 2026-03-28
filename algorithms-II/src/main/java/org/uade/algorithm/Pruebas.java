@@ -1,11 +1,11 @@
 package org.uade.algorithm;
 
 
-import org.uade.structure.implementation.LinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
 
 public class Pruebas {
     public static void main(String[] args) {
-        LinkedListADT lista = new LinkedListADT();
+        DynamicLinkedListADT lista = new DynamicLinkedListADT();
         System.out.println("Lista vacia: " + lista);
 
         lista.add(1);
