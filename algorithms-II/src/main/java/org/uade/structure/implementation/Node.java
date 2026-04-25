@@ -1,8 +1,8 @@
 package org.uade.structure.implementation;
 
 public class Node {
-    int value;
-    Node next;
+    private int value;
+    private Node next;
 
     public Node(int value) {
         this.value = value;
