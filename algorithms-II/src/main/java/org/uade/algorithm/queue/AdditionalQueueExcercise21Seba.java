@@ -2,12 +2,11 @@ package org.uade.algorithm.queue;
 
 import org.uade.structure.definition.QueueADT;
 import org.uade.structure.implementation.dynamic.DynamicQueueADT;
-import org.uade.util.QueueADTUtil;
 
 import static org.uade.util.QueueADTUtil.copy;
 
 
-public class AdditionalQueueExcercise21 {
+public class AdditionalQueueExcercise21Seba {
     // Cree e inicialice la cola DADA. Pase el primer elemento de la cola DADA a su última
     // posición, dejando los restantes elementos en el orden original.
 

@@ -7,7 +7,7 @@ import org.uade.structure.implementation.dynamic.DynamicStackADT;
 
 import static org.uade.util.QueueADTUtil.copy;
 
-public class AdditionalQueueExcercise23 {
+public class AdditionalQueueExcercise23Seba {
     //Dada una cola, verifica si es un palíndromo utilizando una pila.
     // Una cola es un palíndromo si se lee igual de izquierda a derecha que de derecha a izquierda.
     // Por ejemplo, C = [1, 2, 3, 2, 1] es un palíndromo

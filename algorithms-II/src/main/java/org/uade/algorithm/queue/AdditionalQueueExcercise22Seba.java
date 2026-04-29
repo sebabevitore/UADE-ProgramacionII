@@ -5,7 +5,7 @@ import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 
 import static org.uade.util.QueueADTUtil.copy;
 
-public class AdditionalQueueExcercise22 {
+public class AdditionalQueueExcercise22Seba {
     // Dado dos colas, escribi un programa que las intercale.
     // Por ejemplo, si tenes la cola A = [1, 3, 5] y la cola B = [2, 4, 6],
     // el resultado debería ser una nueva cola C = [1, 2, 3, 4, 5, 6]
