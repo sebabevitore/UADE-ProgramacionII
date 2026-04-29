@@ -12,8 +12,8 @@ public class AdditionalQueueExcercise24Seba {
     //Cree e inicialice la cola ORIGEN y la pila DESTINO. Cargue la cola ORIGEN y pase
     //los elementos de la cola ORIGEN a la pila DESTINO
 
-    //suponiendo que pasarlos a la cola implica mantener el orden de salida de la cola (FIFO)
-    private static StackADT cargaDePila(QueueADT cola, StackADT pila) {
+    //suponiendo que se quiere pasarlos a la cola pero respetando el orden de salida de la cola (FIFO)
+    private static void cargaDePila(QueueADT cola, StackADT pila) {
         QueueADT copiaCola = copy(cola);
         StackADT pilaAux = new DynamicStackADT();
         //primer pasaje de cola a pila (se invierte la cola)
@@ -26,8 +26,6 @@ public class AdditionalQueueExcercise24Seba {
             pila.add(pilaAux.getElement());
             pilaAux.remove();
         }
-
-        return pila;
     }
 
     public static void main(String[] args) {
