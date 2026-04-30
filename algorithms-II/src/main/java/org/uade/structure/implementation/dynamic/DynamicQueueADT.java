@@ -1,6 +1,6 @@
 package org.uade.structure.implementation.dynamic;
 
-import org.uade.Exception.EmptyException;
+import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.QueueADT;
 import org.uade.structure.implementation.Node;
 
@@ -12,7 +12,7 @@ public class DynamicQueueADT implements QueueADT {
     @Override
     public int getElement() {
         if (isEmpty()) {
-            throw new EmptyException("Queue is empty");
+            throw new EmptyADTException("Queue is empty");
         }
         return this.node.getValue();
     }
@@ -34,7 +34,7 @@ public class DynamicQueueADT implements QueueADT {
     @Override
     public void remove() {
         if(isEmpty()) {
-            throw new EmptyException("Queue is empty");
+            throw new EmptyADTException("Queue is empty");
         }
         this.node = this.node.getNext();
         this.count--;

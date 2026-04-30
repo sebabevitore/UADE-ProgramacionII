@@ -6,6 +6,14 @@ import org.uade.structure.implementation.fixed.StaticPriorityQueueADT;
 
 public class PriorityQueueADTUtil {
 
+    public static void print(PriorityQueueADT queue) {
+        PriorityQueueADT copy = copy(queue);
+        while (!copy.isEmpty()) {
+            System.out.println("Valor: " + copy.getElement() + " - Prioridad: " + copy.getPriority());
+            copy.remove();
+        }
+    }
+
     public static PriorityQueueADT copy(PriorityQueueADT priorityQueue){
         PriorityQueueADT aux = getNewPriorityQueue(priorityQueue);
         PriorityQueueADT copia = getNewPriorityQueue(priorityQueue);

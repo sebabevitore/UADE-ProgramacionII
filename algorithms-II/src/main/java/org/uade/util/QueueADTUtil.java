@@ -33,4 +33,14 @@ public class QueueADTUtil {
         }
     }
 
+    public static void print(QueueADT queue) {
+        QueueADT copy = copy(queue);
+        while (!copy.isEmpty()) {
+            System.out.println(copy.getElement());
+            copy.remove();
+        }
+    }
+
+
+
 }

@@ -1,6 +1,6 @@
 package org.uade.structure.implementation.dynamic;
 
-import org.uade.Exception.EmptyException;
+import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.PriorityQueueADT;
 
 import org.uade.structure.implementation.NodePrioridad;
@@ -13,7 +13,7 @@ public class DynamicPriorityQueueADT implements PriorityQueueADT {
     @Override
     public int getElement() {
         if (isEmpty()) {
-            throw new EmptyException("Queue is empty");
+            throw new EmptyADTException("Queue is empty");
         }
         return node.getValue();
     }
@@ -21,7 +21,7 @@ public class DynamicPriorityQueueADT implements PriorityQueueADT {
     @Override
     public int getPriority() {
         if (isEmpty()) {
-            throw new EmptyException("Queue is empty");
+            throw new EmptyADTException("Queue is empty");
         }
         return node.getPriority();
     }
@@ -54,7 +54,7 @@ public class DynamicPriorityQueueADT implements PriorityQueueADT {
     @Override
     public void remove() {
         if (isEmpty()) {
-            throw new EmptyException("Queue is empty");
+            throw new EmptyADTException("Queue is empty");
         }
         this.node = this.node.getNext();
     }

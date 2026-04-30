@@ -1,7 +1,7 @@
 package org.uade.structure.implementation.fixed;
 
-import org.uade.Exception.EmptyException;
-import org.uade.Exception.OverflowException;
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.StackADT;
 
 public class StaticStackADT implements StackADT {
@@ -20,7 +20,7 @@ public class StaticStackADT implements StackADT {
             return this.array[this.count-1];
         }
         else{
-            throw new EmptyException("Pila vacia");
+            throw new EmptyADTException("Pila vacia");
         }
     }
 
@@ -31,7 +31,7 @@ public class StaticStackADT implements StackADT {
             this.count++;
         }
         else{
-            throw new OverflowException("Pila llena");
+            throw new FullADTException("Pila llena");
         }
 
     }
@@ -39,7 +39,7 @@ public class StaticStackADT implements StackADT {
     @Override
     public void remove() {
         if (this.isEmpty()){
-            throw new EmptyException("Pila vaca");
+            throw new EmptyADTException("Pila vaca");
         }else{
             this.count--;
 

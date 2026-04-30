@@ -1,8 +1,8 @@
 package org.uade.structure.implementation.fixed;
 
 
-import org.uade.Exception.EmptyException;
-import org.uade.Exception.OverflowException;
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.PriorityQueueADT;
 
 
@@ -20,7 +20,7 @@ public class StaticPriorityQueueADT implements PriorityQueueADT {
     @Override
     public int getElement() {
         if(isEmpty()){
-            throw new EmptyException("Priority Queue is empty");
+            throw new EmptyADTException("Priority Queue is empty");
         }
         return values[0];
     }
@@ -28,7 +28,7 @@ public class StaticPriorityQueueADT implements PriorityQueueADT {
     @Override
     public int getPriority() {
         if(isEmpty()){
-            throw new EmptyException("Priority Queue is empty");
+            throw new EmptyADTException("Priority Queue is empty");
         }
         return priorities[0];
     }
@@ -36,7 +36,7 @@ public class StaticPriorityQueueADT implements PriorityQueueADT {
     @Override
     public void add(int value, int priority) {
         if(count == MAX_SIZE){
-            throw new OverflowException("Priority queue is full");
+            throw new FullADTException("Priority queue is full");
         }
 
         int index = 0;
@@ -62,7 +62,7 @@ public class StaticPriorityQueueADT implements PriorityQueueADT {
     @Override
     public void remove() {
         if (isEmpty()) {
-            throw new EmptyException("Priority Queue is empty");
+            throw new EmptyADTException("Priority Queue is empty");
         }
         for (int i = 0; i < count - 1; i++) {
             values[i] = values[i + 1];

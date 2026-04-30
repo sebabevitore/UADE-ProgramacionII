@@ -1,7 +1,7 @@
 package org.uade.structure.implementation.fixed;
 
-import org.uade.Exception.EmptyException;
-import org.uade.Exception.OverflowException;
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.QueueADT;
 
 public class StaticQueueADT implements QueueADT {
@@ -17,7 +17,7 @@ public class StaticQueueADT implements QueueADT {
     @Override
     public int getElement() {
         if(isEmpty()){
-            throw new EmptyException("Queue is empty");
+            throw new EmptyADTException("Queue is empty");
         }
         return array[0];
     }
@@ -25,7 +25,7 @@ public class StaticQueueADT implements QueueADT {
     @Override
     public void add(int value) {
         if(count == size){
-            throw new OverflowException("Queue is full");
+            throw new FullADTException("Queue is full");
         }
         array[count] = value;
         count++;
@@ -34,7 +34,7 @@ public class StaticQueueADT implements QueueADT {
     @Override
     public void remove() {
         if(this.isEmpty()){
-            throw new EmptyException("Queue is empty");
+            throw new EmptyADTException("Queue is empty");
         }
         for (int i = 0; i < this.count - 1; i++) {
             this.array[i] = this.array[i + 1];

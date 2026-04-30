@@ -1,7 +1,7 @@
 package org.uade.structure.implementation.fixed;
 
-import org.uade.Exception.IndexException;
-import org.uade.Exception.OverflowException;
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.LinkedListADT;
 
 public class StaticLinkedListADT implements LinkedListADT {
@@ -17,7 +17,7 @@ public class StaticLinkedListADT implements LinkedListADT {
     @Override
     public void add(int value){
         if(count >= MAX){
-            throw new OverflowException("Lista llena");
+            throw new FullADTException("Lista llena");
         }
         this.array[count] = value;
         count++;
@@ -26,10 +26,10 @@ public class StaticLinkedListADT implements LinkedListADT {
     @Override
     public void insert(int index, int value) {
         if (index < 0 || index > count) {
-            throw new IndexException("Index out of bounds");
+            throw new GenericADTException("Index out of bounds");
         }
         if (count >= MAX){
-            throw new OverflowException("Lista llena");
+            throw new FullADTException("Lista llena");
         }
 
         for (int i = count ; i > index ; i--){
@@ -43,7 +43,7 @@ public class StaticLinkedListADT implements LinkedListADT {
     @Override
     public void remove(int index) {
         if (index < 0 || index >= count) {
-            throw new IndexException("Index out of bounds");
+            throw new GenericADTException("Index out of bounds");
         }
 
         for (int i = index ; i < count-1 ; i++){
@@ -57,7 +57,7 @@ public class StaticLinkedListADT implements LinkedListADT {
     @Override
     public int get(int index) {
         if (index < 0 || index >= count) {
-            throw new IndexException("Index out of bounds");
+            throw new GenericADTException("Index out of bounds");
         }
         return this.array[index];
     }

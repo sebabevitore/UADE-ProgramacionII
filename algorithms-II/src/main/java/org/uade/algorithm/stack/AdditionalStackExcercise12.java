@@ -1,6 +1,6 @@
 package org.uade.algorithm.stack;
 
-import org.uade.Exception.EmptyException;
+import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.StackADT;
 import org.uade.structure.implementation.dynamic.DynamicStackADT;
 
@@ -27,7 +27,7 @@ public class AdditionalStackExcercise12 {
             }
         }
         else{
-            throw new EmptyException("Empty Stack");
+            throw new EmptyADTException("Empty Stack");
         }
     }
 

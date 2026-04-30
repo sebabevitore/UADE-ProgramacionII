@@ -1,6 +1,6 @@
 package org.uade.structure.implementation.dynamic;
 
-import org.uade.Exception.EmptyException;
+import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.StackADT;
 import org.uade.structure.implementation.Node;
 
@@ -9,12 +9,12 @@ public class DynamicStackADT implements StackADT {
     private int count;
 
     @Override
-    public int getElement() throws EmptyException {
+    public int getElement() throws EmptyADTException {
         if(!this.isEmpty()){
             return this.node.getValue();
         }
         else{
-            throw new EmptyException("Empty stack");
+            throw new EmptyADTException("Empty stack");
         }
     }
 
@@ -33,13 +33,13 @@ public class DynamicStackADT implements StackADT {
     }
 
     @Override
-    public void remove() throws EmptyException {
+    public void remove() throws EmptyADTException {
         if(!this.isEmpty()){
             this.node = this.node.getNext();
             this.count--;
         }
         else{
-            throw new EmptyException("Empty stack");
+            throw new EmptyADTException("Empty stack");
         }
 
     }

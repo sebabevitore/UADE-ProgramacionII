@@ -1,6 +1,6 @@
 package org.uade.algorithm.stack;
 
-import org.uade.Exception.EmptyException;
+import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.StackADT;
 import org.uade.structure.implementation.dynamic.DynamicStackADT;
 
@@ -48,7 +48,7 @@ public class AdditionalStackExcercise13 {
 
         }
         else{
-            throw new EmptyException("Pila vacia");
+            throw new EmptyADTException("Pila vacia");
         }
     }
 
@@ -65,7 +65,7 @@ public class AdditionalStackExcercise13 {
             return invertida;
         }
         else{
-            throw new EmptyException("Pila vacia");
+            throw new EmptyADTException("Pila vacia");
         }
 
     }

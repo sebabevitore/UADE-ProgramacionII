@@ -1,6 +1,6 @@
 package org.uade.structure.implementation.dynamic;
 
-import org.uade.Exception.IndexException;
+import org.uade.Exception.GenericADTException;
 import org.uade.structure.implementation.Node;
 
 public class DynamicLinkedListADT implements org.uade.structure.definition.LinkedListADT {
@@ -50,7 +50,7 @@ public class DynamicLinkedListADT implements org.uade.structure.definition.Linke
     }
 
     @Override
-    public void remove(int index) throws IndexException {
+    public void remove(int index) throws GenericADTException {
         if(index< count && index >= 0){
             int auxCount = 0;
             Node aux = this.node;
@@ -72,12 +72,12 @@ public class DynamicLinkedListADT implements org.uade.structure.definition.Linke
 
         }
         else{
-            throw new IndexException("Indice inexistente");
+            throw new GenericADTException("Indice inexistente");
         }
     }
 
     @Override
-    public int get(int index) throws IndexException {
+    public int get(int index) throws GenericADTException {
         int valor;
         if (index < count && index >= 0) {
             int auxCount = 0;
@@ -90,7 +90,7 @@ public class DynamicLinkedListADT implements org.uade.structure.definition.Linke
 
         }
         else{
-            throw new IndexException("Indice inexistente");
+            throw new GenericADTException("Indice inexistente");
         }
 
         return valor;

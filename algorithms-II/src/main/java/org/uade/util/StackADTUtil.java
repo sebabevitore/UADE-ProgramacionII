@@ -1,11 +1,9 @@
 package org.uade.util;
 
-import org.uade.Exception.EmptyException;
+import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.StackADT;
 import org.uade.structure.implementation.dynamic.DynamicStackADT;
 import org.uade.structure.implementation.fixed.StaticStackADT;
-
-import java.util.EmptyStackException;
 
 public class StackADTUtil {
 
@@ -57,7 +55,7 @@ public class StackADTUtil {
             return false;
         }
         else{
-            throw new EmptyException("Empty Stack");
+            throw new EmptyADTException("Empty Stack");
         }
     }
 
@@ -72,7 +70,7 @@ public class StackADTUtil {
             return invertida;
         }
         else{
-            throw new EmptyException("Pila vacia");
+            throw new EmptyADTException("Pila vacia");
         }
     }
 
