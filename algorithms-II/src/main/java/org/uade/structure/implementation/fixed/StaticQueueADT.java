@@ -29,7 +29,6 @@ public class StaticQueueADT implements QueueADT {
         }
         array[count] = value;
         count++;
-
     }
 
     @Override
