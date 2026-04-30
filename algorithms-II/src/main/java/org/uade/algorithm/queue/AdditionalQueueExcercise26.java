@@ -5,7 +5,7 @@ import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 
 import static org.uade.util.QueueADTUtil.copy;
 
-public class AdditionalQueueExcercise26Seba {
+public class AdditionalQueueExcercise26 {
     //Dada una cola, rota sus elementos N posiciones a la izquierda.
 
     private static QueueADT rotarIzquierda(QueueADT cola, int posiciones) {

@@ -9,7 +9,7 @@ import static org.uade.util.QueueADTUtil.copy;
 import static org.uade.util.StackADTUtil.copy;
 
 
-public class AdditionalQueueExcercise27Seba {
+public class AdditionalQueueExcercise27 {
     //Dada una Pila y una Cola, implementa un método que determine si contienen
     //exactamente los mismos elementos, aunque en diferente orden.
 

@@ -8,7 +8,7 @@ import org.uade.structure.implementation.dynamic.DynamicStackADT;
 
 import static org.uade.util.QueueADTUtil.copy;
 
-public class AdditionalQueueExcercise24Seba {
+public class AdditionalQueueExcercise24 {
     //Cree e inicialice la cola ORIGEN y la pila DESTINO. Cargue la cola ORIGEN y pase
     //los elementos de la cola ORIGEN a la pila DESTINO
 

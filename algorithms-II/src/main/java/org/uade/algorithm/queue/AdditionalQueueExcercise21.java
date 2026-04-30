@@ -6,7 +6,7 @@ import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 import static org.uade.util.QueueADTUtil.copy;
 
 
-public class AdditionalQueueExcercise21Seba {
+public class AdditionalQueueExcercise21 {
     // Cree e inicialice la cola DADA. Pase el primer elemento de la cola DADA a su última
     // posición, dejando los restantes elementos en el orden original.
 

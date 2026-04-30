@@ -3,9 +3,7 @@ package org.uade.algorithm.queue;
 import org.uade.structure.definition.QueueADT;
 import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 
-import static org.uade.util.QueueADTUtil.copy;
-
-public class AdditionalQueueExcercise25Seba {
+public class AdditionalQueueExcercise25 {
     //Eliminar de una cola un elemento específico con recursión.
 
     private static void eliminarElemento(int numero, QueueADT cola) {
