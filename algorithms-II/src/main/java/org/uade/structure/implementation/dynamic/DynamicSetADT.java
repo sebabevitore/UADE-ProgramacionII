@@ -6,21 +6,21 @@ import org.uade.structure.implementation.Node;
 
 import java.util.Random;
 
-public class DynamicSetADT implements SetADT {
+public class DynamicSetADT<T> implements SetADT<T> {
     private int count;
-    private Node node;
+    private Node<T> node;
 
 
     @Override
-    public boolean exist(int value) {
+    public boolean exist(T value) {
         if(isEmpty()){
             return false;
         }
 
-        Node current = this.node;
+        Node<T> current = this.node;
 
         for(int i = 0; i < count; i++){
-            if(current.getValue() == value){
+            if(current.getValue().equals(value)){
                 return true;
             }
             current = current.getNext();
@@ -30,13 +30,13 @@ public class DynamicSetADT implements SetADT {
     }
 
     @Override
-    public int choose() {
+    public T choose() {
         if(isEmpty()){
             throw new EmptyADTException("Empty set");
         }
 
         int random = new Random().nextInt(count);
-        Node current = this.node;
+        Node<T> current = this.node;
 
 
         for (int i = 0; i < random; i++){
@@ -47,9 +47,9 @@ public class DynamicSetADT implements SetADT {
     }
 
     @Override
-    public void add(int value) {
+    public void add(T value) {
         if (!exist(value)) {
-            Node newNode = new Node(value);
+            Node<T> newNode = new Node<>(value);
             newNode.setNext(this.node);
             this.node = newNode;
             count++;
@@ -57,18 +57,18 @@ public class DynamicSetADT implements SetADT {
     }
 
     @Override
-    public void remove(int element) {
+    public void remove(T element) {
         if (isEmpty()) return;
 
-        if (this.node.getValue() == element) {
+        if (this.node.getValue().equals(element)) {
             this.node = this.node.getNext();
             count--;
             return;
         }
 
-        Node current = this.node;
+        Node<T> current = this.node;
         while (current.getNext() != null) {
-            if (current.getNext().getValue() == element) {
+            if (current.getNext().getValue().equals(element)) {
                 current.setNext(current.getNext().getNext());
                 count--;
                 return;

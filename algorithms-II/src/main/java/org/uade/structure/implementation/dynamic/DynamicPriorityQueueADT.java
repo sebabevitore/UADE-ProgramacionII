@@ -5,13 +5,13 @@ import org.uade.structure.definition.PriorityQueueADT;
 
 import org.uade.structure.implementation.NodePrioridad;
 
-public class DynamicPriorityQueueADT implements PriorityQueueADT {
-    private NodePrioridad node; // inicio
+public class DynamicPriorityQueueADT<T> implements PriorityQueueADT<T> {
+    private NodePrioridad<T> node; // inicio
 
 
 
     @Override
-    public int getElement() {
+    public T getElement() {
         if (isEmpty()) {
             throw new EmptyADTException("Queue is empty");
         }
@@ -27,8 +27,8 @@ public class DynamicPriorityQueueADT implements PriorityQueueADT {
     }
 
     @Override
-    public void add(int value, int priority) {
-        NodePrioridad nuevo = new NodePrioridad(value, priority);
+    public void add(T value, int priority) {
+        NodePrioridad<T> nuevo = new NodePrioridad<>(value, priority);
 
         // si esta vacia, o si el nuevo tiene mayor prioridad que el nodo cabeza
         if (isEmpty() || priority > this.node.getPriority()) {
@@ -37,7 +37,7 @@ public class DynamicPriorityQueueADT implements PriorityQueueADT {
             return;
         }
 
-        NodePrioridad current = this.node;
+        NodePrioridad<T> current = this.node;
 
         // buscar mientras el siguiente no sea nulo Y tenga mas (o igual) prioridad que el nuevo
         while (current.getNext() != null && current.getNext().getPriority() >= priority) {

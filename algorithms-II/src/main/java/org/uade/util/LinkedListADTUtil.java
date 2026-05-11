@@ -7,8 +7,8 @@ import org.uade.structure.implementation.fixed.StaticLinkedListADT;
 
 public class LinkedListADTUtil {
 
-    public static void print(LinkedListADT list) {
-        LinkedListADT copy = copy(list);
+    public static <T> void print(LinkedListADT<T> list) {
+        LinkedListADT<T> copy = copy(list);
         if (copy.isEmpty()) {
             System.out.println("La lista está vacía.");
             return;
@@ -24,24 +24,24 @@ public class LinkedListADTUtil {
 
     }
 
-    public static LinkedListADT copy(LinkedListADT list) {
-        LinkedListADT aux = getNewLinkedList(list);
+    public static <T> LinkedListADT<T> copy(LinkedListADT<T> list) {
+        LinkedListADT<T> aux = getNewLinkedList(list);
         for (int i = 0; i < list.size(); i++) {
             aux.add(list.get(i));
         }
         return aux;
     }
 
-    public static boolean areEqual(LinkedListADT listOne, LinkedListADT listTwo) {
-        LinkedListADT copy1 = copy(listOne);
-        LinkedListADT copy2 = copy(listTwo);
+    public static <T> boolean areEqual(LinkedListADT<T> listOne, LinkedListADT<T> listTwo) {
+        LinkedListADT<T> copy1 = copy(listOne);
+        LinkedListADT<T> copy2 = copy(listTwo);
 
         if (copy1.size() != copy2.size()) {
             return false;
         }
 
         for (int i = 0; i < copy1.size(); i++) {
-            if (copy1.get(i) != copy2.get(i)) {
+            if (!copy1.get(i).equals(copy2.get(i))) {
                 return false;
             }
         }
@@ -50,11 +50,11 @@ public class LinkedListADTUtil {
     }
 
 
-    private static LinkedListADT getNewLinkedList(LinkedListADT list) {
+    private static <T> LinkedListADT<T> getNewLinkedList(LinkedListADT<T> list) {
         if (list instanceof StaticLinkedListADT) {
-            return new StaticLinkedListADT();
+            return new StaticLinkedListADT<>();
         } else {
-            return new DynamicLinkedListADT();
+            return new DynamicLinkedListADT<>();
         }
     }
 }

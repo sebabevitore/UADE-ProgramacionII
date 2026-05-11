@@ -4,13 +4,13 @@ import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.QueueADT;
 import org.uade.structure.implementation.Node;
 
-public class DynamicQueueADT implements QueueADT {
-    private Node node; // inicio
+public class DynamicQueueADT<T> implements QueueADT<T> {
+    private Node<T> node; // inicio
     private int count;
-    private Node last;
+    private Node<T> last;
 
     @Override
-    public int getElement() {
+    public T getElement() {
         if (isEmpty()) {
             throw new EmptyADTException("Queue is empty");
         }
@@ -18,8 +18,8 @@ public class DynamicQueueADT implements QueueADT {
     }
 
     @Override
-    public void add(int value) {
-        Node newNode = new Node(value);
+    public void add(T value) {
+        Node<T> newNode = new Node<>(value);
         if(isEmpty()) {
             this.node = newNode;
             this.last = newNode;

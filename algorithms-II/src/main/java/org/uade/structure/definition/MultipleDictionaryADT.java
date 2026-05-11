@@ -23,7 +23,7 @@ public interface MultipleDictionaryADT {
     /**
      * Descripcion: Retorna el conjunto de claves. Precondición: No tiene.
      */
-    SetADT getKeys();
+    SetADT<Integer> getKeys();
 
     /**
      * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.

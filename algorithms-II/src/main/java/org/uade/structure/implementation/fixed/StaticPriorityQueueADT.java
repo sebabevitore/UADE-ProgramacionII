@@ -6,19 +6,21 @@ import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.PriorityQueueADT;
 
 
-public class StaticPriorityQueueADT implements PriorityQueueADT {
-    private int [] values;
-    private int [] priorities;
+public class StaticPriorityQueueADT<T> implements PriorityQueueADT<T> {
+    private T[] values;
+    private int[] priorities;
     private int count;
     private final int MAX_SIZE = 1000;
+
+    @SuppressWarnings("unchecked")
     public StaticPriorityQueueADT() {
-        this.values = new int[MAX_SIZE];
+        this.values = (T[]) new Object[MAX_SIZE];
         this.priorities = new int[MAX_SIZE];
         this.count = 0;
     }
 
     @Override
-    public int getElement() {
+    public T getElement() {
         if(isEmpty()){
             throw new EmptyADTException("Priority Queue is empty");
         }
@@ -34,7 +36,7 @@ public class StaticPriorityQueueADT implements PriorityQueueADT {
     }
 
     @Override
-    public void add(int value, int priority) {
+    public void add(T value, int priority) {
         if(count == MAX_SIZE){
             throw new FullADTException("Priority queue is full");
         }

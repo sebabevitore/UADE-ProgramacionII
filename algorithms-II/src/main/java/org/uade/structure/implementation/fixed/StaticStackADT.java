@@ -4,18 +4,19 @@ import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.StackADT;
 
-public class StaticStackADT implements StackADT {
-    private int[] array;
+public class StaticStackADT<T> implements StackADT<T> {
+    private T[] array;
     private int count;
     private int max = 1000;
 
+    @SuppressWarnings("unchecked")
     public StaticStackADT() {
-        this.array = new int[max];
+        this.array = (T[]) new Object[max];
         this.count = 0;
     }
 
     @Override
-    public int getElement() {
+    public T getElement() {
         if (!isEmpty()){
             return this.array[this.count-1];
         }
@@ -25,7 +26,7 @@ public class StaticStackADT implements StackADT {
     }
 
     @Override
-    public void add(int value) {
+    public void add(T value) {
         if(this.count < this.array.length){
             array[this.count] = value;
             this.count++;

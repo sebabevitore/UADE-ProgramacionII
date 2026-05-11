@@ -2,24 +2,24 @@ package org.uade.structure.implementation.fixed;
 
 import org.uade.structure.definition.SetADT;
 
-public class StaticSetADT implements SetADT {
+public class StaticSetADT<T> implements SetADT<T> {
     @Override
-    public boolean exist(int value) {
+    public boolean exist(T value) {
         return false;
     }
 
     @Override
-    public int choose() {
-        return 0;
+    public T choose() {
+        return null;
     }
 
     @Override
-    public void add(int value) {
+    public void add(T value) {
 
     }
 
     @Override
-    public void remove(int element) {
+    public void remove(T element) {
 
     }
 

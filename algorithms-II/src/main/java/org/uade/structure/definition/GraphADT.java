@@ -6,7 +6,7 @@ public interface GraphADT {
     /**
      * Descripcion: Retorna el conjunto de vertices. Precondición: No tiene.
      */
-    SetADT getVertxs();
+    SetADT<Integer> getVertxs();
 
     /**
      * Descripcion: Agrega un nuevo vertice al grafo. Precondición: No tiene.

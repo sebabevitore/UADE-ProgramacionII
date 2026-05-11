@@ -4,18 +4,19 @@ import org.uade.Exception.GenericADTException;
 import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.LinkedListADT;
 
-public class StaticLinkedListADT implements LinkedListADT {
-    private int [] array;
+public class StaticLinkedListADT<T> implements LinkedListADT<T> {
+    private T[] array;
     private final int MAX = 1000;
     private int count;
 
+    @SuppressWarnings("unchecked")
     public StaticLinkedListADT() {
-        this.array = new int[MAX];
+        this.array = (T[]) new Object[MAX];
         this.count = 0;
     }
 
     @Override
-    public void add(int value){
+    public void add(T value){
         if(count >= MAX){
             throw new FullADTException("Lista llena");
         }
@@ -24,7 +25,7 @@ public class StaticLinkedListADT implements LinkedListADT {
     }
 
     @Override
-    public void insert(int index, int value) {
+    public void insert(int index, T value) {
         if (index < 0 || index > count) {
             throw new GenericADTException("Index out of bounds");
         }
@@ -50,12 +51,12 @@ public class StaticLinkedListADT implements LinkedListADT {
             this.array[i] = this.array[i+1];
         }
 
-        this.array[count - 1] = 0;
+        this.array[count - 1] = null;
         this.count--;
     }
 
     @Override
-    public int get(int index) {
+    public T get(int index) {
         if (index < 0 || index >= count) {
             throw new GenericADTException("Index out of bounds");
         }

@@ -4,12 +4,12 @@ import org.uade.Exception.EmptyADTException;
 import org.uade.structure.definition.StackADT;
 import org.uade.structure.implementation.Node;
 
-public class DynamicStackADT implements StackADT {
-    private Node node; // tope
+public class DynamicStackADT<T> implements StackADT<T> {
+    private Node<T> node; // tope
     private int count;
 
     @Override
-    public int getElement() throws EmptyADTException {
+    public T getElement() throws EmptyADTException {
         if(!this.isEmpty()){
             return this.node.getValue();
         }
@@ -19,15 +19,15 @@ public class DynamicStackADT implements StackADT {
     }
 
     @Override
-    public void add(int value) {
+    public void add(T value) {
         if(!this.isEmpty()){
-            Node aux = new Node(value);
-            aux.setNext(this.node); // el nuevo apunta al que antes era el primero
-            this.node = aux;        // el nuevo pasa a ser la cima
+            Node<T> aux = new Node<>(value);
+            aux.setNext(this.node);
+            this.node = aux;
             this.count++;
         }
         else{
-            this.node = new Node(value);
+            this.node = new Node<>(value);
             this.count++;
         }
     }

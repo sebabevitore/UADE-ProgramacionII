@@ -9,8 +9,8 @@ public class AdditionalLinkedListExcercise4 {
     //los elementos de ambas. Si una lista es más larga que la otra, los elementos
     //restantes deben añadirse al final.
 
-    private static LinkedListADT intercalar(LinkedListADT lista1, LinkedListADT lista2) {
-        LinkedListADT aux = new DynamicLinkedListADT();
+    private static LinkedListADT<Integer> intercalar(LinkedListADT<Integer> lista1, LinkedListADT<Integer> lista2) {
+        LinkedListADT<Integer> aux = new DynamicLinkedListADT<Integer>();
         if(!lista1.isEmpty() && !lista2.isEmpty()){
             int indice = 0;
             while(aux.size() < (lista1.size()+lista2.size())){

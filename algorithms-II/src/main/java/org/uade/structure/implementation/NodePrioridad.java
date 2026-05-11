@@ -1,28 +1,28 @@
 package org.uade.structure.implementation;
 
-public class NodePrioridad {
-    private int value;
-    private NodePrioridad next;
+public class NodePrioridad<T> {
+    private T value;
+    private NodePrioridad<T> next;
     private int priority;
 
-    public NodePrioridad(int value, int priority) {
+    public NodePrioridad(T value, int priority) {
         this.value = value;
         this.priority = priority;
     }
 
-    public int getValue() {
+    public T getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(T value) {
         this.value = value;
     }
 
-    public NodePrioridad getNext() {
+    public NodePrioridad<T> getNext() {
         return next;
     }
 
-    public void setNext(NodePrioridad next) {
+    public void setNext(NodePrioridad<T> next) {
         this.next = next;
     }
 

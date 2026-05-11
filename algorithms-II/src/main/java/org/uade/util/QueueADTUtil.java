@@ -7,15 +7,15 @@ import org.uade.structure.implementation.fixed.StaticQueueADT;
 public class QueueADTUtil {
 
 
-    public static QueueADT copy (QueueADT queue){
-        QueueADT copia = getNewQueue(queue);
-        QueueADT aux = getNewQueue(queue);
+    public static <T> QueueADT<T> copy (QueueADT<T> queue){
+        QueueADT<T> copia = getNewQueue(queue);
+        QueueADT<T> aux = getNewQueue(queue);
 
         while(!queue.isEmpty()){
             copia.add(queue.getElement());
             aux.add(queue.getElement());
             queue.remove();
-        } // hasta aca vacie queue, y llene copia y aux.
+        }
 
         while(!aux.isEmpty()){
             queue.add(aux.getElement());
@@ -24,17 +24,17 @@ public class QueueADTUtil {
         return copia;
     }
 
-    private static QueueADT getNewQueue(QueueADT queue){
+    private static <T> QueueADT<T> getNewQueue(QueueADT<T> queue){
         if(queue instanceof StaticQueueADT){
-            return new StaticQueueADT();
+            return new StaticQueueADT<>();
         }
         else{
-            return new DynamicQueueADT();
+            return new DynamicQueueADT<>();
         }
     }
 
-    public static void print(QueueADT queue) {
-        QueueADT copy = copy(queue);
+    public static <T> void print(QueueADT<T> queue) {
+        QueueADT<T> copy = copy(queue);
         while (!copy.isEmpty()) {
             System.out.println(copy.getElement());
             copy.remove();

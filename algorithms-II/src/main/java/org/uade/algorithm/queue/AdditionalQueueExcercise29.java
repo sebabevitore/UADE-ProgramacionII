@@ -36,7 +36,7 @@ public class AdditionalQueueExcercise29 {
         if(cantidadStack > cantidadQueue){
             System.out.println("Pasando " + diferencia + " elementos de pila a cola.");
             for(int i = 0; i < diferencia; i++){
-                int elemento = pilaResultado.getElement();
+                Integer elemento = pilaResultado.getElement();
                 colaResultado.add(elemento);
                 pilaResultado.remove();
             }
@@ -44,7 +44,7 @@ public class AdditionalQueueExcercise29 {
         else{
             System.out.println("Pasando " + diferencia + " elementos de cola a pila.");
             for(int i = 0; i < diferencia; i++){
-                int elemento = colaResultado.getElement();
+                Integer elemento = colaResultado.getElement();
                 pilaResultado.add(elemento);
                 colaResultado.remove();
             }

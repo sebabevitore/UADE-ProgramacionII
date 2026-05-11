@@ -8,18 +8,18 @@ import org.uade.structure.implementation.fixed.StaticStackADT;
 
 public class SetADTUtil {
 
-    public static SetADT copy(SetADT set) {
-        SetADT aux = getNewStack(set);
-        SetADT copia = getNewStack(set);;
+    public static <T> SetADT<T> copy(SetADT<T> set) {
+        SetADT<T> aux = getNewStack(set);
+        SetADT<T> copia = getNewStack(set);
 
         while (!set.isEmpty()) {
-            int element = set.choose();
+            T element = set.choose();
             aux.add(element);
             set.remove(element);
         }
 
         while (!aux.isEmpty()) {
-            int element = aux.choose();
+            T element = aux.choose();
             set.add(element);
             copia.add(element);
             aux.remove(element);
@@ -28,11 +28,11 @@ public class SetADTUtil {
         return copia;
     }
 
-    private static SetADT getNewStack(SetADT set) {
+    private static <T> SetADT<T> getNewStack(SetADT<T> set) {
         if (set instanceof StaticSetADT) {
-            return new StaticSetADT();
+            return new StaticSetADT<>();
         } else {
-            return new DynamicSetADT();
+            return new DynamicSetADT<>();
         }
     }
 

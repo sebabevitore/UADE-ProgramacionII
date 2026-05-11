@@ -7,24 +7,22 @@ import org.uade.structure.implementation.fixed.StaticStackADT;
 
 public class StackADTUtil {
 
-    public static void print(StackADT stack) {
-        StackADT copy = copy(stack);
+    public static <T> void print(StackADT<T> stack) {
+        StackADT<T> copy = copy(stack);
         while (!copy.isEmpty()) {
             System.out.println(copy.getElement());
             copy.remove();
         }
     }
 
-    public static StackADT copy(StackADT stack) {
-        StackADT aux = getNewStack(stack);
-        StackADT copia = getNewStack(stack);
+    public static <T> StackADT<T> copy(StackADT<T> stack) {
+        StackADT<T> aux = getNewStack(stack);
+        StackADT<T> copia = getNewStack(stack);
 
-        // 1. Invertimos stack en aux (stack queda vacía)
         while (!stack.isEmpty()) {
             aux.add(stack.getElement());
             stack.remove();
         }
-        // 2. Restauramos stack Y cargamos la copia (vuelven al orden original)
         while (!aux.isEmpty()) {
             stack.add(aux.getElement());
             copia.add(aux.getElement());
@@ -33,17 +31,17 @@ public class StackADTUtil {
         return copia;
     }
 
-    private static StackADT getNewStack(StackADT stack) {
+    private static <T> StackADT<T> getNewStack(StackADT<T> stack) {
         if (stack instanceof StaticStackADT) {
-            return new StaticStackADT();
+            return new StaticStackADT<>();
         } else {
-            return new DynamicStackADT();
+            return new DynamicStackADT<>();
         }
     }
 
-    public static boolean esPar(StackADT stack){
+    public static <T> boolean esPar(StackADT<T> stack){
         if(!stack.isEmpty()){
-            StackADT aux = copy(stack);
+            StackADT<T> aux = copy(stack);
             int count = 0;
             while(!aux.isEmpty()){
                 aux.remove();
@@ -59,10 +57,10 @@ public class StackADTUtil {
         }
     }
 
-    public static StackADT invertir(StackADT stack){
+    public static <T> StackADT<T> invertir(StackADT<T> stack){
         if(!stack.isEmpty()){
-            StackADT copia1 = copy(stack);
-            StackADT invertida = new DynamicStackADT();
+            StackADT<T> copia1 = copy(stack);
+            StackADT<T> invertida = new DynamicStackADT<>();
             while(!copia1.isEmpty()){
                 invertida.add(copia1.getElement());
                 copia1.remove();
@@ -74,12 +72,12 @@ public class StackADTUtil {
         }
     }
 
-    public static boolean estaEnPila(int elemento, StackADT pila) {
-        if (pila.isEmpty()) return false; // si está vacía, claramente no está el elemento
+    public static <T> boolean estaEnPila(T elemento, StackADT<T> pila) {
+        if (pila.isEmpty()) return false;
 
-        StackADT copia = copy(pila);
+        StackADT<T> copia = copy(pila);
         while (!copia.isEmpty()) {
-            if (copia.getElement() == elemento) {
+            if (copia.getElement().equals(elemento)) {
                 return true;
             }
             copia.remove();

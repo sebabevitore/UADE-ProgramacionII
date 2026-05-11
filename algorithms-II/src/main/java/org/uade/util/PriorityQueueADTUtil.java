@@ -6,17 +6,17 @@ import org.uade.structure.implementation.fixed.StaticPriorityQueueADT;
 
 public class PriorityQueueADTUtil {
 
-    public static void print(PriorityQueueADT queue) {
-        PriorityQueueADT copy = copy(queue);
+    public static <T> void print(PriorityQueueADT<T> queue) {
+        PriorityQueueADT<T> copy = copy(queue);
         while (!copy.isEmpty()) {
             System.out.println("Valor: " + copy.getElement() + " - Prioridad: " + copy.getPriority());
             copy.remove();
         }
     }
 
-    public static PriorityQueueADT copy(PriorityQueueADT priorityQueue){
-        PriorityQueueADT aux = getNewPriorityQueue(priorityQueue);
-        PriorityQueueADT copia = getNewPriorityQueue(priorityQueue);
+    public static <T> PriorityQueueADT<T> copy(PriorityQueueADT<T> priorityQueue){
+        PriorityQueueADT<T> aux = getNewPriorityQueue(priorityQueue);
+        PriorityQueueADT<T> copia = getNewPriorityQueue(priorityQueue);
 
         while(!priorityQueue.isEmpty()){
             aux.add(priorityQueue.getElement(), priorityQueue.getPriority());
@@ -31,11 +31,11 @@ public class PriorityQueueADTUtil {
         return copia;
     }
 
-    private static PriorityQueueADT getNewPriorityQueue(PriorityQueueADT priorityQueue) {
+    private static <T> PriorityQueueADT<T> getNewPriorityQueue(PriorityQueueADT<T> priorityQueue) {
         if (priorityQueue instanceof DynamicPriorityQueueADT) {
-            return new DynamicPriorityQueueADT();
+            return new DynamicPriorityQueueADT<>();
         } else {
-            return new StaticPriorityQueueADT();
+            return new StaticPriorityQueueADT<>();
         }
     }
 

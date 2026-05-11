@@ -4,18 +4,19 @@ import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.FullADTException;
 import org.uade.structure.definition.QueueADT;
 
-public class StaticQueueADT implements QueueADT {
-    private int[] array;
+public class StaticQueueADT<T> implements QueueADT<T> {
+    private T[] array;
     private int count;
     private int size = 1000;
 
+    @SuppressWarnings("unchecked")
     public StaticQueueADT() {
-        this.array = new int[size];
+        this.array = (T[]) new Object[size];
         this.count = 0;
     }
 
     @Override
-    public int getElement() {
+    public T getElement() {
         if(isEmpty()){
             throw new EmptyADTException("Queue is empty");
         }
@@ -23,7 +24,7 @@ public class StaticQueueADT implements QueueADT {
     }
 
     @Override
-    public void add(int value) {
+    public void add(T value) {
         if(count == size){
             throw new FullADTException("Queue is full");
         }
@@ -40,7 +41,7 @@ public class StaticQueueADT implements QueueADT {
             this.array[i] = this.array[i + 1];
         }
         //  limpiar la ult. posición
-        this.array[this.count - 1] = 0;
+        this.array[this.count - 1] = null;
         this.count--;
 
     }
