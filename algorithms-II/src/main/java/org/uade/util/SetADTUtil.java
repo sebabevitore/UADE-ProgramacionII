@@ -2,8 +2,7 @@ package org.uade.util;
 
 import org.uade.structure.definition.SetADT;
 import org.uade.structure.implementation.dynamic.DynamicSetADT;
-import org.uade.structure.implementation.fixed.StaticSetADT;
-import org.uade.structure.implementation.fixed.StaticStackADT;
+import org.uade.structure.implementation.fixed.StaticSetADTPENDIENTE;
 
 
 public class SetADTUtil {
@@ -40,8 +39,8 @@ public class SetADTUtil {
     }
 
     private static SetADT getNewStack(SetADT set) {
-        if (set instanceof StaticSetADT) {
-            return new StaticSetADT();
+        if (set instanceof StaticSetADTPENDIENTE) {
+            return new StaticSetADTPENDIENTE();
         } else {
             return new DynamicSetADT();
         }

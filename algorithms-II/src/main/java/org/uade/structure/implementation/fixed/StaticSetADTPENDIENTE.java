@@ -2,7 +2,7 @@ package org.uade.structure.implementation.fixed;
 
 import org.uade.structure.definition.SetADT;
 
-public class StaticSetADT implements SetADT {
+public class StaticSetADTPENDIENTE implements SetADT {
     @Override
     public boolean exist(int value) {
         return false;
