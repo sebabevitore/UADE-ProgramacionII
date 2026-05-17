@@ -1,8 +1,11 @@
 package org.uade.structure.implementation.fixed;
 
+import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.FullADTException;
+import org.uade.Exception.GenericADTException;
 import org.uade.structure.definition.SetADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.structure.implementation.dynamic.DynamicSetADT;
 
 public class StaticSimpleDictionaryADT implements SimpleDictionaryADT {
     private int [] keys ;
@@ -43,17 +46,31 @@ public class StaticSimpleDictionaryADT implements SimpleDictionaryADT {
                 return;
             }
         }
-
     }
 
     @Override
     public int get(int key) {
-        return 0;
+        if(isEmpty()){
+            throw new EmptyADTException("Dictionary is empty");
+        }
+
+        for(int i = 0; i < count; i++){
+            if(keys[i] == key) {
+                return values[i];
+            }
+        }
+
+        throw new GenericADTException("Key not found");
     }
 
     @Override
     public SetADT getKeys() {
-        return null;
+        if(isEmpty()){return null;}
+        SetADT set = new DynamicSetADT();
+        for(int i = 0; i < count; i++){
+            set.add(keys[i]);
+        }
+        return set;
     }
 
     @Override
