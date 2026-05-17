@@ -34,6 +34,15 @@ public class StaticSimpleDictionaryADT implements SimpleDictionaryADT {
 
     @Override
     public void remove(int key) {
+        if(isEmpty()){return;}
+        for (int i = 0; i < count; i++){
+            if(keys[i] == key) {
+                keys[i]=keys[count-1];
+                values[i]=values[count-1];
+                count--;
+                return;
+            }
+        }
 
     }
 
@@ -49,6 +58,6 @@ public class StaticSimpleDictionaryADT implements SimpleDictionaryADT {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return count == 0;
     }
 }
