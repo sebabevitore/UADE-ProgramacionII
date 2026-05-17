@@ -4,16 +4,16 @@ import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.GenericADTException;
 import org.uade.structure.definition.SetADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
-import org.uade.structure.implementation.NodeDict;
+import org.uade.structure.implementation.NodeSimpleDict;
 
 public class DynamicSimpleDictionaryADT implements SimpleDictionaryADT {
-    private NodeDict node;
+    private NodeSimpleDict node;
 
     @Override
     public void add(int key, int value) {
         //Si la clave ya existe, reemplazamos el valor y salimos
-        NodeDict aux = this.node;
-        NodeDict aux2 = null;
+        NodeSimpleDict aux = this.node;
+        NodeSimpleDict aux2 = null;
         while (aux != null) {
             if(aux.getKey() == key) {
                 aux.setValue(value);
@@ -23,7 +23,7 @@ public class DynamicSimpleDictionaryADT implements SimpleDictionaryADT {
             aux = aux.getNext();
         }
         //si  llega aca, la clave NO existe (o el diccionario esta vacio)
-        NodeDict nuevoNodo = new NodeDict(key, value);
+        NodeSimpleDict nuevoNodo = new NodeSimpleDict(key, value);
         nuevoNodo.setNext(this.node);
         this.node = nuevoNodo;
     }
@@ -38,7 +38,7 @@ public class DynamicSimpleDictionaryADT implements SimpleDictionaryADT {
             return;
         }
 
-        NodeDict aux = this.node;
+        NodeSimpleDict aux = this.node;
         while (aux.getNext() != null) {
             if (aux.getNext().getKey() == key) {
                 // si aux.getNext().getNext() es null, al hacer ese ultimo get trae null, entonces setea null,
@@ -57,7 +57,7 @@ public class DynamicSimpleDictionaryADT implements SimpleDictionaryADT {
             throw new EmptyADTException("Dictionary is empty");
         }
 
-        NodeDict aux = this.node;
+        NodeSimpleDict aux = this.node;
         while (aux != null) {
             if (aux.getKey() == key) {
                 return aux.getValue();
@@ -76,7 +76,7 @@ public class DynamicSimpleDictionaryADT implements SimpleDictionaryADT {
         }
         SetADT set = new DynamicSetADT();
 
-        NodeDict aux = this.node;
+        NodeSimpleDict aux = this.node;
         while (aux != null) {
             set.add(aux.getKey());
             aux = aux.getNext();

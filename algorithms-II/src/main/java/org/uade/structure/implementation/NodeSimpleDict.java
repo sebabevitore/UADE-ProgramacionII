@@ -1,11 +1,11 @@
 package org.uade.structure.implementation;
 
-public class NodeDict {
+public class NodeSimpleDict {
     private int value;
     private int key;
-    private NodeDict next;
+    private NodeSimpleDict next;
 
-    public NodeDict(int value, int key) {
+    public NodeSimpleDict(int value, int key) {
         this.value = value;
         this.key = key;
     }
@@ -26,11 +26,11 @@ public class NodeDict {
         this.key = key;
     }
 
-    public NodeDict getNext() {
+    public NodeSimpleDict getNext() {
         return next;
     }
 
-    public void setNext(NodeDict next) {
+    public void setNext(NodeSimpleDict next) {
         this.next = next;
     }
 }
