@@ -6,13 +6,13 @@ import org.uade.structure.definition.SetADT;
 
 import java.util.Random;
 
-public class StaticSetADTPENDIENTE implements SetADT {
+public class StaticSetADT implements SetADT {
     private int MAX_SIZE = 1000;
     private int [] values;
     private int count;
 
 
-    public StaticSetADTPENDIENTE() {
+    public StaticSetADT() {
         this.values = new int [MAX_SIZE];
         this.count = 0;
     }
