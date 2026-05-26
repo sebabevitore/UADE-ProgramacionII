@@ -1,17 +1,19 @@
 package org.uade.entity;
 
-import org.uade.structure.definition.ILinkedList;
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
+
 import java.time.LocalDate;
 
 public class Micro {
     private String patente;
     private Tipo tipo;
-    private ILinkedList<Viaje> viajes;
+    private LinkedListADT<Viaje> viajes;
 
     public Micro(String patente, Tipo tipo) {
         this.patente = patente;
         this.tipo = tipo;
-        this.viajes = new LinkedListDynamic<Viaje>();
+        this.viajes = new DynamicLinkedListADT<>();
     }
 
     public boolean estaDisponible(LocalDate fechaBusqueda) {

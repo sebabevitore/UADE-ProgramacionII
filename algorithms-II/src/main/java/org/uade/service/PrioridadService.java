@@ -3,24 +3,25 @@ package org.uade.service;
 import org.uade.entity.Viaje;
 import org.uade.entity.Motivo;
 import org.uade.entity.CambioPrioridad;
-import org.uade.structure.definition.IPriorityQueueADT;
+import org.uade.structure.definition.PriorityQueueADT;
+import org.uade.structure.implementation.dynamic.DynamicPriorityQueueADT;
 
 public class PrioridadService {
-    private IPriorityQueueADT<Viaje> colaViajes;
+    private PriorityQueueADT<Viaje> colaViajes;
 
     public PrioridadService() {
-        this.colaViajes = new PriorityQueueDynamic<Viaje>();
+        this.colaViajes = new DynamicPriorityQueueADT<>();
     }
 
     public void programarViaje(Viaje viaje) {
-        this.colaViajes.insertar(viaje, viaje.getPrioridadActual());
+        this.colaViajes.add(viaje, viaje.getPrioridadActual());
     }
 
     public void cambiarPrioridad(Viaje viaje, Motivo motivo, String desc, int nuevaPrioridad) {
         CambioPrioridad cambio = new CambioPrioridad(motivo, desc);
         viaje.registrarCambioClimatico(cambio, nuevaPrioridad);
-        this.colaViajes.eliminar(viaje);
-        this.colaViajes.insertar(viaje, nuevaPrioridad);
+        this.colaViajes.remove(viaje);
+        this.colaViajes.add(viaje, nuevaPrioridad);
     }
 
     public Viaje despacharSiguienteViaje() {

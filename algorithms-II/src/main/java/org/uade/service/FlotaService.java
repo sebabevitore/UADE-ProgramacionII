@@ -2,23 +2,23 @@ package org.uade.service;
 
 import org.uade.entity.Micro;
 import org.uade.entity.Viaje;
-import org.uade.structure.definition.IDiccionario;
-import org.uade.structure.definition.ILinkedList;
-import java.time.LocalDate;
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
 
 public class FlotaService {
-    private IDiccionario<String, Micro> micros;
+    private SimpleDictionaryADT<String, Micro> micros;
 
     public FlotaService() {
-        this.micros = new DiccionarioClase<String, Micro>();
+        this.micros = new DynamicSimpleDictionaryADT<String, Micro>();
     }
 
     public void registrarMicro(Micro micro) {
-        this.micros.insertar(micro.getPatente(), micro);
+        this.micros.add(micro.getPatente(), micro);
     }
 
     public void asignarMicroAViaje(Viaje viaje, String patente) {
-        Micro micro = this.micros.obtener(patente);
+        Micro micro = this.micros.get(patente);
         if (micro == null) {
             System.out.println("Error: El micro no existe.");
             return;
@@ -33,7 +33,7 @@ public class FlotaService {
         }
     }
 
-    public ILinkedList<Micro> obtenerMicrosMasAsignados() {
+    public LinkedListADT<Micro> obtenerMicrosMasAsignados() {
         return null;
     }
 }
