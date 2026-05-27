@@ -9,6 +9,7 @@ import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
 public class FlotaService {
     private SimpleDictionaryADT<String, Micro> micros;
 
+
     public FlotaService() {
         this.micros = new DynamicSimpleDictionaryADT<String, Micro>();
     }
@@ -32,5 +33,6 @@ public class FlotaService {
             System.out.println("Error: El micro no está disponible en esa fecha.");
         }
     }
+
 
 }
