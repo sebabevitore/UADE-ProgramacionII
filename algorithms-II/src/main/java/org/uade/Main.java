@@ -21,6 +21,6 @@ public class Main {
 
         prioridad.programarViaje(viaje1);
 
-        prioridad.cambiarPrioridad(viaje1, Motivo.LLUVIA, "Tormenta de granizo", 9);
+        prioridad.cambiarPrioridad(viaje1,3,Motivo.LLUVIA);
     }
 }

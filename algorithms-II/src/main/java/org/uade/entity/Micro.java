@@ -17,25 +17,23 @@ public class Micro {
     }
 
     public boolean estaDisponible(LocalDate fechaBusqueda) {
+        for (int i = 0; i < this.viajes.size(); i++) {
+            Viaje viajeActual = this.viajes.get(i);
+
+            if (viajeActual.getFecha().equals(fechaBusqueda)) {
+                return false;
+            }
+        }
         return true;
     }
 
     public void agregarViaje(Viaje viaje) {
-        this.viajes.insertarFinal(viaje);
+        this.viajes.add(viaje);
     }
 
-    public int getCantViajes() {
-        return this.viajes.obtenerTamanio();
-    }
+    public int getCantViajes() { return this.viajes.size(); }
 
     public String getPatente() { return patente; }
     public Tipo getTipo() { return tipo; }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Micro micro = (Micro) obj;
-        return patente.equals(micro.patente);
-    }
 }

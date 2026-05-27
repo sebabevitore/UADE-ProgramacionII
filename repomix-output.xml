@@ -1,0 +1,2238 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+algorithms-II/
+  src/
+    main/
+      java/
+        org/
+          uade/
+            entity/
+              CambioPrioridad.java
+              Micro.java
+              Motivo.java
+              Ruta.java
+              Tipo.java
+              Viaje.java
+            Exception/
+              EmptyADTException.java
+              FullADTException.java
+              GenericADTException.java
+            service/
+              FlotaService.java
+              GestionarPrioridadViaje.java
+              PrioridadService.java
+            structure/
+              definition/
+                BinaryTreeADT.java
+                GraphADT.java
+                LinkedListADT.java
+                MultipleDictionaryADT.java
+                PriorityQueueADT.java
+                QueueADT.java
+                SetADT.java
+                SimpleDictionaryADT.java
+                StackADT.java
+              implementation/
+                dynamic/
+                  DynamicLinkedListADT.java
+                  DynamicPriorityQueueADT.java
+                  DynamicQueueADT.java
+                  DynamicSetADT.java
+                  DynamicSimpleDictionaryADT.java
+                  DynamicStackADT.java
+                fixed/
+                  StaticLinkedListADT.java
+                  StaticPriorityQueueADT.java
+                  StaticQueueADT.java
+                  StaticSetADT.java
+                  StaticStackADT.java
+                Node.java
+                NodePrioridad.java
+                NodeSimpleDict.java
+            util/
+              LinkedListADTUtil.java
+              PriorityQueueADTUtil.java
+              QueueADTUtil.java
+              SetADTUtil.java
+              StackADTUtil.java
+            Main.java
+  .gitignore
+  pom.xml
+.gitignore
+LICENSE
+README.md
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="algorithms-II/src/main/java/org/uade/entity/CambioPrioridad.java">
+package org.uade.entity;
+
+public class CambioPrioridad {
+    private Motivo motivo;
+    private String descripcion;
+
+    public CambioPrioridad(Motivo motivo, String descripcion) {
+        this.motivo = motivo;
+        this.descripcion = descripcion;
+    }
+
+    public Motivo getMotivo() { return motivo; }
+    public String getDescripcion() { return descripcion; }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Motivo.java">
+package org.uade.entity;
+
+public enum Motivo {
+    LLUVIA, VISIBILIDAD, OTRO
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Tipo.java">
+package org.uade.entity;
+
+public enum Tipo {
+    CAMA, SEMICAMA, EJECUTIVO
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Exception/EmptyADTException.java">
+package org.uade.Exception;
+
+public class EmptyADTException extends RuntimeException {
+
+    public EmptyADTException(String message) {
+        super(message);
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Exception/FullADTException.java">
+package org.uade.Exception;
+
+public class FullADTException extends RuntimeException {
+    public FullADTException(String message) {
+        super(message);
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Exception/GenericADTException.java">
+package org.uade.Exception;
+
+public class GenericADTException extends RuntimeException {
+
+
+
+    public GenericADTException(String mensaje) {
+        super(mensaje);
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/service/GestionarPrioridadViaje.java">
+package org.uade.service;
+
+import org.uade.entity.Viaje;
+import org.uade.structure.definition.PriorityQueueADT;
+
+public class GestionarPrioridadViaje {
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/BinaryTreeADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Arbol Binario.
+public interface BinaryTreeADT {
+
+    /**
+     * Descripcion: Retorna el valor del nodo.
+     */
+
+    int getRoot();
+
+    /**
+     * Descripcion: Retorna el nodo izquierdo. Precondición: Ninguna, ya que puede ser uno si es una hoja.
+     */
+    BinaryTreeADT getLeft();
+
+    /**
+     * Descripcion: Retorna el nodo derecho. Precondición: Ninguna, ya que puede ser uno si es una hoja.
+     */
+    BinaryTreeADT getRight();
+
+    /**
+     * Descripcion: Agrega un elemento en la estructura. Precondición: La estructura no debe sobrepasar la capacidad.
+     */
+    void add(int value);
+
+    /**
+     * Descripcion: Elimina el elemento de la estructura. Precondición: La estructura debe tener elementos y debe
+     * existir el valor.
+     */
+    void remove(int value);
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/NodeSimpleDict.java">
+package org.uade.structure.implementation;
+
+public class NodeSimpleDict<K, V> {
+    private K key;
+    private V value;
+    private NodeSimpleDict<K, V> next;
+
+    public NodeSimpleDict(K key, V value) {
+        this.key = key;
+        this.value = value;
+        this.next = null;
+    }
+
+    public K key() {
+        return key;
+    }
+
+    public void setKey(K key) {
+        this.key = key;
+    }
+
+    public V value() {
+        return value;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
+    }
+
+    public NodeSimpleDict<K, V> next() {
+        return next;
+    }
+
+    public void setNext(NodeSimpleDict<K, V> next) {
+        this.next = next;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Main.java">
+package org.uade;
+
+import org.uade.entity.*;
+import org.uade.service.*;
+import java.time.LocalDate;
+
+public class Main {
+    public static void main(String[] args) {
+        FlotaService flota = new FlotaService();
+        PrioridadService prioridad = new PrioridadService();
+
+        for (int i = 1; i <= 15; i++) {
+            flota.registrarMicro(new Micro("AAA" + i, Tipo.CAMA));
+        }
+        System.out.println("Escenario inicial cargado: 15 micros registrados.");
+
+        Ruta rutaTest = new Ruta("Buenos Aires", "Rosario");
+        Viaje viaje1 = new Viaje(101, rutaTest, LocalDate.of(2026, 6, 15), 5);
+
+        flota.asignarMicroAViaje(viaje1, "AAA1");
+
+        prioridad.programarViaje(viaje1);
+
+        prioridad.cambiarPrioridad(viaje1, Motivo.LLUVIA, "Tormenta de granizo", 9);
+    }
+}
+</file>
+
+<file path="algorithms-II/.gitignore">
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+</file>
+
+<file path="algorithms-II/pom.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.uade</groupId>
+    <artifactId>algorithms-II</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+</project>
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Ruta.java">
+package org.uade.entity;
+
+public class Ruta {
+    private String origen;
+    private String destino;
+
+    public Ruta(String origen, String destino) {
+        this.origen = origen;
+        this.destino = destino;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Viaje.java">
+package org.uade.entity;
+
+import org.uade.structure.definition.IStackADT;
+import java.time.LocalDate;
+
+public class Viaje {
+    private int idViaje;
+    private Ruta ruta;
+    private Micro microAsignado;
+    private LocalDate fecha;
+    private boolean completado;
+    private int prioridadActual;
+    private IStackADT<CambioPrioridad> cambios;
+
+    public Viaje(int idViaje, Ruta ruta, LocalDate fecha, int prioridadBase) {
+        this.idViaje = idViaje;
+        this.ruta = ruta;
+        this.fecha = fecha;
+        this.prioridadActual = prioridadBase;
+        this.completado = false;
+        this.microAsignado = null;
+        this.cambios = new StackDynamic<CambioPrioridad>();
+    }
+
+    public void registrarCambioClimatico(CambioPrioridad cambio, int nuevaPrioridad) {
+        this.cambios.apilar(cambio);
+        this.prioridadActual = nuevaPrioridad;
+    }
+
+    public int getIdViaje() { return idViaje; }
+    public LocalDate getFecha() { return fecha; }
+    public int getPrioridadActual() { return prioridadActual; }
+    public Micro getMicroAsignado() { return microAsignado; }
+    public void setMicroAsignado(Micro micro) { this.microAsignado = micro; }
+    public boolean isCompletado() { return completado; }
+    public void setCompletado(boolean completado) { this.completado = completado; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Viaje viaje = (Viaje) obj;
+        return idViaje == viaje.idViaje;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/service/FlotaService.java">
+package org.uade.service;
+
+import org.uade.entity.Micro;
+import org.uade.entity.Viaje;
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
+
+public class FlotaService {
+    private SimpleDictionaryADT<String, Micro> micros;
+
+    public FlotaService() {
+        this.micros = new DynamicSimpleDictionaryADT<String, Micro>();
+    }
+
+    public void registrarMicro(Micro micro) {
+        this.micros.add(micro.getPatente(), micro);
+    }
+
+    public void asignarMicroAViaje(Viaje viaje, String patente) {
+        Micro micro = this.micros.get(patente);
+        if (micro == null) {
+            System.out.println("Error: El micro no existe.");
+            return;
+        }
+
+        if (micro.estaDisponible(viaje.getFecha())) {
+            micro.agregarViaje(viaje);
+            viaje.setMicroAsignado(micro);
+            System.out.println("Micro asignado con éxito.");
+        } else {
+            System.out.println("Error: El micro no está disponible en esa fecha.");
+        }
+    }
+
+    public LinkedListADT<Micro> obtenerMicrosMasAsignados() {
+
+        return Micro;
+
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/service/PrioridadService.java">
+package org.uade.service;
+
+import org.uade.entity.Viaje;
+import org.uade.entity.Motivo;
+import org.uade.entity.CambioPrioridad;
+import org.uade.structure.definition.PriorityQueueADT;
+import org.uade.structure.implementation.dynamic.DynamicPriorityQueueADT;
+
+public class PrioridadService {
+    private PriorityQueueADT<Viaje> colaViajes;
+
+    public PrioridadService() {
+        this.colaViajes = new DynamicPriorityQueueADT<>();
+    }
+
+    public void programarViaje(Viaje viaje) {
+        this.colaViajes.add(viaje, viaje.getPrioridadActual());
+    }
+
+    public void cambiarPrioridad(Viaje viaje, Motivo motivo, String desc, int nuevaPrioridad) {
+        CambioPrioridad cambio = new CambioPrioridad(motivo, desc);
+        viaje.registrarCambioClimatico(cambio, nuevaPrioridad);
+        this.colaViajes.remove(viaje);
+        this.colaViajes.add(viaje, nuevaPrioridad);
+    }
+
+    public Viaje despacharSiguienteViaje() {
+        return this.colaViajes.desacoplar();
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/GraphADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Grafo.
+public interface GraphADT {
+
+    /**
+     * Descripcion: Retorna el conjunto de vertices. Precondición: No tiene.
+     */
+    SetADT<Integer> getVertxs();
+
+    /**
+     * Descripcion: Agrega un nuevo vertice al grafo. Precondición: No tiene.
+     */
+    void addVertx(int vertex);
+
+    /**
+     * Descripcion: Eliminar un vertice del grafo. Precondición: No tiene.
+     */
+    void removeVertx(int vertex);
+
+    /**
+     * Descripcion: Agrega una nueva arista al grafo. Precondición: No tiene.
+     */
+    void addEdge(int vertxOne, int vertxTwo, int weight);
+
+    /**
+     * Descripcion: Eliminar una arista del grafo. Precondición: No tiene.
+     */
+    void removeEdge(int vertxOne, int vertxTwo);
+
+    /**
+     * Descripcion: Comprueba si existe o no una arista en el grafo. Precondición: Debe tener elementos el grafo.
+     */
+    boolean existsEdge(int vertxOne, int vertxTwo);
+
+    /**
+     * Descripcion: Devuelve el peso de la arista entre dos vertices. Precondición: Debe tener elementos el grafo.
+     */
+    int edgeWeight(int vertxOne, int vertxTwo);
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/LinkedListADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Lista enlazada.
+public interface LinkedListADT<T> {
+
+    /**
+     * Descripcion: Agrega el elemento a un indice.
+     * Precondición: No tiene
+     */
+    void add(T value);
+
+    /**
+     * Descripcion: Agrega el elemento a un indice.
+     * Precondición: No tiene.
+     */
+    void insert(int index, T value);
+
+    /**
+     * Descripcion: Elimina el elemento de un indice.
+     * Precondición: El indice debe existir.
+     */
+    void remove(int index);
+
+    /**
+     * Descripcion: Retorna el elemento de un indice.
+     * Precondición: El indice debe existir.
+     */
+    T get(int index);
+
+    /**
+     * Descripcion: Retorna el tamaño de la lista.
+     * Precondición: No tiene.
+     */
+    int size();
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores.
+     * Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/PriorityQueueADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Cola con Prioridad.
+public interface PriorityQueueADT<T> {
+    /**
+     * Descripcion: Devuelve el primer elemento de la estructura. Precondición: La estructura debe tener elementos.
+     */
+    T getElement();
+
+    /**
+     * Descripcion: Devuelve la prioridad del primer elemento de la estructura. Precondición: La estructura debe tener
+     * elementos.
+     */
+    int getPriority();
+
+    /**
+     * Descripcion: Agrega un elemento al final de la estructura. Precondición: La estructura no debe sobrepasar la
+     * capacidad.
+     */
+    void add(T value, int priority);
+
+    /**
+     * Descripcion: Elimina el primer elemento que existe. Precondición: La estructura debe tener elementos.
+     */
+    void remove();
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/QueueADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Cola.
+public interface QueueADT<T> {
+
+    /**
+     * Descripcion: Devuelve el primer elemento de la estructura. Precondición: La estructura debe tener elementos.
+     */
+    T getElement();
+
+    /**
+     * Descripcion: Agrega un elemento al final de la estructura. Precondición: La estructura no debe sobrepasar la
+     * capacidad.
+     */
+    void add(T value);
+
+    /**
+     * Descripcion: Elimina el primer elemento que existe. Precondición: La estructura debe tener elementos.
+     */
+    void remove();
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/SetADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Conjunto.
+public interface SetADT<T> {
+
+    /**
+     * Descripcion: Devuelve true en caso de que el valor exista en el conjunto· Precondición: No tiene
+     */
+    boolean exist(T value);
+
+    /**
+     * Descripcion: Devuelve un elemento al azar de la estructura. Precondición: La estructura debe tener elementos.
+     */
+    T choose();
+
+    /**
+     * Descripcion: Agrega un elemento a la estructura. Precondición: La estructura no debe sobrepasar la capacidad. No
+     * puede haber repetidos
+     */
+    void add(T value);
+
+    /**
+     * Descripcion: Elimina el elemento de la estructura, si no existe no hace nada. Precondición: La estructura debe
+     * tener elementos.
+     */
+    void remove(T element);
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/StackADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Pila.
+public interface StackADT<T> {
+
+    /**
+     * Descripcion: Devuelve el último elemento de la estructura.
+     * Precondición: La estructura debe tener elementos.
+     */
+    T getElement();
+
+    /**
+     * Descripcion: Agrega un elemento al final de la estructura.
+     * Precondición: La estructura no debe sobrepasar la
+     * capacidad.
+     */
+    void add(T value);
+
+    /**
+     * Descripcion: Elimina el último elemento que existe.
+     * Precondición: La estructura debe tener elementos.
+     */
+    void remove();
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores.
+     * Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicSetADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.implementation.Node;
+
+import java.util.Random;
+
+public class DynamicSetADT<T> implements SetADT<T> {
+    private int count;
+    private Node<T> node;
+
+
+    @Override
+    public boolean exist(T value) {
+        if(isEmpty()){
+            return false;
+        }
+
+        Node<T> current = this.node;
+
+        for(int i = 0; i < count; i++){
+            if(current.getValue().equals(value)){
+                return true;
+            }
+            current = current.getNext();
+        }
+
+        return false;
+    }
+
+    @Override
+    public T choose() {
+        if(isEmpty()){
+            throw new EmptyADTException("Empty set");
+        }
+
+        int random = new Random().nextInt(count);
+        Node<T> current = this.node;
+
+
+        for (int i = 0; i < random; i++){
+            current = current.getNext();
+        }
+
+        return current.getValue();
+    }
+
+    @Override
+    public void add(T value) {
+        if (!exist(value)) {
+            Node<T> newNode = new Node<>(value);
+            newNode.setNext(this.node);
+            this.node = newNode;
+            count++;
+        }
+    }
+
+    @Override
+    public void remove(T element) {
+        if (isEmpty()) return;
+
+        if (this.node.getValue().equals(element)) {
+            this.node = this.node.getNext();
+            count--;
+            return;
+        }
+
+        Node<T> current = this.node;
+        while (current.getNext() != null) {
+            if (current.getNext().getValue().equals(element)) {
+                current.setNext(current.getNext().getNext());
+                count--;
+                return;
+            }
+            current = current.getNext();
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return count==0;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicSimpleDictionaryADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.structure.implementation.NodeSimpleDict;
+
+// Añadimos <K, V> a la clase y a la interfaz que implementa
+public class DynamicSimpleDictionaryADT<K, V> implements SimpleDictionaryADT<K, V> {
+    // El nodo ahora también debe ser genérico
+    private NodeSimpleDict<K, V> node;
+
+    @Override
+    public void add(K key, V value) {
+        // Validación opcional si la clave es nula
+        if (key == null) {
+            throw new GenericADTException("Key cannot be null");
+        }
+
+        NodeSimpleDict<K, V> aux = this.node;
+        while (aux != null) {
+            // CAMBIO CRÍTICO: Usamos .equals() en lugar de ==
+            if (aux.getKey().equals(key)) {
+                aux.setValue(value);
+                return;
+            }
+            aux = aux.getNext();
+        }
+
+        // Si llega acá, la clave NO existe (o el diccionario está vacío)
+        NodeSimpleDict<K, V> nuevoNodo = new NodeSimpleDict<>(key, value);
+        nuevoNodo.setNext(this.node);
+        this.node = nuevoNodo;
+    }
+
+    @Override
+    public void remove(K key) {
+        if (isEmpty()) {
+            throw new EmptyADTException("Dictionary is empty");
+        }
+        if (key == null) {
+            throw new GenericADTException("Key cannot be null");
+        }
+
+        // CAMBIO CRÍTICO: Usamos .equals() para el primer nodo
+        if (this.node.getKey().equals(key)) {
+            this.node = this.node.getNext();
+            return;
+        }
+
+        NodeSimpleDict<K, V> aux = this.node;
+        while (aux.getNext() != null) {
+            // CAMBIO CRÍTICO: Usamos .equals() para los nodos siguientes
+            if (aux.getNext().getKey().equals(key)) {
+                aux.setNext(aux.getNext().getNext());
+                return;
+            }
+            aux = aux.getNext();
+        }
+    }
+
+    @Override
+    public V get(K key) {
+        if (isEmpty()){
+            throw new EmptyADTException("Dictionary is empty");
+        }
+        if (key == null) {
+            throw new GenericADTException("Key cannot be null");
+        }
+
+        NodeSimpleDict<K, V> aux = this.node;
+        while (aux != null) {
+            // CAMBIO CRÍTICO: Usamos .equals()
+            if (aux.getKey().equals(key)) {
+                return aux.getValue();
+            }
+            aux = aux.getNext();
+        }
+
+        throw new GenericADTException("Key not found");
+    }
+
+    @Override
+    public SetADT<K> getKeys() {
+        if(isEmpty()){
+            return null;
+        }
+        // Tu SetADT también debería estar adaptado a generics <K>
+        SetADT<K> set = new DynamicSetADT<>();
+
+        NodeSimpleDict<K, V> aux = this.node;
+        while (aux != null) {
+            set.add(aux.getKey());
+            aux = aux.getNext();
+        }
+
+        return set;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.node == null;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/fixed/StaticSetADT.java">
+package org.uade.structure.implementation.fixed;
+
+import org.uade.structure.definition.SetADT;
+
+public class StaticSetADT<T> implements SetADT<T> {
+    @Override
+    public boolean exist(T value) {
+        return false;
+    }
+
+    @Override
+    public T choose() {
+        return null;
+    }
+
+    @Override
+    public void add(T value) {
+
+    }
+
+    @Override
+    public void remove(T element) {
+
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/NodePrioridad.java">
+package org.uade.structure.implementation;
+
+public class NodePrioridad<T> {
+    private T value;
+    private NodePrioridad<T> next;
+    private int priority;
+
+    public NodePrioridad(T value, int priority) {
+        this.value = value;
+        this.priority = priority;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public NodePrioridad<T> getNext() {
+        return next;
+    }
+
+    public void setNext(NodePrioridad<T> next) {
+        this.next = next;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    @Override
+    public String toString() {
+        // formato: Valor(Prioridad)
+        String mensaje = this.value + "(P:" + this.priority + ")";
+
+        if (this.next != null) {
+            mensaje += " -> " + this.next.toString();
+        }
+
+        return mensaje;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/util/LinkedListADTUtil.java">
+package org.uade.util;
+
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
+import org.uade.structure.implementation.fixed.StaticLinkedListADT;
+
+
+public class LinkedListADTUtil {
+
+    public static <T> void print(LinkedListADT<T> list) {
+        LinkedListADT<T> copy = copy(list);
+        if (copy.isEmpty()) {
+            System.out.println("La lista está vacía.");
+            return;
+        }
+
+        for (int i = 0; i < copy.size(); i++) {
+            System.out.print(copy.get(i));
+            if (i < copy.size() - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println();
+
+    }
+
+    public static <T> LinkedListADT<T> copy(LinkedListADT<T> list) {
+        LinkedListADT<T> aux = getNewLinkedList(list);
+        for (int i = 0; i < list.size(); i++) {
+            aux.add(list.get(i));
+        }
+        return aux;
+    }
+
+    public static <T> boolean areEqual(LinkedListADT<T> listOne, LinkedListADT<T> listTwo) {
+        LinkedListADT<T> copy1 = copy(listOne);
+        LinkedListADT<T> copy2 = copy(listTwo);
+
+        if (copy1.size() != copy2.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < copy1.size(); i++) {
+            if (!copy1.get(i).equals(copy2.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    private static <T> LinkedListADT<T> getNewLinkedList(LinkedListADT<T> list) {
+        if (list instanceof StaticLinkedListADT) {
+            return new StaticLinkedListADT<>();
+        } else {
+            return new DynamicLinkedListADT<>();
+        }
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/util/SetADTUtil.java">
+package org.uade.util;
+
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.implementation.dynamic.DynamicSetADT;
+import org.uade.structure.implementation.fixed.StaticSetADT;
+import org.uade.structure.implementation.fixed.StaticStackADT;
+
+
+public class SetADTUtil {
+
+    public static <T> SetADT<T> copy(SetADT<T> set) {
+        SetADT<T> aux = getNewStack(set);
+        SetADT<T> copia = getNewStack(set);
+
+        while (!set.isEmpty()) {
+            T element = set.choose();
+            aux.add(element);
+            set.remove(element);
+        }
+
+        while (!aux.isEmpty()) {
+            T element = aux.choose();
+            set.add(element);
+            copia.add(element);
+            aux.remove(element);
+        }
+
+        return copia;
+    }
+
+    private static <T> SetADT<T> getNewStack(SetADT<T> set) {
+        if (set instanceof StaticSetADT) {
+            return new StaticSetADT<>();
+        } else {
+            return new DynamicSetADT<>();
+        }
+    }
+
+
+}
+</file>
+
+<file path=".gitignore">
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+</file>
+
+<file path="LICENSE">
+MIT License
+
+Copyright (c) 2024 Andres Sacco
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</file>
+
+<file path="README.md">
+# UADE: Algoritmos Y Estructuras De Datos II - Programación II
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Este repositorio contiene todo lo necesario para poder seguir la materia desde el inicio hasta el final.
+
+## Tabla de contenidos
+
+Los siguientes son los puntos más importantes en este archivo:
+- [Requisitos](#requisitos)
+- [Comprobar requisitos](#comprobar-requisitos)
+- [FAQ](#faq)
+
+## Requisitos
+
+Para poder realizar el curso necesitas tener instalado en tu computadora las siguientes herramientas:
+- [Java](http://jdk.java.net/)
+- [Git](https://git-scm.com/)
+
+Si no tienes algunas de estas herramientas instaladas en tu computadora, sigue las instrucciones en la documentación oficial de cada herramienta o los videos creados como guía para esta materia.
+
+## Comprobar requisitos
+
+Si instalaste en tu computadora algunas de estas herramientas anteriormente o lo acabas de hacer ahora, verifica si todo funciona bien.
+
+- Comprueba si la versión de Java está correctamente instalada usando el siguiente comando:
+   ````
+   % java -version
+   openjdk 21.0.2 2024-01-16
+   OpenJDK Runtime Environment GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30)
+   OpenJDK 64-Bit Server VM GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30, mixed mode, sharing)
+   ````
+
+- Comprueba si tienes instalado de manera correcta en tu computadora Git usando el siguiente comando:
+   ````
+   % git --version
+   git version 2.34.1
+   ````
+
+## Estándares de código
+
+Java tiene una serie de reglas definidas para desarrollar algo, ya sea una aplicación o una librería, y que todos los desarrolladores usen los mismos criterios. Existen las siguientes formas de validar si se está siguiendo el formato correcto: 
+
+- **Code conventions**: Este [documento](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf) que fue creado en 1997 con el fin de definir los estándares de código que debería seguir cualquier desarrollador que usa Java.
+
+- **SonarLint**: Es un plugin que nos ayuda al código fuente, siga los estándares de Java y reducir los bugs que podrían generarse. Esta herramienta tiene soporte para casi todos los IDE existentes, dentro de los más conocidos tiene soporte en:
+    - [IntelliJ](https://plugins.jetbrains.com/plugin/7973-sonarlint)
+    - [Eclipse](https://marketplace.eclipse.org/content/sonarqube-ide)
+    - [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)
+
+## Estructura del proyecto
+
+El proyecto que se usara a lo largo de la cursada tiene estructura similar a la siguiente:
+
+````
+src/
+  └── main
+      └── java
+          └── org
+              └── uade
+                  ├── algorithm
+                  ├── exception
+                  ├── structure
+                  │   ├── definition
+                  │   └── implementation
+                  │       ├── dynamic
+                  │       │   └── extras
+                  │       └── fixed
+                  └── util
+````
+
+Como se puede ver en la estructura existen una serie de paquetes donde cada uno tiene una funcionalidad en particular. En la siguiente tabla se detalla cada uno de los paquetes como asi tambien si deben o no tener prefijos los archivos en su interior:
+
+| **Paquete**                  | **Descripción**                                                             |
+|------------------------------|-----------------------------------------------------------------------------|
+| `algorithm`                  | Contiene la implementación de algoritmos que utilizan los TDA.              |
+| `exception`                  | Define las excepciones personalizadas usadas en el proyecto.                |
+| `structure`                  | Paquete general que agrupa las estructuras de datos.                        |
+| `structure.definition`       | Contiene las interfaces o definiciones de los TDA.                          |
+| `structure.implementation`   | Implementaciones concretas de los TDA.                                      |
+| `structure.implementation.dynamic` | Implementaciones de estructuras de datos dinámicas (ej.: listas enlazadas). |
+| `structure.implementation.dynamic.extras` | Componentes auxiliares o complementarios para las estructuras dinámicas.    |
+| `structure.implementation.fixed`   | Implementaciones de estructuras de datos de tamaño fijo (ej.: arrays).      |
+| `util`                       | Clases utilitarias y funciones auxiliares usadas en todo el proyecto.       |
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Micro.java">
+package org.uade.entity;
+
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
+
+import java.time.LocalDate;
+
+public class Micro {
+    private String patente;
+    private Tipo tipo;
+    private LinkedListADT<Viaje> viajes;
+
+    public Micro(String patente, Tipo tipo) {
+        this.patente = patente;
+        this.tipo = tipo;
+        this.viajes = new DynamicLinkedListADT<>();
+    }
+
+    public boolean estaDisponible(LocalDate fechaBusqueda) {
+        return true;
+    }
+
+    public void agregarViaje(Viaje viaje) {
+        this.viajes.insertarFinal(viaje);
+    }
+
+    public int getCantViajes() {
+        int count = 0;
+        for (int i = 0; i < this.viajes.size(); i++) {
+            count++;
+        }
+        return count;
+    }
+
+    public String getPatente() { return patente; }
+    public Tipo getTipo() { return tipo; }
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/MultipleDictionaryADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Diccionario Multiple.
+public interface MultipleDictionaryADT {
+
+    /**
+     * Descripcion: Agrega un elemento a la estructura. Precondición: No tiene, acepta valores duplicados.
+     */
+    void add(int key, int value);
+
+    /**
+     * Descripcion: Elimina el elemento de la estructura, si no existe no hace nada. Precondición: La estructura debe
+     * tener elementos.
+     */
+    void remove(int key);
+
+    /**
+     * Descripcion: Devuelve el valor de una clave. Precondición: La estructura debe tener elementos y la clave debe
+     * existir.
+     */
+    int[] get(int key);
+
+    /**
+     * Descripcion: Retorna el conjunto de claves. Precondición: No tiene.
+     */
+    SetADT<Integer> getKeys();
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
+
+    /**
+     * Descripcion: Elimina el elemento de la estructura, si no existe no hace nada. Precondición: La estructura debe
+     * tener elementos y deben existir.
+     */
+    void remove(int key, int value);
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/SimpleDictionaryADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Diccionario Simple.
+public interface SimpleDictionaryADT<K,V> {
+
+    /**
+     * Descripcion: Agrega un elemento a la estructura. Precondición: La estructura no debe sobrepasar la capacidad. Si
+     * el valor existe pisa el contenido
+     */
+    void add(K key, V value);
+
+    /**
+     * Descripcion: Elimina el elemento de la estructura, si no existe no hace nada. Precondición: La estructura debe
+     * tener elementos.
+     */
+    void remove(K key);
+
+    /**
+     * Descripcion: Devuelve el valor de una clave. Precondición: La estructura debe tener elementos y la clave debe
+     * existir.
+     */
+    V get(K key);
+
+    /**
+     * Descripcion: Retorna el conjunto de claves. Precondición: No tiene.
+     */
+    SetADT<K> getKeys();
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicPriorityQueueADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.structure.definition.PriorityQueueADT;
+
+import org.uade.structure.implementation.NodePrioridad;
+
+public class DynamicPriorityQueueADT<T> implements PriorityQueueADT<T> {
+    private NodePrioridad<T> node; // inicio
+
+
+
+    @Override
+    public T getElement() {
+        if (isEmpty()) {
+            throw new EmptyADTException("Queue is empty");
+        }
+        return node.getValue();
+    }
+
+    @Override
+    public int getPriority() {
+        if (isEmpty()) {
+            throw new EmptyADTException("Queue is empty");
+        }
+        return node.getPriority();
+    }
+
+    @Override
+    public void add(T value, int priority) {
+        NodePrioridad<T> nuevo = new NodePrioridad<>(value, priority);
+
+        // si esta vacia, o si el nuevo tiene mayor prioridad que el nodo cabeza
+        if (isEmpty() || priority > this.node.getPriority()) {
+            nuevo.setNext(this.node);
+            this.node = nuevo;
+            return;
+        }
+
+        NodePrioridad<T> current = this.node;
+
+        // buscar mientras el siguiente no sea nulo Y tenga mas (o igual) prioridad que el nuevo
+        while (current.getNext() != null && current.getNext().getPriority() >= priority) {
+            current = current.getNext();
+        }
+
+        // el current es el nodo que va a tener como siguiente el nuevo nodo.
+        // al nuevo le seteo como siguiente el que ahora current tiene como siguiente.
+        nuevo.setNext(current.getNext());
+        // y a current le seteo como siguiente el nuevo.
+        current.setNext(nuevo);
+    }
+
+    @Override
+    public void remove() {
+        if (isEmpty()) {
+            throw new EmptyADTException("Queue is empty");
+        }
+        this.node = this.node.getNext();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.node == null;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                node +
+                '}';
+    }
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicQueueADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.structure.definition.QueueADT;
+import org.uade.structure.implementation.Node;
+
+public class DynamicQueueADT<T> implements QueueADT<T> {
+    private Node<T> node; // inicio
+    private int count;
+    private Node<T> last;
+
+    @Override
+    public T getElement() {
+        if (isEmpty()) {
+            throw new EmptyADTException("Queue is empty");
+        }
+        return this.node.getValue();
+    }
+
+    @Override
+    public void add(T value) {
+        Node<T> newNode = new Node<>(value);
+        if(isEmpty()) {
+            this.node = newNode;
+            this.last = newNode;
+        }
+        else {
+            last.setNext(newNode);
+            this.last = newNode;
+        }
+        this.count++;
+    }
+
+    @Override
+    public void remove() {
+        if(isEmpty()) {
+            throw new EmptyADTException("Queue is empty");
+        }
+        this.node = this.node.getNext();
+        this.count--;
+
+        if (this.node == null) {
+            this.last = null;
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return node == null;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                node +
+                '}';
+    }
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicStackADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.structure.definition.StackADT;
+import org.uade.structure.implementation.Node;
+
+public class DynamicStackADT<T> implements StackADT<T> {
+    private Node<T> node; // tope
+    private int count;
+
+    @Override
+    public T getElement() throws EmptyADTException {
+        if(!this.isEmpty()){
+            return this.node.getValue();
+        }
+        else{
+            throw new EmptyADTException("Empty stack");
+        }
+    }
+
+    @Override
+    public void add(T value) {
+        if(!this.isEmpty()){
+            Node<T> aux = new Node<>(value);
+            aux.setNext(this.node);
+            this.node = aux;
+            this.count++;
+        }
+        else{
+            this.node = new Node<>(value);
+            this.count++;
+        }
+    }
+
+    @Override
+    public void remove() throws EmptyADTException {
+        if(!this.isEmpty()){
+            this.node = this.node.getNext();
+            this.count--;
+        }
+        else{
+            throw new EmptyADTException("Empty stack");
+        }
+
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return node ==null;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                node +
+                '}';
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/fixed/StaticStackADT.java">
+package org.uade.structure.implementation.fixed;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.FullADTException;
+import org.uade.structure.definition.StackADT;
+
+public class StaticStackADT<T> implements StackADT<T> {
+    private T[] array;
+    private int count;
+    private int max = 1000;
+
+    @SuppressWarnings("unchecked")
+    public StaticStackADT() {
+        this.array = (T[]) new Object[max];
+        this.count = 0;
+    }
+
+    @Override
+    public T getElement() {
+        if (!isEmpty()){
+            return this.array[this.count-1];
+        }
+        else{
+            throw new EmptyADTException("Pila vacia");
+        }
+    }
+
+    @Override
+    public void add(T value) {
+        if(this.count < this.array.length){
+            array[this.count] = value;
+            this.count++;
+        }
+        else{
+            throw new FullADTException("Pila llena");
+        }
+
+    }
+
+    @Override
+    public void remove() {
+        if (this.isEmpty()){
+            throw new EmptyADTException("Pila vaca");
+        }else{
+            this.count--;
+
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.count==0;
+    }
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/util/PriorityQueueADTUtil.java">
+package org.uade.util;
+
+import org.uade.structure.definition.PriorityQueueADT;
+import org.uade.structure.implementation.dynamic.DynamicPriorityQueueADT;
+import org.uade.structure.implementation.fixed.StaticPriorityQueueADT;
+
+public class PriorityQueueADTUtil {
+
+    public static <T> void print(PriorityQueueADT<T> queue) {
+        PriorityQueueADT<T> copy = copy(queue);
+        while (!copy.isEmpty()) {
+            System.out.println("Valor: " + copy.getElement() + " - Prioridad: " + copy.getPriority());
+            copy.remove();
+        }
+    }
+
+    public static <T> PriorityQueueADT<T> copy(PriorityQueueADT<T> priorityQueue){
+        PriorityQueueADT<T> aux = getNewPriorityQueue(priorityQueue);
+        PriorityQueueADT<T> copia = getNewPriorityQueue(priorityQueue);
+
+        while(!priorityQueue.isEmpty()){
+            aux.add(priorityQueue.getElement(), priorityQueue.getPriority());
+            priorityQueue.remove();
+        }
+
+        while(!aux.isEmpty()){
+            copia.add(aux.getElement(), aux.getPriority());
+            priorityQueue.add(aux.getElement(), aux.getPriority());
+            aux.remove();
+        }
+        return copia;
+    }
+
+    private static <T> PriorityQueueADT<T> getNewPriorityQueue(PriorityQueueADT<T> priorityQueue) {
+        if (priorityQueue instanceof DynamicPriorityQueueADT) {
+            return new DynamicPriorityQueueADT<>();
+        } else {
+            return new StaticPriorityQueueADT<>();
+        }
+    }
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/util/QueueADTUtil.java">
+package org.uade.util;
+
+import org.uade.structure.definition.QueueADT;
+import org.uade.structure.implementation.dynamic.DynamicQueueADT;
+import org.uade.structure.implementation.fixed.StaticQueueADT;
+
+public class QueueADTUtil {
+
+
+    public static <T> QueueADT<T> copy (QueueADT<T> queue){
+        QueueADT<T> copia = getNewQueue(queue);
+        QueueADT<T> aux = getNewQueue(queue);
+
+        while(!queue.isEmpty()){
+            copia.add(queue.getElement());
+            aux.add(queue.getElement());
+            queue.remove();
+        }
+
+        while(!aux.isEmpty()){
+            queue.add(aux.getElement());
+            aux.remove();
+        }
+        return copia;
+    }
+
+    private static <T> QueueADT<T> getNewQueue(QueueADT<T> queue){
+        if(queue instanceof StaticQueueADT){
+            return new StaticQueueADT<>();
+        }
+        else{
+            return new DynamicQueueADT<>();
+        }
+    }
+
+    public static <T> void print(QueueADT<T> queue) {
+        QueueADT<T> copy = copy(queue);
+        while (!copy.isEmpty()) {
+            System.out.println(copy.getElement());
+            copy.remove();
+        }
+    }
+
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/util/StackADTUtil.java">
+package org.uade.util;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.structure.definition.StackADT;
+import org.uade.structure.implementation.dynamic.DynamicStackADT;
+import org.uade.structure.implementation.fixed.StaticStackADT;
+
+public class StackADTUtil {
+
+    public static <T> void print(StackADT<T> stack) {
+        StackADT<T> copy = copy(stack);
+        while (!copy.isEmpty()) {
+            System.out.println(copy.getElement());
+            copy.remove();
+        }
+    }
+
+    public static <T> StackADT<T> copy(StackADT<T> stack) {
+        StackADT<T> aux = getNewStack(stack);
+        StackADT<T> copia = getNewStack(stack);
+
+        while (!stack.isEmpty()) {
+            aux.add(stack.getElement());
+            stack.remove();
+        }
+        while (!aux.isEmpty()) {
+            stack.add(aux.getElement());
+            copia.add(aux.getElement());
+            aux.remove();
+        }
+        return copia;
+    }
+
+    private static <T> StackADT<T> getNewStack(StackADT<T> stack) {
+        if (stack instanceof StaticStackADT) {
+            return new StaticStackADT<>();
+        } else {
+            return new DynamicStackADT<>();
+        }
+    }
+
+    public static <T> boolean esPar(StackADT<T> stack){
+        if(!stack.isEmpty()){
+            StackADT<T> aux = copy(stack);
+            int count = 0;
+            while(!aux.isEmpty()){
+                aux.remove();
+                count++;
+            }
+            if(count%2 == 0){
+                return true;
+            }
+            return false;
+        }
+        else{
+            throw new EmptyADTException("Empty Stack");
+        }
+    }
+
+    public static <T> StackADT<T> invertir(StackADT<T> stack){
+        if(!stack.isEmpty()){
+            StackADT<T> copia1 = copy(stack);
+            StackADT<T> invertida = new DynamicStackADT<>();
+            while(!copia1.isEmpty()){
+                invertida.add(copia1.getElement());
+                copia1.remove();
+            }
+            return invertida;
+        }
+        else{
+            throw new EmptyADTException("Pila vacia");
+        }
+    }
+
+    public static <T> boolean estaEnPila(T elemento, StackADT<T> pila) {
+        if (pila.isEmpty()) return false;
+
+        StackADT<T> copia = copy(pila);
+        while (!copia.isEmpty()) {
+            if (copia.getElement().equals(elemento)) {
+                return true;
+            }
+            copia.remove();
+        }
+        return false;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicLinkedListADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.GenericADTException;
+import org.uade.structure.implementation.Node;
+
+public class DynamicLinkedListADT<T> implements org.uade.structure.definition.LinkedListADT<T> {
+    private Node<T> node;
+    private int count;
+
+    @Override
+    public void add(T value) {
+        if(this.isEmpty()) {//si es el primero, seteo el value
+            this.node = new Node<>(value);
+        }
+        else{
+            Node<T> aux = this.node; //busco desde el primer nodo
+            while(aux.getNext() != null) {//voy cambiando aux hasta encontrar el q no tenga next
+                aux = aux.getNext();
+            }
+            aux.setNext(new Node<>(value));//seteo el valor del auxiliar porque es el ultimo nodo.
+        }
+        this.count++;
+    }
+
+    @Override
+    public void insert(int index, T value) {
+        if(index<= count && index >= 0){
+            int auxCount = 0;
+            Node<T> aux = this.node;
+            if (index != 0){
+                while(auxCount!=(index-1)){
+                    auxCount++;
+                    aux = aux.getNext();
+                }
+                Node<T> newNode = new Node<>(value);
+                newNode.setNext(aux.getNext());
+                aux.setNext(newNode);
+            }
+            else{
+                Node<T> newNode = new Node<>(value);
+                newNode.setNext(aux);
+                this.node = newNode;
+            }
+            this.count++;
+
+        }
+        else{
+            throw new IndexOutOfBoundsException("Indice inexistente");
+        }
+    }
+
+    @Override
+    public void remove(int index) throws GenericADTException {
+        if(index< count && index >= 0){
+            int auxCount = 0;
+            Node<T> aux = this.node;
+
+            if(index!=0){
+                while(auxCount != (index-1)){
+                    auxCount++;
+                    aux = aux.getNext();
+                }
+                Node<T> remove = aux.getNext();
+                aux.setNext(remove.getNext());
+                remove.setNext(null);
+            }
+            else{ //caso especial si index es 0
+                this.node = aux.getNext();
+                aux.setNext(null);
+            }
+            this.count--;
+
+        }
+        else{
+            throw new GenericADTException("Indice inexistente");
+        }
+    }
+
+    @Override
+    public T get(int index) throws GenericADTException {
+        T valor;
+        if (index < count && index >= 0) {
+            int auxCount = 0;
+            Node<T> auxNode = this.node;
+            while(index != auxCount){
+                auxCount++;
+                auxNode = auxNode.getNext();
+            }
+            valor = auxNode.getValue();
+
+        }
+        else{
+            throw new GenericADTException("Indice inexistente");
+        }
+
+        return valor;
+    }
+
+    @Override
+    public int size() {
+        return this.count;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return node == null;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                node +
+                '}';
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/fixed/StaticLinkedListADT.java">
+package org.uade.structure.implementation.fixed;
+
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.FullADTException;
+import org.uade.structure.definition.LinkedListADT;
+
+public class StaticLinkedListADT<T> implements LinkedListADT<T> {
+    private T[] array;
+    private final int MAX = 1000;
+    private int count;
+
+    @SuppressWarnings("unchecked")
+    public StaticLinkedListADT() {
+        this.array = (T[]) new Object[MAX];
+        this.count = 0;
+    }
+
+    @Override
+    public void add(T value){
+        if(count >= MAX){
+            throw new FullADTException("Lista llena");
+        }
+        this.array[count] = value;
+        count++;
+    }
+
+    @Override
+    public void insert(int index, T value) {
+        if (index < 0 || index > count) {
+            throw new GenericADTException("Index out of bounds");
+        }
+        if (count >= MAX){
+            throw new FullADTException("Lista llena");
+        }
+
+        for (int i = count ; i > index ; i--){
+            this.array [i] = this.array[i-1];
+        }
+
+        this.array[index] = value;
+        this.count++;
+    }
+
+    @Override
+    public void remove(int index) {
+        if (index < 0 || index >= count) {
+            throw new GenericADTException("Index out of bounds");
+        }
+
+        for (int i = index ; i < count-1 ; i++){
+            this.array[i] = this.array[i+1];
+        }
+
+        this.array[count - 1] = null;
+        this.count--;
+    }
+
+    @Override
+    public T get(int index) {
+        if (index < 0 || index >= count) {
+            throw new GenericADTException("Index out of bounds");
+        }
+        return this.array[index];
+    }
+
+    @Override
+    public int size() {
+        return this.count;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.count==0;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/fixed/StaticPriorityQueueADT.java">
+package org.uade.structure.implementation.fixed;
+
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.FullADTException;
+import org.uade.structure.definition.PriorityQueueADT;
+
+
+public class StaticPriorityQueueADT<T> implements PriorityQueueADT<T> {
+    private T[] values;
+    private int[] priorities;
+    private int count;
+    private final int MAX_SIZE = 1000;
+
+    @SuppressWarnings("unchecked")
+    public StaticPriorityQueueADT() {
+        this.values = (T[]) new Object[MAX_SIZE];
+        this.priorities = new int[MAX_SIZE];
+        this.count = 0;
+    }
+
+    @Override
+    public T getElement() {
+        if(isEmpty()){
+            throw new EmptyADTException("Priority Queue is empty");
+        }
+        return values[0];
+    }
+
+    @Override
+    public int getPriority() {
+        if(isEmpty()){
+            throw new EmptyADTException("Priority Queue is empty");
+        }
+        return priorities[0];
+    }
+
+    @Override
+    public void add(T value, int priority) {
+        if(count == MAX_SIZE){
+            throw new FullADTException("Priority queue is full");
+        }
+
+        int index = 0;
+        // buscar el indice donde debe ir (mientras la prioridad sea menor o igual a la actual)
+        //  >= (los de igual prioridad se encolan atrás)
+        while (index < count && priorities[index] >= priority) {
+            index++;
+        }
+
+        //desplazar desde final hasta index
+        for (int j = count; j > index; j--) {
+            values[j] = values[j - 1];
+            priorities[j] = priorities[j - 1];
+        }
+
+        // ocupar el hueco
+        values[index] = value;
+        priorities[index] = priority;
+        count++;
+
+    }
+
+    @Override
+    public void remove() {
+        if (isEmpty()) {
+            throw new EmptyADTException("Priority Queue is empty");
+        }
+        for (int i = 0; i < count - 1; i++) {
+            values[i] = values[i + 1];
+            priorities[i] = priorities[i + 1];
+        }
+        count--;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return count == 0;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/Node.java">
+package org.uade.structure.implementation;
+
+public class Node<T> {
+    private T value;
+    private Node<T> next;
+
+    public Node(T value) {
+        this.value = value;
+        this.next = null;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public Node<T> getNext() {
+        return next;
+    }
+
+    public void setNext(Node<T> next) {
+        this.next = next;
+    }
+
+    @Override
+    public String toString() {
+        String mensaje = value+"";
+        if (this.next != null) {
+            mensaje += ","+this.next.toString();
+        }
+        return mensaje;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/fixed/StaticQueueADT.java">
+package org.uade.structure.implementation.fixed;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.FullADTException;
+import org.uade.structure.definition.QueueADT;
+
+public class StaticQueueADT<T> implements QueueADT<T> {
+    private T[] array;
+    private int count;
+    private int size = 1000;
+
+    @SuppressWarnings("unchecked")
+    public StaticQueueADT() {
+        this.array = (T[]) new Object[size];
+        this.count = 0;
+    }
+
+    @Override
+    public T getElement() {
+        if(isEmpty()){
+            throw new EmptyADTException("Queue is empty");
+        }
+        return array[0];
+    }
+
+    @Override
+    public void add(T value) {
+        if(count == size){
+            throw new FullADTException("Queue is full");
+        }
+        array[count] = value;
+        count++;
+    }
+
+    @Override
+    public void remove() {
+        if(this.isEmpty()){
+            throw new EmptyADTException("Queue is empty");
+        }
+        for (int i = 0; i < this.count - 1; i++) {
+            this.array[i] = this.array[i + 1];
+        }
+        //  limpiar la ult. posición
+        this.array[this.count - 1] = null;
+        this.count--;
+
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return count == 0;
+    }
+
+
+
+
+}
+</file>
+
+</files>

@@ -33,7 +33,4 @@ public class FlotaService {
         }
     }
 
-    public LinkedListADT<Micro> obtenerMicrosMasAsignados() {
-        return null;
-    }
 }

@@ -11,7 +11,7 @@ public class NodeSimpleDict<K, V> {
         this.next = null;
     }
 
-    public K key() {
+    public K getKey() {
         return key;
     }
 
@@ -19,7 +19,7 @@ public class NodeSimpleDict<K, V> {
         this.key = key;
     }
 
-    public V value() {
+    public V getValue() {
         return value;
     }
 
@@ -27,7 +27,7 @@ public class NodeSimpleDict<K, V> {
         this.value = value;
     }
 
-    public NodeSimpleDict<K, V> next() {
+    public NodeSimpleDict<K, V> getNext() {
         return next;
     }
 
