@@ -19,7 +19,6 @@ public class Micro {
     public boolean estaDisponible(LocalDate fechaBusqueda) {
         for (int i = 0; i < this.viajes.size(); i++) {
             Viaje viajeActual = this.viajes.get(i);
-
             if (viajeActual.getFecha().equals(fechaBusqueda)) {
                 return false;
             }

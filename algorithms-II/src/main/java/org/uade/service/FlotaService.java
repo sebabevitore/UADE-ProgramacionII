@@ -4,7 +4,11 @@ import org.uade.entity.Micro;
 import org.uade.entity.Viaje;
 import org.uade.structure.definition.LinkedListADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
 import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
+
+import java.util.LinkedList;
+
 
 public class FlotaService {
     private SimpleDictionaryADT<String, Micro> micros;
@@ -32,6 +36,21 @@ public class FlotaService {
         } else {
             System.out.println("Error: El micro no está disponible en esa fecha.");
         }
+    }
+
+    public LinkedListADT<Micro> mostrarMicrosAsignados() {
+        LinkedListADT<Micro> microsAsignados = new DynamicLinkedListADT<Micro>();
+
+        while(){
+
+        }
+
+        return microsAsignados;
+    }
+
+    public boolean esMicroAsignado(String patente) {
+
+        return false;
     }
 
 
