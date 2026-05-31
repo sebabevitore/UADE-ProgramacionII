@@ -1,6 +1,7 @@
 package org.uade.service;
 
 import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
 import org.uade.Exception.NotFoundException;
 import org.uade.Exception.UnavailableDateException;
 import org.uade.entity.Micro;
@@ -23,6 +24,9 @@ public class FlotaService {
 
     public void registrarMicro(String patente, Tipo tipo) {
         // TODO: add validacion de patente segun formato que quiera.
+        if(patenteExiste(patente)) {
+            throw new GenericADTException("Ya existe un micro con esa patente.");
+        }
         Micro micro = new Micro(patente, tipo);
         this.micros.add(patente, micro);
     }

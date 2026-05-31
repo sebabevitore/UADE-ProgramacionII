@@ -1,6 +1,7 @@
 package org.uade.view;
 
 import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
 import org.uade.Exception.NotFoundException;
 import org.uade.Exception.OpcionInvalida;
 import org.uade.entity.Micro;
@@ -85,9 +86,8 @@ public class FlotaModulo {
 
             flotaService.registrarMicro(patente,tipo);
             System.out.println("✅ Micro registrado exitosamente.");
-        } catch (OpcionInvalida e) {
+        } catch (OpcionInvalida | GenericADTException e) {
             System.out.println("❌ Error: " + e.getMessage());
-
         }
     }
 
