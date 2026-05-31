@@ -6,6 +6,7 @@ import org.uade.structure.implementation.dynamic.DynamicStackADT;
 import java.time.LocalDate;
 
 public class Viaje {
+    private static int contadorId = 0;
     private int idViaje;
     private Ruta ruta;
     private Micro microAsignado;
@@ -14,8 +15,9 @@ public class Viaje {
     private int prioridadActual;
     private StackADT<CambioPrioridad> cambios;
 
-    public Viaje(int idViaje, Ruta ruta, LocalDate fecha, int prioridadBase) {
-        this.idViaje = idViaje;
+    public Viaje(Ruta ruta, LocalDate fecha, int prioridadBase) {
+        contadorId++;
+        this.idViaje = contadorId++;
         this.ruta = ruta;
         this.fecha = fecha;
         this.prioridadActual = prioridadBase;
@@ -35,6 +37,10 @@ public class Viaje {
             return this.idViaje == aux.idViaje;
         }
         return false;
+    }
+
+    public void asignarMicro(Micro micro){
+        this.microAsignado = micro;
     }
 
     public int getIdViaje() {
@@ -94,4 +100,11 @@ public class Viaje {
     }
 
 
+    @Override
+    public String toString() {
+        return "Viaje " +
+                "N. " + idViaje +
+                ", " + ruta +
+                ", " + fecha;
+    }
 }

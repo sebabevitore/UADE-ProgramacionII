@@ -26,6 +26,10 @@ public class Micro {
         return true;
     }
 
+    public boolean esAsignado() {
+        return getCantViajes()>0;
+    }
+
     public void agregarViaje(Viaje viaje) {
         this.viajes.add(viaje);
     }
@@ -35,4 +39,9 @@ public class Micro {
     public String getPatente() { return patente; }
     public Tipo getTipo() { return tipo; }
 
+
+    @Override
+    public String toString() {
+        return  "patente: "+this.patente + " " + this.tipo.toString();
+    }
 }

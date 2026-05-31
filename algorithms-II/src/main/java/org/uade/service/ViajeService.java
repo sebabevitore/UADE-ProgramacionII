@@ -2,23 +2,29 @@ package org.uade.service;
 
 import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.NotFoundException;
-import org.uade.entity.Viaje;
-import org.uade.entity.Motivo;
-import org.uade.entity.CambioPrioridad;
+import org.uade.entity.*;
 import org.uade.structure.definition.PriorityQueueADT;
 import org.uade.structure.implementation.dynamic.DynamicPriorityQueueADT;
 
+import java.time.LocalDate;
+
 import static org.uade.util.PriorityQueueADTUtil.copy;
 
-public class PrioridadService {
+public class ViajeService {
     private PriorityQueueADT<Viaje> colaViajes;
 
-    public PrioridadService() {
+    public ViajeService() {
         this.colaViajes = new DynamicPriorityQueueADT<>();
     }
 
-    public void programarViaje(Viaje viaje) {
-        this.colaViajes.add(viaje, viaje.getPrioridadActual());
+    public void programarViaje(Ruta ruta, LocalDate fecha, int prioridadBase) {
+        //TODO: add validaciones
+        Viaje viaje = new Viaje(ruta, fecha, prioridadBase);
+        this.colaViajes.add(viaje, prioridadBase);
+    }
+
+    private void programarViaje(Viaje viaje) {
+        this.colaViajes.add(viaje,viaje.getPrioridadActual());
     }
 
     public void cambiarPrioridad(Viaje viaje, int nuevaPrioridad, Motivo motivo) {
@@ -29,9 +35,6 @@ public class PrioridadService {
         CambioPrioridad cambio = new CambioPrioridad(motivo, nuevaPrioridad);
         viaje.cambiarPrioridad(cambio);
         programarViaje(viaje);
-        System.out.println("Cambio prioridad: " + cambio.getPrioridad());
-        System.out.println("Motivo: " + cambio.getMotivo());
-
     }
 
     private void removeViaje(Viaje viaje){
@@ -62,8 +65,6 @@ public class PrioridadService {
         return false;
     }
 
-
-
     public Viaje despacharSiguienteViaje() {
         if(this.colaViajes.isEmpty()) {
             throw new EmptyADTException("No hay viajes en cola");
@@ -73,4 +74,11 @@ public class PrioridadService {
 
         return viaje;
     }
+
+    public void asignarMicroAViaje(Viaje viaje, Micro micro) {
+        micro.agregarViaje(viaje);
+        viaje.asignarMicro(micro);
+    }
+
+
 }

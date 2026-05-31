@@ -8,4 +8,15 @@ public class Ruta {
         this.origen = origen;
         this.destino = destino;
     }
+
+
+
+
+    @Override
+    public String toString() {
+        return "Ruta{" +
+                "origen='" + origen + '\'' +
+                ", destino='" + destino + '\'' +
+                '}';
+    }
 }
