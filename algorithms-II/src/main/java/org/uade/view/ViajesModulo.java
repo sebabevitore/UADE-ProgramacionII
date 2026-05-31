@@ -93,7 +93,7 @@ public class ViajesModulo {
             System.out.println("\n--- ASIGNAR MICRO PARA PROXIMO VIAJE EN COLA ---");
             String patente = ConsoleInput.readString("Ingrese la patente del micro:");
             Viaje viaje = viajeService.despacharSiguienteViaje();
-            Micro micro = flotaService.obtenerMicroSiEstaDisponible(patente,viaje.getFecha());
+            Micro micro = flotaService.getMicroDisponible(patente,viaje.getFecha());
 
             viajeService.asignarMicroAViaje(viaje,micro);
             System.out.println(viaje.toString());

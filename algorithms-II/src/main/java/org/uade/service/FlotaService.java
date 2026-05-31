@@ -1,10 +1,10 @@
 package org.uade.service;
 
+import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.NotFoundException;
 import org.uade.Exception.UnavailableDateException;
 import org.uade.entity.Micro;
 import org.uade.entity.Tipo;
-import org.uade.entity.Viaje;
 import org.uade.structure.definition.LinkedListADT;
 import org.uade.structure.definition.SetADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
@@ -30,6 +30,9 @@ public class FlotaService {
     public LinkedListADT<Micro> mostrarMicrosAsignados() {
         LinkedListADT<Micro> microsAsignados = new DynamicLinkedListADT<Micro>();
         SetADT<String> patentes = micros.getKeys();
+        if(patentes.isEmpty()){
+            throw new EmptyADTException("No hay micros registrados.");
+        }
         while(!patentes.isEmpty()) {
             String patente = patentes.choose();
             Micro micro = micros.get(patente);
@@ -41,28 +44,22 @@ public class FlotaService {
         return microsAsignados;
     }
 
-    public boolean esMicroAsignado(String patente) {
-        if(!patenteExiste(patente)){
-            Micro micro = this.micros.get(patente);
-            return micro.esAsignado();
-        }
-        return false;
-    }
-
     public boolean estaDisponible(String patente, LocalDate fecha) {
         if(patenteExiste(patente)) {
             Micro micro = this.micros.get(patente);
             return micro.estaDisponible(fecha);
         }
-        return false;
+        else{
+            throw new NotFoundException("No se encontro el micro.");
+        }
     }
 
-    public boolean patenteExiste(String patente) {
+    private boolean patenteExiste(String patente) {
         SetADT<String> patentes = micros.getKeys();
         return patentes.exist(patente.toUpperCase());
     }
 
-    public Micro obtenerMicroSiEstaDisponible(String patente, LocalDate fecha) {
+    public Micro getMicroDisponible(String patente, LocalDate fecha) {
         Micro micro = this.micros.get(patente);
         if (micro == null) {
             throw new NotFoundException("El micro " + patente + " no existe");
