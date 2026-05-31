@@ -9,6 +9,7 @@ import org.uade.entity.Tipo;
 import org.uade.service.FlotaService;
 import org.uade.service.ViajeService;
 import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.SimpleDictionaryADT;
 import org.uade.util.ConsoleInput;
 
 import java.time.DateTimeException;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static org.uade.util.LinkedListADTUtil.print;
+import static org.uade.util.SimpleDictionaryADTUtil.print;
 
 public class FlotaModulo {
     private final FlotaService flotaService;
@@ -33,6 +35,7 @@ public class FlotaModulo {
             System.out.println("1. Registrar nuevo micro");
             System.out.println("2. Disponibilidad de micro");
             System.out.println("3. Mostrar micros con viajes (pendientes/terminados)");
+            System.out.println("4. Mostrar todos los micros");
             System.out.println("0. Volver al menú principal");
 
             opcionFlota = ConsoleInput.readOption("Seleccione una opción:");
@@ -55,7 +58,7 @@ public class FlotaModulo {
                     ConsoleInput.waitEnter();
                     break;
                 case 4:
-                    System.out.println("PENDIENTE?: mostrar todos los micros");
+                    ejecutarMostrarMicros();
                     ConsoleInput.waitEnter();
                     break;
                 default:
@@ -118,6 +121,15 @@ public class FlotaModulo {
             System.out.println("❌ Error:  " + e.getMessage());
         } catch(DateTimeException e){
             System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
+        }
+    }
+
+    private void ejecutarMostrarMicros(){
+        try{
+            SimpleDictionaryADT<String, Micro> micros = flotaService.getMicros();
+            print(micros);
+        }catch (EmptyADTException e){
+            System.out.println("❌ Error: " + e.getMessage());
         }
     }
 }

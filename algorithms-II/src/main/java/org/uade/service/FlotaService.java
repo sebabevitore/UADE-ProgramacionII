@@ -48,6 +48,13 @@ public class FlotaService {
         return microsAsignados;
     }
 
+    public SimpleDictionaryADT<String,Micro> getMicros() {
+        if(micros.isEmpty()){
+            throw new EmptyADTException("No hay micros registrados.");
+        }
+        return this.micros;
+    }
+
     public boolean estaDisponible(String patente, LocalDate fecha) {
         if(patenteExiste(patente)) {
             Micro micro = this.micros.get(patente);
