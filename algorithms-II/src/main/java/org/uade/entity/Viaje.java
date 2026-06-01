@@ -102,9 +102,9 @@ public class Viaje {
 
     @Override
     public String toString() {
-        return "Viaje " +
-                "N. " + idViaje +
-                ", " + ruta +
-                ", " + fecha;
+        return "VIAJE " +
+                "id: " + idViaje +
+                " - Ruta:  " + ruta +
+                " - Fecha: " + fecha;
     }
 }

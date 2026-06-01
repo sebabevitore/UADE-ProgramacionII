@@ -5,6 +5,7 @@ import org.uade.Exception.NotFoundException;
 import org.uade.Exception.OpcionInvalida;
 import org.uade.Exception.UnavailableDateException;
 import org.uade.entity.Micro;
+import org.uade.entity.Motivo;
 import org.uade.entity.Ruta;
 import org.uade.entity.Viaje;
 import org.uade.service.FlotaService;
@@ -14,6 +15,8 @@ import org.uade.util.ConsoleInput;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static org.uade.util.PriorityQueueADTUtil.print;
 
 public class ViajesModulo {
     private final FlotaService flotaService;
@@ -30,7 +33,7 @@ public class ViajesModulo {
             System.out.println("\n--- MÓDULO VIAJES ---");
             System.out.println("1. Registrar nuevo viaje");
             System.out.println("2. Asignar micro a viaje");
-            System.out.println("3. Mostrar viajes");
+            System.out.println("3. Mostrar viajes pendientes");
             System.out.println("4. Cambiar prioridad de viaje");
             System.out.println("0. Volver al menú principal");
 
@@ -39,20 +42,24 @@ public class ViajesModulo {
             switch (opcionViajes) {
                 case 0:
                     System.out.println("Volviendo al menú principal...");
+                    ConsoleInput.waitEnter();
                     break;
                 case 1:
                     ejecutarRegistrarMicro();
+                    ConsoleInput.waitEnter();
+
                     break;
                 case 2:
-                    asignarMicro();
+                    ejecutarAsignarMicro();
                     ConsoleInput.waitEnter();
                     break;
                 case 3:
-                    System.out.println("TODO: Implementar mostrar viajes");
+                    ejecutarMostrarViajes();
                     ConsoleInput.waitEnter();
                     break;
                 case 4:
-                    System.out.println("TODO: Implementar cambio prioridad");
+                    ejecutarCambioPrioridad();
+                    ConsoleInput.waitEnter();
                     break;
                 default:
                     System.out.println("❌ Opción no válida.");
@@ -77,34 +84,83 @@ public class ViajesModulo {
 
             viajeService.programarViaje(ruta, fecha, prioridad);
             System.out.println("✅ Viaje registrado exitosamente con fecha: " + fecha);
-            ConsoleInput.waitEnter();
 
         } catch(DateTimeException e){
             System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
-            ConsoleInput.waitEnter();
         } catch (OpcionInvalida e) {
             System.out.println("❌ Error: " + e.getMessage());
-            ConsoleInput.waitEnter();
         }
     }
 
-    private void asignarMicro() {
+    private void ejecutarAsignarMicro() {
         try {
             System.out.println("\n--- ASIGNAR MICRO PARA PROXIMO VIAJE EN COLA ---");
             String patente = ConsoleInput.readString("Ingrese la patente del micro:");
             Viaje viaje = viajeService.despacharSiguienteViaje();
             Micro micro = flotaService.getMicroDisponible(patente,viaje.getFecha());
-
             viajeService.asignarMicroAViaje(viaje,micro);
             System.out.println(viaje.toString());
             System.out.println("✅ Micro "+micro.toString()+" asignado correctamente.");
 
         } catch(EmptyADTException e){
             System.out.println("❌ Error: No hay viajes en la cola para despachar.");
-            ConsoleInput.waitEnter();
         } catch (NotFoundException | UnavailableDateException e) {
             System.out.println("❌ Error: " + e.getMessage());
-            ConsoleInput.waitEnter();
         }
     }
+
+    private void ejecutarMostrarViajes(){
+        try{
+            print(viajeService.getColaViajes());
+        }catch (EmptyADTException e){
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarCambioPrioridad() {
+        try {
+            System.out.println("\n--- CAMBIAR PRIORIDAD DE VIAJE ---");
+
+            int idViaje = ConsoleInput.readInt("Ingrese el ID del viaje:");
+            int nuevaPrioridad = ConsoleInput.readInt("Ingrese la nueva prioridad:");
+
+            Motivo motivo = null;
+            boolean motivoValido = false;
+            do {
+                System.out.println("\nMotivos de cambio:");
+                System.out.println("1. LLUVIA");
+                System.out.println("2. VISIBILIDAD");
+                System.out.println("3. OTRO");
+                int opcionMotivo = ConsoleInput.readInt("Seleccione una opción:");
+
+                switch (opcionMotivo) {
+                    case 1:
+                        motivo = Motivo.LLUVIA;
+                        motivoValido = true;
+                        break;
+                    case 2:
+                        motivo = Motivo.VISIBILIDAD;
+                        motivoValido = true;
+                        break;
+                    case 3:
+                        motivo = Motivo.OTRO;
+                        motivoValido = true;
+                        break;
+                    default:
+                        System.out.println("❌ Opción no válida. Intente nuevamente.");
+                }
+            } while (!motivoValido);
+
+            viajeService.cambiarPrioridad(idViaje, nuevaPrioridad, motivo);
+
+            System.out.println("✅ Prioridad cambiada correctamente.");
+
+        } catch (NotFoundException | OpcionInvalida e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+
+
+
 }

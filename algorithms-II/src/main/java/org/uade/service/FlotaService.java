@@ -23,10 +23,10 @@ public class FlotaService {
     }
 
     public void registrarMicro(String patente, Tipo tipo) {
-        // TODO: add validacion de patente segun formato que quiera.
-        if(patenteExiste(patente)) {
+        if(!micros.isEmpty() && patenteExiste(patente)) {
             throw new GenericADTException("Ya existe un micro con esa patente.");
         }
+        // TODO: add validacion de patente segun formato que quiera.
         Micro micro = new Micro(patente, tipo);
         this.micros.add(patente, micro);
     }

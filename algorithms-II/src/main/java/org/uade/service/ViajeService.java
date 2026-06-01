@@ -27,7 +27,8 @@ public class ViajeService {
         this.colaViajes.add(viaje,viaje.getPrioridadActual());
     }
 
-    public void cambiarPrioridad(Viaje viaje, int nuevaPrioridad, Motivo motivo) {
+    public void cambiarPrioridad(int idViaje, int nuevaPrioridad, Motivo motivo) {
+        Viaje viaje = findViajeById(idViaje);
         if (this.colaViajes.isEmpty() || !viajeEnCola(viaje)) {
             throw new NotFoundException("El viaje ID: " + viaje.getIdViaje() + " no esta en la cola");
         }
@@ -52,6 +53,18 @@ public class ViajeService {
         }
     }
 
+    private Viaje findViajeById(int idViaje){
+        PriorityQueueADT<Viaje> copy = copy(this.colaViajes);
+        while(!copy.isEmpty()){
+            if(copy.getElement().getIdViaje() == idViaje){
+                return copy.getElement();
+            }
+            copy.remove();
+        }
+        throw new NotFoundException("El viaje ID: " + idViaje + " no esta en la cola.");
+
+    }
+
 
     private boolean viajeEnCola(Viaje viaje) {
         PriorityQueueADT<Viaje> copy = copy(this.colaViajes);
@@ -71,13 +84,19 @@ public class ViajeService {
         }
         Viaje viaje = this.colaViajes.getElement();
         this.colaViajes.remove();
-
         return viaje;
     }
 
     public void asignarMicroAViaje(Viaje viaje, Micro micro) {
-        micro.agregarViaje(viaje);
         viaje.asignarMicro(micro);
+        micro.agregarViaje(viaje);
+    }
+
+    public PriorityQueueADT<Viaje> getColaViajes() {
+        if(this.colaViajes.isEmpty()) {
+            throw new EmptyADTException("No hay viajes pendientes.");
+        }
+        return this.colaViajes;
     }
 
 
