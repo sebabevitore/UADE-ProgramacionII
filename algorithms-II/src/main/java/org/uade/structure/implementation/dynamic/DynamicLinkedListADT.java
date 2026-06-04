@@ -12,6 +12,7 @@ public class DynamicLinkedListADT<T> implements org.uade.structure.definition.Li
         if(this.isEmpty()) {//si es el primero, seteo el value
             this.node = new Node<>(value);
         }
+
         else{
             Node<T> aux = this.node; //busco desde el primer nodo
             while(aux.getNext() != null) {//voy cambiando aux hasta encontrar el q no tenga next
