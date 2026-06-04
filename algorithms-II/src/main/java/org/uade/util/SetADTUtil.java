@@ -8,6 +8,15 @@ import org.uade.structure.implementation.fixed.StaticStackADT;
 
 public class SetADTUtil {
 
+    public static <T> void print(SetADT<T> set) {
+        SetADT<T> copy = copy(set);
+        while (!copy.isEmpty()) {
+            T element = copy.choose();
+            System.out.println(element);
+            copy.remove(element);
+        }
+    }
+
     public static <T> SetADT<T> copy(SetADT<T> set) {
         SetADT<T> aux = getNewStack(set);
         SetADT<T> copia = getNewStack(set);

@@ -1,42 +1,42 @@
 package org.uade.structure.definition;
 
 // Esta interfaz representa el TDA Grafo.
-public interface GraphADT {
+public interface GraphADT<V, P> {
 
     /**
      * Descripcion: Retorna el conjunto de vertices. Precondición: No tiene.
      */
-    SetADT<Integer> getVertxs();
+    SetADT<V> getVertxs();
 
     /**
      * Descripcion: Agrega un nuevo vertice al grafo. Precondición: No tiene.
      */
-    void addVertx(int vertex);
+    void addVertx(V vertex);
 
     /**
      * Descripcion: Eliminar un vertice del grafo. Precondición: No tiene.
      */
-    void removeVertx(int vertex);
+    void removeVertx(V vertex);
 
     /**
      * Descripcion: Agrega una nueva arista al grafo. Precondición: No tiene.
      */
-    void addEdge(int vertxOne, int vertxTwo, int weight);
+    void addEdge(V vertxOne, V vertxTwo, P weight);
 
     /**
      * Descripcion: Eliminar una arista del grafo. Precondición: No tiene.
      */
-    void removeEdge(int vertxOne, int vertxTwo);
+    void removeEdge(V vertxOne, V vertxTwo);
 
     /**
      * Descripcion: Comprueba si existe o no una arista en el grafo. Precondición: Debe tener elementos el grafo.
      */
-    boolean existsEdge(int vertxOne, int vertxTwo);
+    boolean existsEdge(V vertxOne, V vertxTwo);
 
     /**
      * Descripcion: Devuelve el peso de la arista entre dos vertices. Precondición: Debe tener elementos el grafo.
      */
-    int edgeWeight(int vertxOne, int vertxTwo);
+    P edgeWeight(V vertxOne, V vertxTwo);
 
     /**
      * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.

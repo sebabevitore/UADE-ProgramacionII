@@ -1,6 +1,7 @@
 package org.uade.structure.implementation.dynamic;
 
 import org.uade.Exception.GenericADTException;
+import org.uade.Exception.InvalidIndexException;
 import org.uade.structure.implementation.Node;
 
 public class DynamicLinkedListADT<T> implements org.uade.structure.definition.LinkedListADT<T> {
@@ -46,7 +47,7 @@ public class DynamicLinkedListADT<T> implements org.uade.structure.definition.Li
 
         }
         else{
-            throw new IndexOutOfBoundsException("Indice inexistente");
+            throw new InvalidIndexException("Indice inexistente");
         }
     }
 

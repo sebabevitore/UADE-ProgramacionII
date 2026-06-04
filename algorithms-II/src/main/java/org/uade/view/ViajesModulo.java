@@ -74,7 +74,7 @@ public class ViajesModulo {
             System.out.println("\n--- REGISTRAR NUEVO VIAJE ---");
 
             // TODO: arreglar ruta cuando lo haga...
-            Ruta ruta = new Ruta("bsas","caba");
+            Ruta ruta = new Ruta(1, 3); // bsas -> caba
             // fecha
             String fechaStr = ConsoleInput.readString("Ingrese la fecha del viaje (dd/MM/yyyy):");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
