@@ -4,36 +4,31 @@ import org.uade.structure.definition.QueueADT;
 import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 
 public class Ruta {
-    private int codigoOrigen;
-    private int codigoDestino;
+    private Terminal origen;
+    private Terminal destino;
     private QueueADT<Terminal> paradasIntermedias;
 
-    public Ruta(int codigoOrigen, int codigoDestino) {
-        this.codigoOrigen = codigoOrigen;
-        this.codigoDestino = codigoDestino;
-        this.paradasIntermedias = new DynamicQueueADT<>();
-    }
 
-    public Ruta(int codigoOrigen, int codigoDestino, QueueADT<Terminal> paradasIntermedias) {
-        this.codigoOrigen = codigoOrigen;
-        this.codigoDestino = codigoDestino;
+    public Ruta(Terminal origen, Terminal destino, QueueADT<Terminal> paradasIntermedias) {
+        this.origen = origen;
+        this.destino = destino;
         this.paradasIntermedias = paradasIntermedias;
     }
 
-    public int getCodigoOrigen() {
-        return codigoOrigen;
+    public Terminal getOrigen() {
+        return origen;
     }
 
-    public void setCodigoOrigen(int codigoOrigen) {
-        this.codigoOrigen = codigoOrigen;
+    public void setOrigen(Terminal origen) {
+        this.origen = origen;
     }
 
-    public int getCodigoDestino() {
-        return codigoDestino;
+    public Terminal getDestino() {
+        return destino;
     }
 
-    public void setCodigoDestino(int codigoDestino) {
-        this.codigoDestino = codigoDestino;
+    public void setDestino(Terminal destino) {
+        this.destino = destino;
     }
 
     public QueueADT<Terminal> getParadasIntermedias() {
@@ -47,8 +42,8 @@ public class Ruta {
     @Override
     public String toString() {
         return "Ruta{" +
-                "codigoOrigen=" + codigoOrigen +
-                ", codigoDestino=" + codigoDestino +
+                "codigoOrigen=" + origen.getCodigo() +
+                ", codigoDestino=" + destino.getCodigo() +
                 ", paradasIntermedias=" + paradasIntermedias +
                 '}';
     }

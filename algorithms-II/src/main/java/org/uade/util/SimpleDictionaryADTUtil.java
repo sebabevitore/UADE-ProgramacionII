@@ -4,7 +4,7 @@ import org.uade.structure.definition.SimpleDictionaryADT;
 
 public class SimpleDictionaryADTUtil {
 
-    public static  <K, V> void print(SimpleDictionaryADT<K,V> dict){
+    public static  <K, V> void printDict(SimpleDictionaryADT<K,V> dict){
         if (dict == null || dict.isEmpty()) {
             System.out.println("El diccionario está vacío.");
             return;

@@ -7,7 +7,6 @@ import org.uade.Exception.OpcionInvalida;
 import org.uade.entity.Micro;
 import org.uade.entity.Tipo;
 import org.uade.service.FlotaService;
-import org.uade.service.ViajeService;
 import org.uade.structure.definition.LinkedListADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
 import org.uade.util.ConsoleInput;
@@ -17,15 +16,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static org.uade.util.LinkedListADTUtil.print;
-import static org.uade.util.SimpleDictionaryADTUtil.print;
+import static org.uade.util.SimpleDictionaryADTUtil.printDict;
 
 public class FlotaModulo {
     private final FlotaService flotaService;
-    private final ViajeService viajeService;
 
-    public FlotaModulo(FlotaService flotaService, ViajeService viajeService) {
+    public FlotaModulo(FlotaService flotaService) {
         this.flotaService = flotaService;
-        this.viajeService = viajeService;
     }
 
     public void ejecutarMenuFlota() {
@@ -127,9 +124,10 @@ public class FlotaModulo {
     private void ejecutarMostrarMicros(){
         try{
             SimpleDictionaryADT<String, Micro> micros = flotaService.getMicros();
-            print(micros);
+            printDict(micros);
         }catch (EmptyADTException e){
             System.out.println("❌ Error: " + e.getMessage());
         }
     }
+
 }

@@ -3,12 +3,11 @@ package org.uade.util;
 import org.uade.structure.definition.SetADT;
 import org.uade.structure.implementation.dynamic.DynamicSetADT;
 import org.uade.structure.implementation.fixed.StaticSetADT;
-import org.uade.structure.implementation.fixed.StaticStackADT;
 
 
 public class SetADTUtil {
 
-    public static <T> void print(SetADT<T> set) {
+    public static <T> void printSet(SetADT<T> set) {
         SetADT<T> copy = copy(set);
         while (!copy.isEmpty()) {
             T element = copy.choose();

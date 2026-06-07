@@ -4,12 +4,10 @@ import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.NotFoundException;
 import org.uade.Exception.OpcionInvalida;
 import org.uade.Exception.UnavailableDateException;
-import org.uade.entity.Micro;
-import org.uade.entity.Motivo;
-import org.uade.entity.Ruta;
-import org.uade.entity.Viaje;
+import org.uade.entity.*;
 import org.uade.service.FlotaService;
 import org.uade.service.ViajeService;
+import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 import org.uade.util.ConsoleInput;
 
 import java.time.DateTimeException;
@@ -45,7 +43,7 @@ public class ViajesModulo {
                     ConsoleInput.waitEnter();
                     break;
                 case 1:
-                    ejecutarRegistrarMicro();
+                    ejecutarRegistrarViaje();
                     ConsoleInput.waitEnter();
 
                     break;
@@ -69,12 +67,14 @@ public class ViajesModulo {
     }
 
 
-    private void ejecutarRegistrarMicro() {
+    private void ejecutarRegistrarViaje() {
         try {
             System.out.println("\n--- REGISTRAR NUEVO VIAJE ---");
 
             // TODO: arreglar ruta cuando lo haga...
-            Ruta ruta = new Ruta(1, 3); // bsas -> caba
+            Terminal terminal1 = new Terminal("BUE","Buenos Aires");
+            Terminal terminal2 = new Terminal("BRC","Bariloche");
+            Ruta ruta = new Ruta(terminal1, terminal2,new DynamicQueueADT<>());
             // fecha
             String fechaStr = ConsoleInput.readString("Ingrese la fecha del viaje (dd/MM/yyyy):");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

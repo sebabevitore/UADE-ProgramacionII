@@ -2,11 +2,14 @@ package org.uade.view;
 
 import org.uade.entity.Micro;
 import org.uade.entity.Ruta;
+import org.uade.entity.Terminal;
 import org.uade.entity.Tipo;
 import org.uade.entity.Viaje;
 import org.uade.service.FlotaService;
 import org.uade.service.RutaService;
+import org.uade.service.TerminalService;
 import org.uade.service.ViajeService;
+import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 import org.uade.util.ConsoleInput;
 
 import java.time.LocalDate;
@@ -16,24 +19,30 @@ public class Menu {
     private final FlotaService flotaService;
     private final ViajeService viajeService;
     private final RutaService rutaService;
+    private final TerminalService terminalService;
     private final FlotaModulo flotaModulo;
     private final ViajesModulo viajesModulo;
     private final RutaModulo rutaModulo;
+    private final TerminalModulo terminalModulo;
 
     Micro sandero = new Micro("AB672PT", Tipo.EJECUTIVO);
     Micro ecosport = new Micro("AC095VV", Tipo.CAMA);
-    Ruta ruta = new Ruta(1, 2); // bsas -> cordoba
+    Terminal bsas = new Terminal("BUE", "Buenos Aires");
+    Terminal cordoba = new Terminal("COR", "Córdoba");
+    Ruta ruta = new Ruta(bsas, cordoba, new DynamicQueueADT<>()); // bsas -> cordoba
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     LocalDate fecha = LocalDate.parse("27/06/2001", formatter);
     Viaje viaje = new Viaje(ruta,fecha,2);
 
     public Menu() {
+        this.terminalService = new TerminalService();
         this.flotaService = new FlotaService();
         this.viajeService = new ViajeService();
         this.rutaService = new RutaService();
-        this.flotaModulo = new FlotaModulo(this.flotaService, this.viajeService);
+        this.flotaModulo = new FlotaModulo(this.flotaService);
         this.viajesModulo = new ViajesModulo(this.flotaService, this.viajeService);
-        this.rutaModulo = new RutaModulo(this.rutaService);
+        this.rutaModulo = new RutaModulo(this.rutaService,this.terminalService);
+        this.terminalModulo = new TerminalModulo(this.terminalService,this.rutaService);
 
         //PARA TEST
         this.flotaService.registrarMicro(sandero.getPatente(),sandero.getTipo());
@@ -48,6 +57,7 @@ public class Menu {
             System.out.println("1. Flota");
             System.out.println("2. Viajes");
             System.out.println("3. Rutas");
+            System.out.println("4. Terminales");
             System.out.println("0. Salir");
 
             opcion = ConsoleInput.readOption("Seleccione una opción:");
@@ -64,6 +74,9 @@ public class Menu {
                     break;
                 case 3:
                     rutaModulo.ejecutarMenuRutas();
+                    break;
+                case 4:
+                    terminalModulo.ejecutarMenuTerminales();
                     break;
                 default:
                     System.out.println("Opción no válida.");
