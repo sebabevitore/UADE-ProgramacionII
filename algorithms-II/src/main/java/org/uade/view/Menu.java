@@ -1,19 +1,12 @@
 package org.uade.view;
 
-import org.uade.entity.Micro;
-import org.uade.entity.Ruta;
-import org.uade.entity.Terminal;
-import org.uade.entity.Tipo;
-import org.uade.entity.Viaje;
 import org.uade.service.FlotaService;
 import org.uade.service.RutaService;
 import org.uade.service.TerminalService;
 import org.uade.service.ViajeService;
-import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 import org.uade.util.ConsoleInput;
+import org.uade.util.PrecargaDatos;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Menu {
     private final FlotaService flotaService;
@@ -25,29 +18,21 @@ public class Menu {
     private final RutaModulo rutaModulo;
     private final TerminalModulo terminalModulo;
 
-    Micro sandero = new Micro("AB672PT", Tipo.EJECUTIVO);
-    Micro ecosport = new Micro("AC095VV", Tipo.CAMA);
-    Terminal bsas = new Terminal("BUE", "Buenos Aires");
-    Terminal cordoba = new Terminal("COR", "Córdoba");
-    Ruta ruta = new Ruta(bsas, cordoba, new DynamicQueueADT<>()); // bsas -> cordoba
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    LocalDate fecha = LocalDate.parse("27/06/2001", formatter);
-    Viaje viaje = new Viaje(ruta,fecha,2);
 
     public Menu() {
         this.terminalService = new TerminalService();
         this.flotaService = new FlotaService();
         this.viajeService = new ViajeService();
         this.rutaService = new RutaService();
+
         this.flotaModulo = new FlotaModulo(this.flotaService);
-        this.viajesModulo = new ViajesModulo(this.flotaService, this.viajeService);
+        this.viajesModulo = new ViajesModulo(this.flotaService, this.viajeService, this.rutaService);
         this.rutaModulo = new RutaModulo(this.rutaService,this.terminalService);
         this.terminalModulo = new TerminalModulo(this.terminalService,this.rutaService);
 
-        //PARA TEST
-        this.flotaService.registrarMicro(sandero.getPatente(),sandero.getTipo());
-        this.flotaService.registrarMicro(ecosport.getPatente(),ecosport.getTipo());
-        this.viajeService.programarViaje(this.ruta,this.fecha,viaje.getPrioridadActual());
+
+        PrecargaDatos demo = new PrecargaDatos(terminalService, flotaService, rutaService, viajeService);
+        demo.cargar();
     }
 
     public void launch() {

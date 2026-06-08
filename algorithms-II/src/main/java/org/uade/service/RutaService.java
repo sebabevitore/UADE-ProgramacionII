@@ -1,6 +1,7 @@
 package org.uade.service;
 
 import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
 import org.uade.entity.Ruta;
 import org.uade.entity.Terminal;
 import org.uade.structure.definition.GraphADT;
@@ -39,20 +40,26 @@ public class RutaService {
         grafoTerminales.removeEdge(origen, destino);
     }
 
-    public SetADT<Ruta> rutasPosibles(Terminal origen, Terminal destino, int maxParadas) {
-        SetADT<Ruta> rutasEncontradas = new DynamicSetADT<>();
+    public LinkedListADT<Ruta> rutasPosibles(Terminal origen, Terminal destino, int maxParadas) {
+        LinkedListADT<Ruta> rutasEncontradas = new DynamicLinkedListADT<>();
         LinkedListADT<Terminal> caminoActual = new DynamicLinkedListADT<>();
         SetADT<Terminal> visitados = new DynamicSetADT<>();
 
         caminoActual.add(origen);
-        busquedaConexiones(origen,destino,maxParadas,0,caminoActual,visitados,rutasEncontradas);
+        busquedaConexiones(origen, destino, maxParadas, 0, caminoActual, visitados, rutasEncontradas);
 
-        return new DynamicSetADT<>();
+        if (rutasEncontradas.isEmpty()) {
+            throw new NotFoundException("No se encontraron rutas entre "
+                    + origen.getCodigo() + " y " + destino.getCodigo()
+                    + " con un máximo de " + maxParadas + " paradas.");
+        }
+
+        return rutasEncontradas;
     }
 
     private void busquedaConexiones(Terminal actual, Terminal destino, int maxParadas, int paradasActuales,
                                     LinkedListADT<Terminal> caminoActual, SetADT<Terminal> visitados,
-                                    SetADT<Ruta> resultados) {
+                                    LinkedListADT<Ruta> resultados) {
         // caso 1: llegue al destino
         if (actual.equals(destino)) {
             Ruta ruta = crearRutaDesdeCamino(caminoActual);
@@ -127,9 +134,66 @@ public class RutaService {
         return vecinos;
     }
 
+    public void crearRuta(Ruta nuevaRuta) {
+        if (rutasExistentes.exist(nuevaRuta)) {
+            throw new GenericADTException("Ya existe una ruta con origen "
+                    + nuevaRuta.getOrigen().getCodigo() + " y destino " + nuevaRuta.getDestino().getCodigo());
+        }
+        rutasExistentes.add(nuevaRuta);
+    }
+
+    public Ruta buscarRuta(Terminal origen, Terminal destino) {
+        Ruta clave = new Ruta(origen, destino, new DynamicQueueADT<>());
+        if (!rutasExistentes.exist(clave)) {
+            throw new NotFoundException("No existe una ruta registrada con origen "
+                    + origen.getCodigo() + " y destino " + destino.getCodigo());
+        }
+        SetADT<Ruta> copia = new DynamicSetADT<>();
+        Ruta encontrada = null;
+        while (!rutasExistentes.isEmpty()) {
+            Ruta rutaActual = rutasExistentes.choose();
+            rutasExistentes.remove(rutaActual);
+            if (rutaActual.getOrigen().equals(origen) && rutaActual.getDestino().equals(destino)) {
+                encontrada = rutaActual;
+            }
+            copia.add(rutaActual);
+        }
+        while (!copia.isEmpty()) {
+            rutasExistentes.add(copia.choose());
+            copia.remove(copia.choose());
+        }
+        return encontrada;
+    }
+
+    public SetADT<Ruta> getRutasExistentes() {
+        return this.rutasExistentes;
+    }
+
     public SetADT<Terminal> identificarTerminalesDesconectadas() {
-        // TODO: implementar logica para encontrar terminales sin conexiones
-        return new DynamicSetADT<>();
+        SetADT<Terminal> desconectadas = new DynamicSetADT<>();
+        SetADT<Terminal> vertices = grafoTerminales.getVertxs();
+
+        while (!vertices.isEmpty()) {
+            Terminal terminal = vertices.choose();
+            vertices.remove(terminal);
+
+            boolean tieneConexion = false;
+            SetADT<Terminal> todosVertices = grafoTerminales.getVertxs();
+            while (!todosVertices.isEmpty()) {
+                Terminal otro = todosVertices.choose();
+                todosVertices.remove(otro);
+                if (!terminal.equals(otro)) {
+                    if (grafoTerminales.existsEdge(terminal, otro) || grafoTerminales.existsEdge(otro, terminal)) {
+                        tieneConexion = true;
+                        break;
+                    }
+                }
+            }
+            if (!tieneConexion) {
+                desconectadas.add(terminal);
+            }
+        }
+        return desconectadas;
     }
 
     public GraphADT<Terminal, Integer> getGrafoTerminales() {

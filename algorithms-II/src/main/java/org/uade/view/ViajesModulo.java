@@ -1,11 +1,13 @@
 package org.uade.view;
 
 import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
 import org.uade.Exception.NotFoundException;
 import org.uade.Exception.OpcionInvalida;
 import org.uade.Exception.UnavailableDateException;
 import org.uade.entity.*;
 import org.uade.service.FlotaService;
+import org.uade.service.RutaService;
 import org.uade.service.ViajeService;
 import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 import org.uade.util.ConsoleInput;
@@ -19,10 +21,12 @@ import static org.uade.util.PriorityQueueADTUtil.print;
 public class ViajesModulo {
     private final FlotaService flotaService;
     private final ViajeService viajeService;
+    private final RutaService rutaService;
 
-    public ViajesModulo(FlotaService flotaService, ViajeService viajeService) {
+    public ViajesModulo(FlotaService flotaService, ViajeService viajeService, RutaService rutaService) {
         this.flotaService = flotaService;
         this.viajeService = viajeService;
+        this.rutaService = rutaService;
     }
 
     public void ejecutarMenuViajes() {
@@ -71,23 +75,26 @@ public class ViajesModulo {
         try {
             System.out.println("\n--- REGISTRAR NUEVO VIAJE ---");
 
-            // TODO: arreglar ruta cuando lo haga...
-            Terminal terminal1 = new Terminal("BUE","Buenos Aires");
-            Terminal terminal2 = new Terminal("BRC","Bariloche");
-            Ruta ruta = new Ruta(terminal1, terminal2,new DynamicQueueADT<>());
-            // fecha
+            String codOrigen = ConsoleInput.readString("Ingrese el código de la terminal origen:");
+            Terminal origen = new Terminal(codOrigen, codOrigen);
+
+            String codDestino = ConsoleInput.readString("Ingrese el código de la terminal destino:");
+            Terminal destino = new Terminal(codDestino, codDestino);
+
+            Ruta ruta = rutaService.buscarRuta(origen, destino);
+
             String fechaStr = ConsoleInput.readString("Ingrese la fecha del viaje (dd/MM/yyyy):");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate fecha = LocalDate.parse(fechaStr, formatter);
-            // TODO: validaciones de prioridad
-            int prioridad = ConsoleInput.readInt("Ingrese prioridad de viaje");
+
+            int prioridad = ConsoleInput.readInt("Ingrese prioridad de viaje: ");
 
             viajeService.programarViaje(ruta, fecha, prioridad);
             System.out.println("✅ Viaje registrado exitosamente con fecha: " + fecha);
 
         } catch(DateTimeException e){
             System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
-        } catch (OpcionInvalida e) {
+        } catch (NotFoundException | GenericADTException e) {
             System.out.println("❌ Error: " + e.getMessage());
         }
     }

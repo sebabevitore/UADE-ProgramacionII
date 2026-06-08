@@ -40,6 +40,14 @@ public class Ruta {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Ruta ruta = (Ruta) obj;
+        return origen.equals(ruta.origen) && destino.equals(ruta.destino);
+    }
+
+    @Override
     public String toString() {
         return "Ruta{" +
                 "codigoOrigen=" + origen.getCodigo() +
