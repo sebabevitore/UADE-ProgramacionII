@@ -6,6 +6,7 @@ import org.uade.Exception.NotFoundException;
 import org.uade.Exception.UnavailableDateException;
 import org.uade.entity.Micro;
 import org.uade.entity.Tipo;
+import org.uade.entity.Viaje;
 import org.uade.structure.definition.LinkedListADT;
 import org.uade.structure.definition.SetADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
@@ -79,6 +80,10 @@ public class FlotaService {
             throw new UnavailableDateException("El micro no esta disponible en la fecha solicitada.");
         }
         return micro;
+    }
+
+    public void eliminarViaje(Micro micro, Viaje viaje) {
+        micro.removerViaje(viaje);
     }
 
 

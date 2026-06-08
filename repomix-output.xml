@@ -51,16 +51,22 @@ algorithms-II/
               Micro.java
               Motivo.java
               Ruta.java
+              Terminal.java
               Tipo.java
               Viaje.java
             Exception/
               EmptyADTException.java
               FullADTException.java
               GenericADTException.java
+              InvalidIndexException.java
+              NotFoundException.java
+              OpcionInvalida.java
+              UnavailableDateException.java
             service/
               FlotaService.java
-              GestionarPrioridadViaje.java
-              PrioridadService.java
+              RutaService.java
+              TerminalService.java
+              ViajeService.java
             structure/
               definition/
                 BinaryTreeADT.java
@@ -74,6 +80,7 @@ algorithms-II/
                 StackADT.java
               implementation/
                 dynamic/
+                  DynamicGraphADT.java
                   DynamicLinkedListADT.java
                   DynamicPriorityQueueADT.java
                   DynamicQueueADT.java
@@ -87,55 +94,42 @@ algorithms-II/
                   StaticSetADT.java
                   StaticStackADT.java
                 Node.java
+                NodeArista.java
+                NodeGrafo.java
                 NodePrioridad.java
                 NodeSimpleDict.java
             util/
+              ConsoleInput.java
               LinkedListADTUtil.java
+              PrecargaDatos.java
               PriorityQueueADTUtil.java
               QueueADTUtil.java
               SetADTUtil.java
+              SimpleDictionaryADTUtil.java
               StackADTUtil.java
+            view/
+              FlotaModulo.java
+              Menu.java
+              RutaModulo.java
+              TerminalModulo.java
+              ViajesModulo.java
             Main.java
   .gitignore
   pom.xml
 .gitignore
 LICENSE
 README.md
+RESTRICCIONES.md
 </directory_structure>
 
 <files>
 This section contains the contents of the repository's files.
-
-<file path="algorithms-II/src/main/java/org/uade/entity/CambioPrioridad.java">
-package org.uade.entity;
-
-public class CambioPrioridad {
-    private Motivo motivo;
-    private String descripcion;
-
-    public CambioPrioridad(Motivo motivo, String descripcion) {
-        this.motivo = motivo;
-        this.descripcion = descripcion;
-    }
-
-    public Motivo getMotivo() { return motivo; }
-    public String getDescripcion() { return descripcion; }
-}
-</file>
 
 <file path="algorithms-II/src/main/java/org/uade/entity/Motivo.java">
 package org.uade.entity;
 
 public enum Motivo {
     LLUVIA, VISIBILIDAD, OTRO
-}
-</file>
-
-<file path="algorithms-II/src/main/java/org/uade/entity/Tipo.java">
-package org.uade.entity;
-
-public enum Tipo {
-    CAMA, SEMICAMA, EJECUTIVO
 }
 </file>
 
@@ -173,15 +167,107 @@ public class GenericADTException extends RuntimeException {
 }
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/service/GestionarPrioridadViaje.java">
+<file path="algorithms-II/src/main/java/org/uade/Exception/InvalidIndexException.java">
+package org.uade.Exception;
+
+public class InvalidIndexException extends RuntimeException {
+
+    public InvalidIndexException(String mensaje) {
+        super(mensaje);
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Exception/NotFoundException.java">
+package org.uade.Exception;
+
+public class NotFoundException extends RuntimeException {
+    public NotFoundException(String message) {
+        super(message);
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Exception/OpcionInvalida.java">
+package org.uade.Exception;
+
+public class OpcionInvalida extends RuntimeException {
+    public OpcionInvalida(String message) {
+        super(message);
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Exception/UnavailableDateException.java">
+package org.uade.Exception;
+
+public class UnavailableDateException extends RuntimeException {
+
+    public UnavailableDateException(String message) {
+        super(message);
+    }
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/service/TerminalService.java">
 package org.uade.service;
 
-import org.uade.entity.Viaje;
-import org.uade.structure.definition.PriorityQueueADT;
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
+import org.uade.entity.Terminal;
+import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
 
-public class GestionarPrioridadViaje {
+public class TerminalService {
+    private SimpleDictionaryADT<String, Terminal> terminales;
 
+    public TerminalService() {
+        this.terminales = new DynamicSimpleDictionaryADT<>();
+    }
 
+    public void registrarTerminal(Terminal terminal) {
+        String codigo = terminal.getCodigo();
+        if (!terminales.isEmpty() && codigoExiste(codigo)) {
+            throw new GenericADTException("Ya existe una terminal con ese código.");
+        }
+        this.terminales.add(codigo, terminal);
+    }
+
+    public void eliminarTerminal(String codigo) {
+        if (!codigoExiste(codigo)) {
+            throw new NotFoundException("No existe una terminal con ese código.");
+        }
+        this.terminales.remove(codigo);
+    }
+
+    public Terminal obtenerTerminal(String codigo) {
+        if (!codigoExiste(codigo)) {
+            throw new NotFoundException("No existe una terminal con el código: " + codigo);
+        }
+        return this.terminales.get(codigo);
+    }
+
+    public SimpleDictionaryADT<String, Terminal> getTerminales() {
+        if (this.terminales.isEmpty()) {
+            throw new GenericADTException("No hay terminales registradas.");
+        }
+        return this.terminales;
+    }
+
+    public boolean codigoExiste(String codigo) {
+        try {
+            Terminal terminal = this.terminales.get(codigo);
+            return terminal != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean estaVacio() {
+        return this.terminales.isEmpty();
+    }
 }
 </file>
 
@@ -225,71 +311,471 @@ public interface BinaryTreeADT {
 }
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/structure/implementation/NodeSimpleDict.java">
-package org.uade.structure.implementation;
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicGraphADT.java">
+package org.uade.structure.implementation.dynamic;
 
-public class NodeSimpleDict<K, V> {
-    private K key;
-    private V value;
-    private NodeSimpleDict<K, V> next;
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
+import org.uade.structure.definition.GraphADT;
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.implementation.NodeArista;
+import org.uade.structure.implementation.NodeGrafo;
 
-    public NodeSimpleDict(K key, V value) {
-        this.key = key;
-        this.value = value;
-        this.next = null;
+public class DynamicGraphADT<V, P> implements GraphADT<V, P> {
+    private NodeGrafo<V, P> inicio;
+
+    public DynamicGraphADT() {
+        this.inicio = null;
     }
 
-    public K key() {
-        return key;
+    private NodeGrafo<V, P> buscarNodo(V valor) {
+        NodeGrafo<V, P> aux = this.inicio;
+        while (aux != null) {
+            if (aux.getVertice().equals(valor)) {
+                return aux;
+            }
+            aux = aux.getSigNodo();
+        }
+        return null;
     }
 
-    public void setKey(K key) {
-        this.key = key;
+    @Override
+    public SetADT<V> getVertxs() {
+        SetADT<V> conjunto = new DynamicSetADT<>();
+        NodeGrafo<V, P> aux = this.inicio;
+        while (aux != null) {
+            conjunto.add(aux.getVertice());
+            aux = aux.getSigNodo();
+        }
+        return conjunto;
     }
 
-    public V value() {
-        return value;
+    @Override
+    public void addVertx(V vertex) {
+        if (buscarNodo(vertex) != null) {
+            return;
+        }
+        NodeGrafo<V, P> nuevo = new NodeGrafo<>(vertex);
+        nuevo.setSigNodo(this.inicio);
+        this.inicio = nuevo;
     }
 
-    public void setValue(V value) {
-        this.value = value;
+    @Override
+    public void removeVertx(V vertex) {
+        if (isEmpty()) return;
+
+        // PASO 1: limpieza de aristas que tengan destino en este vertice
+        NodeGrafo<V, P> auxLimpieza = this.inicio;
+        while (auxLimpieza != null) {
+            removeEdge(auxLimpieza.getVertice(), vertex);
+            auxLimpieza = auxLimpieza.getSigNodo();
+        }
+
+        // PASO 2: eliminar el vertice
+
+        // Caso A: El nodo a borrar es la cabeza
+        if (this.inicio.getVertice().equals(vertex)) {
+            this.inicio = this.inicio.getSigNodo();
+            return;
+        }
+
+        // Caso B: esta en el medio o al final
+        NodeGrafo<V, P> auxVertice = this.inicio;
+        while (auxVertice.getSigNodo() != null) {
+            if (auxVertice.getSigNodo().getVertice().equals(vertex)) {
+                auxVertice.setSigNodo(auxVertice.getSigNodo().getSigNodo());
+                return;
+            }
+            auxVertice = auxVertice.getSigNodo();
+        }
     }
 
-    public NodeSimpleDict<K, V> next() {
-        return next;
+    @Override
+    public void addEdge(V vertxOne, V vertxTwo, P weight) {
+        NodeGrafo<V, P> origen = buscarNodo(vertxOne);
+        NodeGrafo<V, P> destino = buscarNodo(vertxTwo);
+        // ambos nodos tienen que existir
+        if (origen != null && destino != null) {
+            NodeArista<V, P> nuevaArista = new NodeArista<>(weight, destino);
+            // La insertamos al principio de la lista de aristas del nodo origen
+            nuevaArista.setSigArista(origen.getArista());
+            origen.setArista(nuevaArista);
+        }
     }
 
-    public void setNext(NodeSimpleDict<K, V> next) {
-        this.next = next;
+    @Override
+    public void removeEdge(V vertxOne, V vertxTwo) {
+        NodeGrafo<V, P> origen = buscarNodo(vertxOne);
+        if (origen == null || origen.getArista() == null) return;
+
+        // Caso A: La arista a borrar es la primera de la lista
+        if (origen.getArista().getDestino().getVertice().equals(vertxTwo)) {
+            origen.setArista(origen.getArista().getSigArista());
+            return;
+        }
+
+        // Caso B: Está más adelante en la lista de aristas
+        NodeArista<V, P> auxArista = origen.getArista();
+        while (auxArista.getSigArista() != null) {
+            if (auxArista.getSigArista().getDestino().getVertice().equals(vertxTwo)) {
+                auxArista.setSigArista(auxArista.getSigArista().getSigArista());
+                return;
+            }
+            auxArista = auxArista.getSigArista();
+        }
+    }
+
+    @Override
+    public boolean existsEdge(V vertxOne, V vertxTwo) {
+        if (isEmpty()) {
+            throw new EmptyADTException("Graph is empty");
+        }
+        NodeGrafo<V, P> origen = buscarNodo(vertxOne);
+        if (origen != null) {
+            NodeArista<V, P> aux = origen.getArista();
+            while (aux != null) {
+                if (aux.getDestino().getVertice().equals(vertxTwo)) {
+                    return true;
+                }
+                aux = aux.getSigArista();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public P edgeWeight(V vertxOne, V vertxTwo) {
+        if (isEmpty()) throw new EmptyADTException("Graph is empty");
+
+        NodeGrafo<V, P> origen = buscarNodo(vertxOne);
+        if (origen != null) {
+            NodeArista<V, P> auxArista = origen.getArista();
+            while (auxArista != null) {
+                if (auxArista.getDestino().getVertice().equals(vertxTwo)) {
+                    return auxArista.getPeso();
+                }
+                auxArista = auxArista.getSigArista();
+            }
+        }
+        throw new GenericADTException("Edge does not exist");
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.inicio == null;
     }
 }
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/Main.java">
-package org.uade;
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/NodeArista.java">
+package org.uade.structure.implementation;
+
+public class NodeArista<V, P> {
+    private P peso;
+    private NodeGrafo<V, P> destino;
+    private NodeArista<V, P> sigArista;
+
+    public NodeArista(P peso, NodeGrafo<V, P> destino) {
+        this.peso = peso;
+        this.destino = destino;
+        this.sigArista = null;
+    }
+
+    public P getPeso() {
+        return peso;
+    }
+
+    public void setPeso(P peso) {
+        this.peso = peso;
+    }
+
+    public NodeGrafo<V, P> getDestino() {
+        return destino;
+    }
+
+    public void setDestino(NodeGrafo<V, P> destino) {
+        this.destino = destino;
+    }
+
+    public NodeArista<V, P> getSigArista() {
+        return sigArista;
+    }
+
+    public void setSigArista(NodeArista<V, P> sigArista) {
+        this.sigArista = sigArista;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/NodeGrafo.java">
+package org.uade.structure.implementation;
+
+public class NodeGrafo<V, P> {
+    private V vertice;                 // Ahora guarda cualquier objeto (ej: Terminal)
+    private NodeArista<V, P> arista;   // Sublista de aristas genérica
+    private NodeGrafo<V, P> sigNodo;   // Siguiente vértice de la lista de inventario
+
+    public NodeGrafo(V vertice) {
+        this.vertice = vertice;
+        this.arista = null;
+        this.sigNodo = null;
+    }
+
+    // Getters y Setters parametrizados
+    public V getVertice() { return vertice; }
+    public void setVertice(V vertice) { this.vertice = vertice; }
+
+    public NodeArista<V, P> getArista() { return arista; }
+    public void setArista(NodeArista<V, P> arista) { this.arista = arista; }
+
+    public NodeGrafo<V, P> getSigNodo() { return sigNodo; }
+    public void setSigNodo(NodeGrafo<V, P> sigNodo) { this.sigNodo = sigNodo; }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/util/ConsoleInput.java">
+package org.uade.util;
+
+import java.util.Scanner;
+
+public class ConsoleInput {
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static String readString(String mensaje) {
+        System.out.print(mensaje + " ");
+        return scanner.nextLine().trim();
+    }
+
+    public static int readInt(String mensaje) {
+        while (true) {
+            try {
+                System.out.print(mensaje + " ");
+                int valor = scanner.nextInt();
+                scanner.nextLine();
+                return valor;
+            } catch (Exception e) {
+                System.out.println("❌ Error: Por favor, ingrese un número entero válido.");
+                scanner.nextLine();
+            }
+        }
+    }
+
+    public static int readOption(String mensaje) {
+        return readInt(mensaje);
+    }
+
+    public static void waitEnter() {
+        System.out.print("\nPresione Enter para continuar...");
+        scanner.nextLine();
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/util/PrecargaDatos.java">
+package org.uade.util;
 
 import org.uade.entity.*;
 import org.uade.service.*;
+
 import java.time.LocalDate;
 
-public class Main {
-    public static void main(String[] args) {
-        FlotaService flota = new FlotaService();
-        PrioridadService prioridad = new PrioridadService();
+public class PrecargaDatos {
+    private final TerminalService terminalService;
+    private final FlotaService flotaService;
+    private final RutaService rutaService;
+    private final ViajeService viajeService;
 
-        for (int i = 1; i <= 15; i++) {
-            flota.registrarMicro(new Micro("AAA" + i, Tipo.CAMA));
+    public PrecargaDatos(TerminalService terminalService, FlotaService flotaService,
+                         RutaService rutaService, ViajeService viajeService) {
+        this.terminalService = terminalService;
+        this.flotaService = flotaService;
+        this.rutaService = rutaService;
+        this.viajeService = viajeService;
+    }
+
+    public void cargar() {
+        System.out.println("🔄 Iniciando precarga de datos del sistema...");
+        try {
+            // ==========================================
+            // 1. PRECARGAR 10 TERMINALES
+            // ==========================================
+            Terminal t1 = new Terminal("BUE", "Buenos Aires");
+            Terminal t2 = new Terminal("ROS", "Rosario");
+            Terminal t3 = new Terminal("CBA", "Córdoba");
+            Terminal t4 = new Terminal("MDZ", "Mendoza");
+            Terminal t5 = new Terminal("SLA", "Salta");
+            Terminal t6 = new Terminal("TUC", "Tucumán");
+            Terminal t7 = new Terminal("BRB", "Bariloche");
+            Terminal t8 = new Terminal("NQN", "Neuquén");
+            Terminal t9 = new Terminal("PSS", "Posadas");
+            Terminal t10 = new Terminal("RES", "Resistencia");
+
+            Terminal[] terminales = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10};
+
+            for (Terminal t : terminales) {
+                terminalService.registrarTerminal(t);
+                rutaService.registrarTerminal(t); // Lo agregamos al grafo también
+            }
+
+            // ==========================================
+            // 2. PRECARGAR CONEXIONES (ARISTAS DEL GRAFO)
+            // ==========================================
+            rutaService.registrarConexion(t1, t2, 300);  // BUE -> ROS
+            rutaService.registrarConexion(t2, t3, 400);  // ROS -> CBA
+            rutaService.registrarConexion(t3, t5, 800);  // CBA -> SLA
+            rutaService.registrarConexion(t5, t6, 310);  // SLA -> TUC
+            rutaService.registrarConexion(t1, t4, 1050); // BUE -> MDZ
+            rutaService.registrarConexion(t1, t7, 1580); // BUE -> BRB
+            rutaService.registrarConexion(t7, t8, 430);  // BRB -> NQN
+            rutaService.registrarConexion(t1, t9, 1000); // BUE -> PSS
+            rutaService.registrarConexion(t9, t10, 350); // PSS -> RES
+
+            // ==========================================
+            // 3. GENERAR Y CREAR RUTAS USANDO TU ALGORITMO DFS
+            // ==========================================
+            // Aprovechamos tu DFS para que arme las colas de paradas automáticamente
+            Ruta ruta1 = rutaService.rutasPosibles(t1, t3, 2).get(0); // BUE -> ROS -> CBA
+            Ruta ruta2 = rutaService.rutasPosibles(t1, t6, 3).get(0); // BUE -> ROS -> CBA -> SLA -> TUC
+            Ruta ruta3 = rutaService.rutasPosibles(t1, t4, 1).get(0); // BUE -> MDZ (Directo)
+            Ruta ruta4 = rutaService.rutasPosibles(t1, t8, 2).get(0); // BUE -> BRB -> NQN
+            Ruta ruta5 = rutaService.rutasPosibles(t1, t10, 2).get(0); // BUE -> PSS -> RES
+
+            Ruta[] rutasActivas = {ruta1, ruta2, ruta3, ruta4, ruta5};
+
+            for (Ruta r : rutasActivas) {
+                rutaService.crearRuta(r);
+            }
+
+            // ==========================================
+            // 4. PRECARGAR 15 MICROS
+            // ==========================================
+            for (int i = 1; i <= 15; i++) {
+                String patente = String.format("MIC%03d", i); // Genera MIC001, MIC002, etc.
+                Tipo tipo = (i % 3 == 0) ? Tipo.EJECUTIVO : (i % 2 == 0) ? Tipo.CAMA : Tipo.SEMICAMA;
+                flotaService.registrarMicro(patente, tipo);
+            }
+
+            // ==========================================
+            // 5. PRECARGAR 20 VIAJES EN LA COLA DE PRIORIDAD
+            // ==========================================
+            LocalDate fechaBase = LocalDate.now();
+
+            for (int i = 1; i <= 20; i++) {
+                // Asignamos las rutas de forma rotativa para que haya variedad
+                Ruta rutaAsignada = rutasActivas[i % 5];
+
+                // Variamos las fechas para que sean en los próximos 10 días
+                LocalDate fechaViaje = fechaBase.plusDays(i % 10);
+
+                // Variamos las prioridades de 1 a 10 (Donde 10 asumo es la más alta en tu sistema)
+                int prioridad = (i % 10) + 1;
+
+                viajeService.programarViaje(rutaAsignada, fechaViaje, prioridad);
+            }
+
+            System.out.println("✅ Precarga finalizada con éxito. ¡Entorno Demo listo!");
+            System.out.println("--------------------------------------------------\n");
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Hubo un error durante la precarga de datos: " + e.getMessage());
+            e.printStackTrace(); // Útil para debugear si algo falla en el arranque
         }
-        System.out.println("Escenario inicial cargado: 15 micros registrados.");
+    }
+}
+</file>
 
-        Ruta rutaTest = new Ruta("Buenos Aires", "Rosario");
-        Viaje viaje1 = new Viaje(101, rutaTest, LocalDate.of(2026, 6, 15), 5);
+<file path="algorithms-II/src/main/java/org/uade/view/TerminalModulo.java">
+package org.uade.view;
 
-        flota.asignarMicroAViaje(viaje1, "AAA1");
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
+import org.uade.entity.Terminal;
+import org.uade.service.RutaService;
+import org.uade.service.TerminalService;
+import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.util.ConsoleInput;
 
-        prioridad.programarViaje(viaje1);
+import static org.uade.util.SimpleDictionaryADTUtil.printDict;
 
-        prioridad.cambiarPrioridad(viaje1, Motivo.LLUVIA, "Tormenta de granizo", 9);
+public class TerminalModulo {
+    private final TerminalService terminalService;
+    private final RutaService rutaService;
+
+    public TerminalModulo(TerminalService terminalService, RutaService rutaService) {
+        this.terminalService = terminalService;
+        this.rutaService = rutaService;
+    }
+
+    public void ejecutarMenuTerminales() {
+        int opcionTerminales;
+        do {
+            System.out.println("\n--- MÓDULO TERMINALES ---");
+            System.out.println("1. Registrar nueva terminal");
+            System.out.println("2. Eliminar terminal");
+            System.out.println("3. Mostrar todas las terminales");
+            System.out.println("0. Volver al menú principal");
+
+            opcionTerminales = ConsoleInput.readOption("Seleccione una opción:");
+
+            switch (opcionTerminales) {
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
+                    ConsoleInput.waitEnter();
+                    break;
+                case 1:
+                    ejecutarRegistrarTerminal();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 2:
+                    ejecutarEliminarTerminal();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 3:
+                    ejecutarMostrarTerminales();
+                    ConsoleInput.waitEnter();
+                    break;
+                default:
+                    System.out.println("❌ Opción no válida.");
+                    ConsoleInput.waitEnter();
+            }
+        } while (opcionTerminales != 0);
+    }
+
+    private void ejecutarRegistrarTerminal() {
+        try {
+            System.out.println("\n--- REGISTRAR NUEVA TERMINAL ---");
+
+            String codigo = ConsoleInput.readString("Ingrese el código de la terminal:");
+            String descripcion = ConsoleInput.readString("Ingrese la descripción de la terminal:");
+            Terminal terminal = new Terminal(codigo, descripcion);
+            terminalService.registrarTerminal(terminal);
+            rutaService.registrarTerminal(terminal);
+            System.out.println("✅ Terminal registrada exitosamente.");
+
+        } catch (GenericADTException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarEliminarTerminal() {
+        try {
+            System.out.println("\n--- ELIMINAR TERMINAL ---");
+            String codigo = ConsoleInput.readString("Ingrese el código de la terminal a eliminar:");
+            terminalService.eliminarTerminal(codigo);
+            System.out.println("✅ Terminal eliminada exitosamente.");
+        } catch (NotFoundException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarMostrarTerminales() {
+        try {
+            System.out.println("\n--- TERMINALES REGISTRADAS ---");
+            SimpleDictionaryADT<String, Terminal> terminales = terminalService.getTerminales();
+            printDict(terminales);
+        } catch (GenericADTException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
     }
 }
 </file>
@@ -356,209 +842,351 @@ build/
 .vscode/
 </file>
 
-<file path="algorithms-II/pom.xml">
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<file path="RESTRICCIONES.md">
+# Restricciones del Proyecto - Algorithms II
 
-    <groupId>org.uade</groupId>
-    <artifactId>algorithms-II</artifactId>
-    <version>1.0-SNAPSHOT</version>
+## Regla Principal
 
-    <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-</project>
+**NO se puede utilizar Ninguna implementación de Java para colecciones de datos.**
+
+### Prohibido el uso de:
+- `ArrayList`
+- `LinkedList` (de `java.util`)
+- `HashMap`, `HashSet`, `TreeMap`, `TreeSet`
+- `Stack` (de `java.util`)
+- `Queue`, `Deque` (de `java.util`)
+- `Arrays.sort()`, `Arrays.binarySearch()`
+- `Collections.sort()`, `Collections.reverse()`
+- Cualquier otro método de Java que opere sobre colecciones
+
+### Prohibido el uso de excepciones de Java:
+- `IndexOutOfBoundsException`
+- `IllegalArgumentException`
+- `IllegalStateException`
+- `RuntimeException`
+- `NullPointerException`
+- `UnsupportedOperationException`
+- `ClassCastException`
+- `ArrayIndexOutOfBoundsException`
+- `DateTimeException`
+- Cualquier otra excepción de Java
+
+**Solo se pueden usar las excepciones implementadas en el proyecto.**
+
+---
+
+## Excepciones Disponibles
+
+| Excepción | Uso |
+|---|---|
+| `EmptyADTException` | Estructura de datos vacía |
+| `FullADTException` | Estructura de datos llena |
+| `GenericADTException` | Error genérico de TDA |
+| `NotFoundException` | Elemento no encontrado |
+| `UnavailableDateException` | Fecha no disponible |
+| `OpcionInvalida` | Opción de menú inválida |
+| `InvalidIndexException` | Índice fuera de rango |
+
+---
+
+## TDA Disponibles para Uso
+
+Se deben utilizar **únicamente** las implementaciones propias de TDA definidas en el proyecto.
+
+### Estructuras de Datos Implementadas
+
+| TDA | Implementación Dinámica | Implementación Estática | Util |
+|---|---|---|---|
+| **StackADT** | `DynamicStackADT<T>` | `StaticStackADT<T>` | `StackADTUtil` |
+| **QueueADT** | `DynamicQueueADT<T>` | `StaticQueueADT<T>` | `QueueADTUtil` |
+| **PriorityQueueADT** | `DynamicPriorityQueueADT<T>` | `StaticPriorityQueueADT<T>` | `PriorityQueueADTUtil` |
+| **LinkedListADT** | `DynamicLinkedListADT<T>` | `StaticLinkedListADT<T>` | `LinkedListADTUtil` |
+| **SetADT** | `DynamicSetADT<T>` | `StaticSetADT<T>` (STUB) | `SetADTUtil` |
+| **SimpleDictionaryADT** | `DynamicSimpleDictionaryADT<K,V>` | No implementado | `SimpleDictionaryADTUtil` |
+
+### TDA Interfaces (Sin Implementación)
+
+- `MultipleDictionaryADT` - Diccionario múltiple (solo interfaz)
+- `BinaryTreeADT` - Árbol binario (solo interfaz)
+- `GraphADT` - Grafo (solo interfaz, nodos existen)
+
+---
+
+## Métodos Disponibles por TDA
+
+### StackADT<T>
+```java
+T getElement()           // Retorna elemento superior
+void add(T value)        // Agrega elemento al tope
+void remove()            // Remueve elemento superior
+boolean isEmpty()        // Verifica si está vacía
+```
+
+### QueueADT<T>
+```java
+T getElement()           // Retorna elemento frontal
+void add(T value)        // Agrega elemento al final
+void remove()            // Remueve elemento frontal
+boolean isEmpty()        // Verifica si está vacía
+```
+
+### PriorityQueueADT<T>
+```java
+T getElement()           // Retorna elemento de mayor prioridad
+int getPriority()        // Retorna prioridad del elemento frontal
+void add(T value, int priority) // Agrega con prioridad
+void remove()            // Remueve elemento de mayor prioridad
+boolean isEmpty()        // Verifica si está vacía
+```
+
+### LinkedListADT<T>
+```java
+void add(T value)        // Agrega al final
+void insert(int index, T value) // Inserta en índice
+void remove(int index)   // Remueve en índice
+T get(int index)         // Obtiene en índice
+int size()               // Retorna cantidad
+boolean isEmpty()        // Verifica si está vacía
+```
+
+### SetADT<T>
+```java
+boolean exist(T value)   // Verifica existencia
+T choose()               // Retorna elemento aleatorio
+void add(T value)        // Agrega (sin duplicados)
+void remove(T element)   // Remueve elemento
+boolean isEmpty()        // Verifica si está vacío
+```
+
+### SimpleDictionaryADT<K,V>
+```java
+void add(K key, V value) // Agrega par clave-valor
+void remove(K key)       // Remueve por clave
+V get(K key)             // Obtiene valor por clave
+SetADT<K> getKeys()      // Retorna set de claves
+boolean isEmpty()        // Verifica si está vacío
+```
+
+---
+
+## Métodos Util Disponibles
+
+### StackADTUtil<T>
+```java
+void print(StackADT<T> stack)
+StackADT<T> copy(StackADT<T> stack)
+boolean esPar(StackADT<T> stack)
+StackADT<T> invertir(StackADT<T> stack)
+boolean estaEnPila(T elemento, StackADT<T> pila)
+```
+
+### QueueADTUtil<T>
+```java
+QueueADT<T> copy(QueueADT<T> queue)
+void print(QueueADT<T> queue)
+```
+
+### PriorityQueueADTUtil<T>
+```java
+void print(PriorityQueueADT<T> queue)
+PriorityQueueADT<T> copy(PriorityQueueADT<T> priorityQueue)
+```
+
+### LinkedListADTUtil<T>
+```java
+void print(LinkedListADT<T> list)
+LinkedListADT<T> copy(LinkedListADT<T> list)
+boolean areEqual(LinkedListADT<T> listOne, LinkedListADT<T> listTwo)
+```
+
+### SetADTUtil<T>
+```java
+SetADT<T> copy(SetADT<T> set)
+```
+
+### SimpleDictionaryADTUtil<K,V>
+```java
+void print(SimpleDictionaryADT<K, V> dict)
+```
+
+---
+
+## Entidades del Proyecto
+
+- **Micro**: microbús con patente, tipo y lista de viajes (`LinkedListADT<Viaje>`)
+- **Viaje**: viaje con ruta, fecha, prioridad y historial de cambios (`StackADT<CambioPrioridad>`)
+- **Ruta**: código origen, código destino y paradas intermedias (`QueueADT<Terminal>`)
+- **Terminal**: código y descripción
+- **CambioPrioridad**: motivo y nueva prioridad
+- **Tipo** (enum): CAMA, SEMICAMA, EJECUTIVO
+- **Motivo** (enum): LLUVIA, VISIBILIDAD, OTRO
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/entity/Ruta.java">
+<file path="algorithms-II/src/main/java/org/uade/entity/CambioPrioridad.java">
 package org.uade.entity;
 
-public class Ruta {
-    private String origen;
-    private String destino;
+public class CambioPrioridad {
+    private Motivo motivo;
+    private int prioridad;
 
-    public Ruta(String origen, String destino) {
-        this.origen = origen;
-        this.destino = destino;
+
+    public CambioPrioridad(Motivo motivo, int prioridad) {
+        this.motivo = motivo;
+        this.prioridad = prioridad;
+    }
+
+    public Motivo getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(Motivo motivo) {
+        this.motivo = motivo;
+    }
+
+    public int getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(int prioridad) {
+        this.prioridad = prioridad;
     }
 }
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/entity/Viaje.java">
+<file path="algorithms-II/src/main/java/org/uade/entity/Tipo.java">
 package org.uade.entity;
 
-import org.uade.structure.definition.IStackADT;
-import java.time.LocalDate;
-
-public class Viaje {
-    private int idViaje;
-    private Ruta ruta;
-    private Micro microAsignado;
-    private LocalDate fecha;
-    private boolean completado;
-    private int prioridadActual;
-    private IStackADT<CambioPrioridad> cambios;
-
-    public Viaje(int idViaje, Ruta ruta, LocalDate fecha, int prioridadBase) {
-        this.idViaje = idViaje;
-        this.ruta = ruta;
-        this.fecha = fecha;
-        this.prioridadActual = prioridadBase;
-        this.completado = false;
-        this.microAsignado = null;
-        this.cambios = new StackDynamic<CambioPrioridad>();
-    }
-
-    public void registrarCambioClimatico(CambioPrioridad cambio, int nuevaPrioridad) {
-        this.cambios.apilar(cambio);
-        this.prioridadActual = nuevaPrioridad;
-    }
-
-    public int getIdViaje() { return idViaje; }
-    public LocalDate getFecha() { return fecha; }
-    public int getPrioridadActual() { return prioridadActual; }
-    public Micro getMicroAsignado() { return microAsignado; }
-    public void setMicroAsignado(Micro micro) { this.microAsignado = micro; }
-    public boolean isCompletado() { return completado; }
-    public void setCompletado(boolean completado) { this.completado = completado; }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Viaje viaje = (Viaje) obj;
-        return idViaje == viaje.idViaje;
-    }
+public enum Tipo {
+    CAMA, SEMICAMA, EJECUTIVO;
 }
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/service/FlotaService.java">
+<file path="algorithms-II/src/main/java/org/uade/service/ViajeService.java">
 package org.uade.service;
 
-import org.uade.entity.Micro;
-import org.uade.entity.Viaje;
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
+import org.uade.entity.*;
 import org.uade.structure.definition.LinkedListADT;
-import org.uade.structure.definition.SimpleDictionaryADT;
-import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
-
-public class FlotaService {
-    private SimpleDictionaryADT<String, Micro> micros;
-
-    public FlotaService() {
-        this.micros = new DynamicSimpleDictionaryADT<String, Micro>();
-    }
-
-    public void registrarMicro(Micro micro) {
-        this.micros.add(micro.getPatente(), micro);
-    }
-
-    public void asignarMicroAViaje(Viaje viaje, String patente) {
-        Micro micro = this.micros.get(patente);
-        if (micro == null) {
-            System.out.println("Error: El micro no existe.");
-            return;
-        }
-
-        if (micro.estaDisponible(viaje.getFecha())) {
-            micro.agregarViaje(viaje);
-            viaje.setMicroAsignado(micro);
-            System.out.println("Micro asignado con éxito.");
-        } else {
-            System.out.println("Error: El micro no está disponible en esa fecha.");
-        }
-    }
-
-    public LinkedListADT<Micro> obtenerMicrosMasAsignados() {
-
-        return Micro;
-
-    }
-}
-</file>
-
-<file path="algorithms-II/src/main/java/org/uade/service/PrioridadService.java">
-package org.uade.service;
-
-import org.uade.entity.Viaje;
-import org.uade.entity.Motivo;
-import org.uade.entity.CambioPrioridad;
 import org.uade.structure.definition.PriorityQueueADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
 import org.uade.structure.implementation.dynamic.DynamicPriorityQueueADT;
 
-public class PrioridadService {
+import java.time.LocalDate;
+
+import static org.uade.util.PriorityQueueADTUtil.copy;
+
+public class ViajeService {
     private PriorityQueueADT<Viaje> colaViajes;
+    private LinkedListADT<Viaje> historialDespachados;
 
-    public PrioridadService() {
+    public ViajeService() {
         this.colaViajes = new DynamicPriorityQueueADT<>();
+        this.historialDespachados = new DynamicLinkedListADT<>();
     }
 
-    public void programarViaje(Viaje viaje) {
-        this.colaViajes.add(viaje, viaje.getPrioridadActual());
+    public void programarViaje(Ruta ruta, LocalDate fecha, int prioridadBase) {
+        //TODO: add validaciones
+        Viaje viaje = new Viaje(ruta, fecha, prioridadBase);
+        this.colaViajes.add(viaje, prioridadBase);
     }
 
-    public void cambiarPrioridad(Viaje viaje, Motivo motivo, String desc, int nuevaPrioridad) {
-        CambioPrioridad cambio = new CambioPrioridad(motivo, desc);
-        viaje.registrarCambioClimatico(cambio, nuevaPrioridad);
-        this.colaViajes.remove(viaje);
-        this.colaViajes.add(viaje, nuevaPrioridad);
+    private void programarViaje(Viaje viaje) {
+        this.colaViajes.add(viaje,viaje.getPrioridadActual());
+    }
+
+    public void cambiarPrioridad(int idViaje, int nuevaPrioridad, Motivo motivo) {
+        Viaje viaje = findViajeById(idViaje);
+        if (this.colaViajes.isEmpty() || !viajeEnCola(viaje)) {
+            throw new NotFoundException("El viaje ID: " + viaje.getIdViaje() + " no esta en la cola");
+        }
+        removeViaje(viaje);
+        CambioPrioridad cambio = new CambioPrioridad(motivo, nuevaPrioridad);
+        viaje.cambiarPrioridad(cambio);
+        programarViaje(viaje);
+    }
+
+    private void removeViaje(Viaje viaje){
+        PriorityQueueADT<Viaje> aux = new DynamicPriorityQueueADT<Viaje>();
+        while(!this.colaViajes.isEmpty()){
+            aux.add(this.colaViajes.getElement(),this.colaViajes.getPriority());
+            this.colaViajes.remove();
+        }
+
+        while(!aux.isEmpty()){
+            if(!aux.getElement().equals(viaje)){
+                this.colaViajes.add(aux.getElement(),aux.getPriority());
+            }
+            aux.remove();
+        }
+    }
+
+    public Viaje findViajeById(int idViaje){
+        PriorityQueueADT<Viaje> copy = copy(this.colaViajes);
+        while(!copy.isEmpty()){
+            if(copy.getElement().getIdViaje() == idViaje){
+                return copy.getElement();
+            }
+            copy.remove();
+        }
+        throw new NotFoundException("El viaje ID: " + idViaje + " no esta en la cola.");
+
+    }
+
+
+    private boolean viajeEnCola(Viaje viaje) {
+        PriorityQueueADT<Viaje> copy = copy(this.colaViajes);
+        while(!copy.isEmpty()) {
+            Viaje viajeActual = copy.getElement();
+            if(viajeActual.equals(viaje)) {
+                return true;
+            }
+            copy.remove();
+        }
+        return false;
     }
 
     public Viaje despacharSiguienteViaje() {
-        return this.colaViajes.desacoplar();
+        if(this.colaViajes.isEmpty()) {
+            throw new EmptyADTException("No hay viajes en cola");
+        }
+        Viaje viaje = this.colaViajes.getElement();
+
+        if (viaje.getMicroAsignado() == null) {
+            throw new GenericADTException("No se puede despachar el viaje ID: " + viaje.getIdViaje() + " porque no tiene un micro asignado.");
+        }
+
+        this.colaViajes.remove();
+        viaje.setCompletado(true);
+        this.historialDespachados.add(viaje);
+        return viaje;
     }
-}
-</file>
 
-<file path="algorithms-II/src/main/java/org/uade/structure/definition/GraphADT.java">
-package org.uade.structure.definition;
+    public void asignarMicroAViaje(Viaje viaje, Micro micro) {
+        viaje.asignarMicro(micro);
+        micro.agregarViaje(viaje);
+    }
 
-// Esta interfaz representa el TDA Grafo.
-public interface GraphADT {
+    public void desvincularMicro(Viaje viaje) {
+        viaje.asignarMicro(null);
+    }
 
-    /**
-     * Descripcion: Retorna el conjunto de vertices. Precondición: No tiene.
-     */
-    SetADT<Integer> getVertxs();
+    public PriorityQueueADT<Viaje> getColaViajes() {
+        if(this.colaViajes.isEmpty()) {
+            throw new EmptyADTException("No hay viajes pendientes.");
+        }
+        return this.colaViajes;
+    }
 
-    /**
-     * Descripcion: Agrega un nuevo vertice al grafo. Precondición: No tiene.
-     */
-    void addVertx(int vertex);
+    public LinkedListADT<Viaje> getHistorialDespachados() {
+        if (this.historialDespachados.isEmpty()) {
+            throw new EmptyADTException("El historial de viajes está vacío.");
+        }
+        return this.historialDespachados;
+    }
 
-    /**
-     * Descripcion: Eliminar un vertice del grafo. Precondición: No tiene.
-     */
-    void removeVertx(int vertex);
 
-    /**
-     * Descripcion: Agrega una nueva arista al grafo. Precondición: No tiene.
-     */
-    void addEdge(int vertxOne, int vertxTwo, int weight);
-
-    /**
-     * Descripcion: Eliminar una arista del grafo. Precondición: No tiene.
-     */
-    void removeEdge(int vertxOne, int vertxTwo);
-
-    /**
-     * Descripcion: Comprueba si existe o no una arista en el grafo. Precondición: Debe tener elementos el grafo.
-     */
-    boolean existsEdge(int vertxOne, int vertxTwo);
-
-    /**
-     * Descripcion: Devuelve el peso de la arista entre dos vertices. Precondición: Debe tener elementos el grafo.
-     */
-    int edgeWeight(int vertxOne, int vertxTwo);
-
-    /**
-     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
-     */
-    boolean isEmpty();
 }
 </file>
 
@@ -734,93 +1362,6 @@ public interface StackADT<T> {
      * Precondición: No tiene.
      */
     boolean isEmpty();
-}
-</file>
-
-<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicSetADT.java">
-package org.uade.structure.implementation.dynamic;
-
-import org.uade.Exception.EmptyADTException;
-import org.uade.structure.definition.SetADT;
-import org.uade.structure.implementation.Node;
-
-import java.util.Random;
-
-public class DynamicSetADT<T> implements SetADT<T> {
-    private int count;
-    private Node<T> node;
-
-
-    @Override
-    public boolean exist(T value) {
-        if(isEmpty()){
-            return false;
-        }
-
-        Node<T> current = this.node;
-
-        for(int i = 0; i < count; i++){
-            if(current.getValue().equals(value)){
-                return true;
-            }
-            current = current.getNext();
-        }
-
-        return false;
-    }
-
-    @Override
-    public T choose() {
-        if(isEmpty()){
-            throw new EmptyADTException("Empty set");
-        }
-
-        int random = new Random().nextInt(count);
-        Node<T> current = this.node;
-
-
-        for (int i = 0; i < random; i++){
-            current = current.getNext();
-        }
-
-        return current.getValue();
-    }
-
-    @Override
-    public void add(T value) {
-        if (!exist(value)) {
-            Node<T> newNode = new Node<>(value);
-            newNode.setNext(this.node);
-            this.node = newNode;
-            count++;
-        }
-    }
-
-    @Override
-    public void remove(T element) {
-        if (isEmpty()) return;
-
-        if (this.node.getValue().equals(element)) {
-            this.node = this.node.getNext();
-            count--;
-            return;
-        }
-
-        Node<T> current = this.node;
-        while (current.getNext() != null) {
-            if (current.getNext().getValue().equals(element)) {
-                current.setNext(current.getNext().getNext());
-                count--;
-                return;
-            }
-            current = current.getNext();
-        }
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return count==0;
-    }
 }
 </file>
 
@@ -1016,6 +1557,46 @@ public class NodePrioridad<T> {
 }
 </file>
 
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/NodeSimpleDict.java">
+package org.uade.structure.implementation;
+
+public class NodeSimpleDict<K, V> {
+    private K key;
+    private V value;
+    private NodeSimpleDict<K, V> next;
+
+    public NodeSimpleDict(K key, V value) {
+        this.key = key;
+        this.value = value;
+        this.next = null;
+    }
+
+    public K getKey() {
+        return key;
+    }
+
+    public void setKey(K key) {
+        this.key = key;
+    }
+
+    public V getValue() {
+        return value;
+    }
+
+    public void setValue(V value) {
+        this.value = value;
+    }
+
+    public NodeSimpleDict<K, V> getNext() {
+        return next;
+    }
+
+    public void setNext(NodeSimpleDict<K, V> next) {
+        this.next = next;
+    }
+}
+</file>
+
 <file path="algorithms-II/src/main/java/org/uade/util/LinkedListADTUtil.java">
 package org.uade.util;
 
@@ -1079,47 +1660,56 @@ public class LinkedListADTUtil {
 }
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/util/SetADTUtil.java">
+<file path="algorithms-II/src/main/java/org/uade/util/SimpleDictionaryADTUtil.java">
 package org.uade.util;
-
 import org.uade.structure.definition.SetADT;
-import org.uade.structure.implementation.dynamic.DynamicSetADT;
-import org.uade.structure.implementation.fixed.StaticSetADT;
-import org.uade.structure.implementation.fixed.StaticStackADT;
+import org.uade.structure.definition.SimpleDictionaryADT;
 
+public class SimpleDictionaryADTUtil {
 
-public class SetADTUtil {
-
-    public static <T> SetADT<T> copy(SetADT<T> set) {
-        SetADT<T> aux = getNewStack(set);
-        SetADT<T> copia = getNewStack(set);
-
-        while (!set.isEmpty()) {
-            T element = set.choose();
-            aux.add(element);
-            set.remove(element);
+    public static  <K, V> void printDict(SimpleDictionaryADT<K,V> dict){
+        if (dict == null || dict.isEmpty()) {
+            System.out.println("El diccionario está vacío.");
+            return;
         }
-
-        while (!aux.isEmpty()) {
-            T element = aux.choose();
-            set.add(element);
-            copia.add(element);
-            aux.remove(element);
-        }
-
-        return copia;
-    }
-
-    private static <T> SetADT<T> getNewStack(SetADT<T> set) {
-        if (set instanceof StaticSetADT) {
-            return new StaticSetADT<>();
-        } else {
-            return new DynamicSetADT<>();
+        SetADT<K> keys = dict.getKeys();
+        SetADT<K> copy = SetADTUtil.copy(keys);
+        while(!copy.isEmpty()){
+            K key = copy.choose();
+            V value = dict.get(key);
+            System.out.println(value);
+            copy.remove(key);
         }
     }
-
-
 }
+</file>
+
+<file path="algorithms-II/pom.xml">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.uade</groupId>
+    <artifactId>algorithms-II</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.12.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
 </file>
 
 <file path=".gitignore">
@@ -1295,44 +1885,258 @@ Como se puede ver en la estructura existen una serie de paquetes donde cada uno 
 | `util`                       | Clases utilitarias y funciones auxiliares usadas en todo el proyecto.       |
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/entity/Micro.java">
-package org.uade.entity;
+<file path="algorithms-II/src/main/java/org/uade/service/RutaService.java">
+package org.uade.service;
 
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
+import org.uade.entity.Ruta;
+import org.uade.entity.Terminal;
+import org.uade.structure.definition.GraphADT;
 import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.QueueADT;
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.implementation.dynamic.DynamicGraphADT;
 import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicQueueADT;
+import org.uade.structure.implementation.dynamic.DynamicSetADT;
 
-import java.time.LocalDate;
+public class RutaService {
+    private GraphADT<Terminal, Integer> grafoTerminales;
+    private SetADT<Ruta> rutasExistentes;
 
-public class Micro {
-    private String patente;
-    private Tipo tipo;
-    private LinkedListADT<Viaje> viajes;
-
-    public Micro(String patente, Tipo tipo) {
-        this.patente = patente;
-        this.tipo = tipo;
-        this.viajes = new DynamicLinkedListADT<>();
+    public RutaService() {
+        this.grafoTerminales = new DynamicGraphADT<>();
+        this.rutasExistentes = new DynamicSetADT<>();
     }
 
-    public boolean estaDisponible(LocalDate fechaBusqueda) {
-        return true;
+    public void registrarTerminal(Terminal t) {
+        grafoTerminales.addVertx(t);
     }
 
-    public void agregarViaje(Viaje viaje) {
-        this.viajes.insertarFinal(viaje);
-    }
-
-    public int getCantViajes() {
-        int count = 0;
-        for (int i = 0; i < this.viajes.size(); i++) {
-            count++;
+    public void registrarConexion(Terminal o, Terminal d, int km) {
+        if (grafoTerminales.existsEdge(o, d)) {
+            throw new GenericADTException("Ya existe una conexión registrada entre estas terminales.");
         }
-        return count;
+        grafoTerminales.addEdge(o, d, km);
     }
 
-    public String getPatente() { return patente; }
-    public Tipo getTipo() { return tipo; }
+    public void eliminarConexion(Terminal origen, Terminal destino) {
+        if (!grafoTerminales.existsEdge(origen, destino)) {
+            throw new GenericADTException("No existe una conexión registrada entre estas terminales.");
+        }
+        grafoTerminales.removeEdge(origen, destino);
+    }
 
+    public LinkedListADT<Ruta> rutasPosibles(Terminal origen, Terminal destino, int maxParadas) {
+        LinkedListADT<Ruta> rutasEncontradas = new DynamicLinkedListADT<>();
+        LinkedListADT<Terminal> caminoActual = new DynamicLinkedListADT<>();
+        SetADT<Terminal> visitados = new DynamicSetADT<>();
+
+        caminoActual.add(origen);
+        busquedaConexiones(origen, destino, maxParadas, 0, caminoActual, visitados, rutasEncontradas);
+
+        if (rutasEncontradas.isEmpty()) {
+            throw new NotFoundException("No se encontraron rutas entre "
+                    + origen.getCodigo() + " y " + destino.getCodigo()
+                    + " con un máximo de " + maxParadas + " paradas.");
+        }
+
+        return rutasEncontradas;
+    }
+
+    private void busquedaConexiones(Terminal actual, Terminal destino, int maxParadas, int paradasActuales,
+                                    LinkedListADT<Terminal> caminoActual, SetADT<Terminal> visitados,
+                                    LinkedListADT<Ruta> resultados) {
+        // caso 1: llegue al destino
+        if (actual.equals(destino)) {
+            Ruta ruta = crearRutaDesdeCamino(caminoActual);
+            resultados.add(ruta);
+            return;
+        }
+        // caso 2: alcanzo el maximo de paradas intermedias
+        if (paradasActuales > maxParadas) {
+            return;
+        }
+
+        visitados.add(actual);
+
+        LinkedListADT<Terminal> vecinos = obtenerVecinos(actual);
+
+        for (int i = 0; i < vecinos.size(); i++) {
+            Terminal vecino = vecinos.get(i);
+
+            if (!visitados.exist(vecino)) {
+                caminoActual.add(vecino);
+
+                // llamada recursiva aumentando el contador de paradas
+                busquedaConexiones(vecino, destino, maxParadas, paradasActuales + 1, caminoActual, visitados, resultados);
+
+                // BACKTRACKING: Limpiamos el camino para la siguiente iteración del ciclo for
+                caminoActual.remove(caminoActual.size() - 1);
+            }
+        }
+        // BACKTRACKING 2: Desmarcamos el nodo actual al salir de este camino
+        // para que otras rutas alternativas pasen por ese nodo
+        visitados.remove(actual);
+
+    }
+
+    /**
+     * Descripcion: Convierte la lista temporal de caminoActual en un objeto Ruta
+     */
+    private Ruta crearRutaDesdeCamino(LinkedListADT<Terminal> caminoActual) {
+        Terminal origen = caminoActual.get(0);
+        Terminal destino = caminoActual.get(caminoActual.size() - 1);
+
+        QueueADT<Terminal> paradasIntermedias = new DynamicQueueADT<>();
+
+        // esta iteracion saltea el primero y ultimo, para tener solo intermedias
+        for (int i = 1; i < caminoActual.size() - 1; i++) {
+            paradasIntermedias.add(caminoActual.get(i));
+        }
+
+        return new Ruta(origen, destino, paradasIntermedias);
+    }
+
+    /**
+     * Descripcion: devuelve una lista de vecinos del vertice,
+     * es decir, los que tienen una arista directa
+     */
+    private LinkedListADT<Terminal> obtenerVecinos(Terminal actual) {
+        LinkedListADT<Terminal> vecinos = new DynamicLinkedListADT<>();
+
+        SetADT<Terminal> vertices = grafoTerminales.getVertxs();
+
+        while (!vertices.isEmpty()) {
+            Terminal posibleVecino = vertices.choose();
+            vertices.remove(posibleVecino);
+
+            if (!actual.equals(posibleVecino)) {
+                if (grafoTerminales.existsEdge(actual, posibleVecino)) {
+                    vecinos.add(posibleVecino);
+                }
+            }
+        }
+
+        return vecinos;
+    }
+
+    public void crearRuta(Ruta nuevaRuta) {
+        if (rutasExistentes.exist(nuevaRuta)) {
+            throw new GenericADTException("Ya existe una ruta con origen "
+                    + nuevaRuta.getOrigen().getCodigo() + " y destino " + nuevaRuta.getDestino().getCodigo());
+        }
+        rutasExistentes.add(nuevaRuta);
+    }
+
+    public Ruta buscarRuta(Terminal origen, Terminal destino) {
+        Ruta clave = new Ruta(origen, destino, new DynamicQueueADT<>());
+        if (!rutasExistentes.exist(clave)) {
+            throw new NotFoundException("No existe una ruta registrada con origen "
+                    + origen.getCodigo() + " y destino " + destino.getCodigo());
+        }
+        SetADT<Ruta> copia = new DynamicSetADT<>();
+        Ruta encontrada = null;
+        while (!rutasExistentes.isEmpty()) {
+            Ruta rutaActual = rutasExistentes.choose();
+            rutasExistentes.remove(rutaActual);
+            if (rutaActual.getOrigen().equals(origen) && rutaActual.getDestino().equals(destino)) {
+                encontrada = rutaActual;
+            }
+            copia.add(rutaActual);
+        }
+        while (!copia.isEmpty()) {
+            rutasExistentes.add(copia.choose());
+            copia.remove(copia.choose());
+        }
+        return encontrada;
+    }
+
+    public SetADT<Ruta> getRutasExistentes() {
+        return this.rutasExistentes;
+    }
+
+    public SetADT<Terminal> identificarTerminalesDesconectadas() {
+        SetADT<Terminal> desconectadas = new DynamicSetADT<>();
+        SetADT<Terminal> vertices = grafoTerminales.getVertxs();
+
+        while (!vertices.isEmpty()) {
+            Terminal terminal = vertices.choose();
+            vertices.remove(terminal);
+
+            boolean tieneConexion = false;
+            SetADT<Terminal> todosVertices = grafoTerminales.getVertxs();
+            while (!todosVertices.isEmpty()) {
+                Terminal otro = todosVertices.choose();
+                todosVertices.remove(otro);
+                if (!terminal.equals(otro)) {
+                    if (grafoTerminales.existsEdge(terminal, otro) || grafoTerminales.existsEdge(otro, terminal)) {
+                        tieneConexion = true;
+                        break;
+                    }
+                }
+            }
+            if (!tieneConexion) {
+                desconectadas.add(terminal);
+            }
+        }
+        return desconectadas;
+    }
+
+
+
+    public GraphADT<Terminal, Integer> getGrafoTerminales() {
+        return this.grafoTerminales;
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/definition/GraphADT.java">
+package org.uade.structure.definition;
+
+// Esta interfaz representa el TDA Grafo.
+public interface GraphADT<V, P> {
+
+    /**
+     * Descripcion: Retorna el conjunto de vertices. Precondición: No tiene.
+     */
+    SetADT<V> getVertxs();
+
+    /**
+     * Descripcion: Agrega un nuevo vertice al grafo. Precondición: No tiene.
+     */
+    void addVertx(V vertex);
+
+    /**
+     * Descripcion: Eliminar un vertice del grafo. Precondición: No tiene.
+     */
+    void removeVertx(V vertex);
+
+    /**
+     * Descripcion: Agrega una nueva arista al grafo. Precondición: No tiene.
+     */
+    void addEdge(V vertxOne, V vertxTwo, P weight);
+
+    /**
+     * Descripcion: Eliminar una arista del grafo. Precondición: No tiene.
+     */
+    void removeEdge(V vertxOne, V vertxTwo);
+
+    /**
+     * Descripcion: Comprueba si existe o no una arista en el grafo. Precondición: Debe tener elementos el grafo.
+     */
+    boolean existsEdge(V vertxOne, V vertxTwo);
+
+    /**
+     * Descripcion: Devuelve el peso de la arista entre dos vertices. Precondición: Debe tener elementos el grafo.
+     */
+    P edgeWeight(V vertxOne, V vertxTwo);
+
+    /**
+     * Descripcion: Debe comprobar si la estructura tiene o no valores. Precondición: No tiene.
+     */
+    boolean isEmpty();
 }
 </file>
 
@@ -1548,6 +2352,95 @@ public class DynamicQueueADT<T> implements QueueADT<T> {
         return "{" +
                 node +
                 '}';
+    }
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicSetADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.implementation.Node;
+
+import java.util.Random;
+
+public class DynamicSetADT<T> implements SetADT<T> {
+    private int count;
+    private Node<T> node;
+
+
+    @Override
+    public boolean exist(T value) {
+        if(isEmpty()){
+            return false;
+        }
+
+        Node<T> current = this.node;
+
+        for(int i = 0; i < count; i++){
+            if(current.getValue().equals(value)){
+                return true;
+            }
+            current = current.getNext();
+        }
+
+        return false;
+    }
+
+    @Override
+    public T choose() {
+        if(isEmpty()){
+            throw new EmptyADTException("Empty set");
+        }
+
+        int random = new Random().nextInt(count);
+        Node<T> current = this.node;
+
+
+        for (int i = 0; i < random; i++){
+            current = current.getNext();
+        }
+
+        return current.getValue();
+    }
+
+    @Override
+    public void add(T value) {
+        if (!exist(value)) {
+            Node<T> newNode = new Node<>(value);
+            newNode.setNext(this.node);
+            this.node = newNode;
+            count++;
+        }
+    }
+
+    @Override
+    public void remove(T element) {
+        if (isEmpty()) return;
+
+        if (this.node.getValue().equals(element)) {
+            this.node = this.node.getNext();
+            count--;
+            return;
+        }
+
+        Node<T> current = this.node;
+        while (current.getNext() != null) {
+            if (current.getNext().getValue().equals(element)) {
+                current.setNext(current.getNext().getNext());
+                count--;
+                return;
+            }
+            current = current.getNext();
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return count==0;
     }
 
 
@@ -1857,121 +2750,186 @@ public class StackADTUtil {
 }
 </file>
 
-<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicLinkedListADT.java">
-package org.uade.structure.implementation.dynamic;
+<file path="algorithms-II/src/main/java/org/uade/view/RutaModulo.java">
+package org.uade.view;
 
 import org.uade.Exception.GenericADTException;
-import org.uade.structure.implementation.Node;
+import org.uade.Exception.NotFoundException;
+import org.uade.entity.Ruta;
+import org.uade.entity.Terminal;
+import org.uade.service.RutaService;
+import org.uade.service.TerminalService;
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.SetADT;
+import org.uade.util.ConsoleInput;
 
-public class DynamicLinkedListADT<T> implements org.uade.structure.definition.LinkedListADT<T> {
-    private Node<T> node;
-    private int count;
 
-    @Override
-    public void add(T value) {
-        if(this.isEmpty()) {//si es el primero, seteo el value
-            this.node = new Node<>(value);
-        }
-        else{
-            Node<T> aux = this.node; //busco desde el primer nodo
-            while(aux.getNext() != null) {//voy cambiando aux hasta encontrar el q no tenga next
-                aux = aux.getNext();
+import static org.uade.util.LinkedListADTUtil.print;
+import static org.uade.util.SetADTUtil.printSet;
+import static org.uade.util.SimpleDictionaryADTUtil.printDict;
+
+public class RutaModulo {
+    private final RutaService rutaService;
+    private final TerminalService terminalService;
+
+    public RutaModulo(RutaService rutaService, TerminalService terminalService) {
+        this.rutaService = rutaService;
+        this.terminalService = terminalService;
+    }
+
+    public void ejecutarMenuRutas() {
+        int opcionRutas;
+        do {
+            System.out.println("\n--- MÓDULO RUTAS ---");
+            System.out.println("1. Crear conexion entre terminales");
+            System.out.println("2. Eliminar conexion entre terminales");
+            System.out.println("3. Ver rutas posibles entre dos terminales");
+            System.out.println("4. Crear ruta");
+            System.out.println("5. Reportes");
+            // mostrar rutas aisladas,
+            // mostrar Terminales con mayor número de salidas y de llegadas y
+            // Terminales con más conexiones directas con otras terminales
+            System.out.println("0. Volver al menú principal");
+
+            opcionRutas = ConsoleInput.readOption("Seleccione una opción:");
+
+            switch (opcionRutas) {
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
+                    ConsoleInput.waitEnter();
+                    break;
+                case 1:
+                    ejecutarCrearConexion();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 2:
+                    ejecutarEliminarConexion();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 3:
+                    ejecutarVerRutasPosibles();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 4:
+                    ejecutarCrearRuta();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 5:
+                    ejecutarMostrarTerminalesAisladas();
+                    ConsoleInput.waitEnter();
+                    break;
+                default:
+                    System.out.println("❌ Opción no válida.");
+                    ConsoleInput.waitEnter();
             }
-            aux.setNext(new Node<>(value));//seteo el valor del auxiliar porque es el ultimo nodo.
-        }
-        this.count++;
+        } while (opcionRutas != 0);
     }
 
-    @Override
-    public void insert(int index, T value) {
-        if(index<= count && index >= 0){
-            int auxCount = 0;
-            Node<T> aux = this.node;
-            if (index != 0){
-                while(auxCount!=(index-1)){
-                    auxCount++;
-                    aux = aux.getNext();
-                }
-                Node<T> newNode = new Node<>(value);
-                newNode.setNext(aux.getNext());
-                aux.setNext(newNode);
+    private void ejecutarCrearConexion() {
+        try {
+            System.out.println("\n--- CREAR CONEXIÓN ENTRE TERMINALES ---");
+            printDict(terminalService.getTerminales());
+
+            String codOrigen = ConsoleInput.readString("Ingrese el código de la terminal origen:");
+            Terminal origen = terminalService.obtenerTerminal(codOrigen);
+
+            String codDestino = ConsoleInput.readString("Ingrese el código de la terminal destino:");
+            Terminal destino = terminalService.obtenerTerminal(codDestino);
+
+            int km = ConsoleInput.readInt("Ingrese la distancia en km:");
+
+            rutaService.registrarConexion(origen, destino, km);
+            System.out.println("✅ Conexión registrada exitosamente.");
+        } catch (GenericADTException | NotFoundException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarEliminarConexion() {
+        try {
+            System.out.println("\n--- ELIMINAR CONEXIÓN ENTRE TERMINALES ---");
+            printDict(terminalService.getTerminales());
+
+            String codOrigen = ConsoleInput.readString("Ingrese el código de la terminal origen:");
+            Terminal origen = terminalService.obtenerTerminal(codOrigen);
+
+            String codDestino = ConsoleInput.readString("Ingrese el código de la terminal destino:");
+            Terminal destino = terminalService.obtenerTerminal(codDestino);
+
+            rutaService.eliminarConexion(origen, destino);
+            System.out.println("✅ Conexión eliminada exitosamente.");
+        } catch (GenericADTException | NotFoundException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private LinkedListADT<Ruta> getRutasPosibles() throws GenericADTException, NotFoundException {
+        printDict(terminalService.getTerminales());
+
+        String codOrigen = ConsoleInput.readString("Ingrese el código de la terminal origen:");
+        Terminal origen = terminalService.obtenerTerminal(codOrigen);
+
+        String codDestino = ConsoleInput.readString("Ingrese el código de la terminal destino:");
+        Terminal destino = terminalService.obtenerTerminal(codDestino);
+
+        int cantParadas = ConsoleInput.readInt("Ingrese el número máximo de paradas intermedias:");
+
+        return rutaService.rutasPosibles(origen, destino, cantParadas);
+    }
+
+    private void ejecutarVerRutasPosibles() {
+        try {
+            System.out.println("\n--- BUSCAR RUTAS POSIBLES ---");
+            LinkedListADT<Ruta> rutasEncontradas = getRutasPosibles();
+
+            System.out.println("\n--- RUTAS POSIBLES ---");
+            print(rutasEncontradas);
+
+        } catch (GenericADTException | NotFoundException e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
+    private void ejecutarCrearRuta() {
+        try {
+            System.out.println("\n--- CREAR RUTA ---");
+            LinkedListADT<Ruta> rutasEncontradas = getRutasPosibles();
+
+            System.out.println("\n--- RUTAS DISPONIBLES PARA CREAR ---");
+            for (int i = 0; i < rutasEncontradas.size(); i++) {
+                System.out.println((i + 1) + ". " + rutasEncontradas.get(i).toString());
             }
-            else{
-                Node<T> newNode = new Node<>(value);
-                newNode.setNext(aux);
-                this.node = newNode;
+
+            int seleccion = ConsoleInput.readInt("Seleccione una ruta (número):") - 1;
+
+            if (seleccion < 0 || seleccion >= rutasEncontradas.size()) {
+                System.out.println("❌ Selección no válida.");
+                return;
             }
-            this.count++;
 
-        }
-        else{
-            throw new IndexOutOfBoundsException("Indice inexistente");
-        }
-    }
+            Ruta rutaSeleccionada = rutasEncontradas.get(seleccion);
+            rutaService.crearRuta(rutaSeleccionada);
+            System.out.println("✅ Ruta creada exitosamente.");
 
-    @Override
-    public void remove(int index) throws GenericADTException {
-        if(index< count && index >= 0){
-            int auxCount = 0;
-            Node<T> aux = this.node;
-
-            if(index!=0){
-                while(auxCount != (index-1)){
-                    auxCount++;
-                    aux = aux.getNext();
-                }
-                Node<T> remove = aux.getNext();
-                aux.setNext(remove.getNext());
-                remove.setNext(null);
-            }
-            else{ //caso especial si index es 0
-                this.node = aux.getNext();
-                aux.setNext(null);
-            }
-            this.count--;
-
-        }
-        else{
-            throw new GenericADTException("Indice inexistente");
+        } catch (GenericADTException | NotFoundException e) {
+            System.out.println("❌ " + e.getMessage());
         }
     }
 
-    @Override
-    public T get(int index) throws GenericADTException {
-        T valor;
-        if (index < count && index >= 0) {
-            int auxCount = 0;
-            Node<T> auxNode = this.node;
-            while(index != auxCount){
-                auxCount++;
-                auxNode = auxNode.getNext();
-            }
-            valor = auxNode.getValue();
-
+    private void ejecutarMostrarTerminalesAisladas() {
+        System.out.println("\n--- TERMINALES AISLADAS ---");
+        SetADT<Terminal> desconectadas = rutaService.identificarTerminalesDesconectadas();
+        if (desconectadas.isEmpty()) {
+            System.out.println("No hay terminales aisladas.");
+        } else {
+            printSet(desconectadas);
         }
-        else{
-            throw new GenericADTException("Indice inexistente");
-        }
-
-        return valor;
     }
 
-    @Override
-    public int size() {
-        return this.count;
+    private void ejecutarMostrarReporte() {
+
     }
 
-    @Override
-    public boolean isEmpty() {
-        return node == null;
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                node +
-                '}';
-    }
 }
 </file>
 
@@ -2175,6 +3133,215 @@ public class Node<T> {
 }
 </file>
 
+<file path="algorithms-II/src/main/java/org/uade/util/SetADTUtil.java">
+package org.uade.util;
+
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.implementation.dynamic.DynamicSetADT;
+import org.uade.structure.implementation.fixed.StaticSetADT;
+
+
+public class SetADTUtil {
+
+    public static <T> void printSet(SetADT<T> set) {
+        SetADT<T> copy = copy(set);
+        while (!copy.isEmpty()) {
+            T element = copy.choose();
+            System.out.println(element);
+            copy.remove(element);
+        }
+    }
+
+    public static <T> SetADT<T> copy(SetADT<T> set) {
+        SetADT<T> aux = getNewStack(set);
+        SetADT<T> copia = getNewStack(set);
+
+        while (!set.isEmpty()) {
+            T element = set.choose();
+            aux.add(element);
+            set.remove(element);
+        }
+
+        while (!aux.isEmpty()) {
+            T element = aux.choose();
+            set.add(element);
+            copia.add(element);
+            aux.remove(element);
+        }
+
+        return copia;
+    }
+
+    private static <T> SetADT<T> getNewStack(SetADT<T> set) {
+        if (set instanceof StaticSetADT) {
+            return new StaticSetADT<>();
+        } else {
+            return new DynamicSetADT<>();
+        }
+    }
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Terminal.java">
+package org.uade.entity;
+
+public class Terminal {
+    private String codigo;
+    private String descripcion;
+
+    public Terminal(String codigo, String descripcion) {
+        this.codigo = codigo;
+        this.descripcion = descripcion;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Terminal terminal = (Terminal) obj;
+        return codigo.equals(terminal.codigo);
+    }
+
+    @Override
+    public String toString() {
+        return "Terminal{" +
+                "codigo=" + codigo +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Viaje.java">
+package org.uade.entity;
+
+import org.uade.structure.definition.StackADT;
+import org.uade.structure.implementation.dynamic.DynamicStackADT;
+
+import java.time.LocalDate;
+
+public class Viaje {
+    private static int contadorId = 0;
+    private int idViaje;
+    private Ruta ruta;
+    private Micro microAsignado;
+    private LocalDate fecha;
+    private boolean completado;
+    private int prioridadActual;
+    private StackADT<CambioPrioridad> cambios;
+
+    public Viaje(Ruta ruta, LocalDate fecha, int prioridadBase) {
+        this.idViaje = contadorId++;
+        this.ruta = ruta;
+        this.fecha = fecha;
+        this.prioridadActual = prioridadBase;
+        this.completado = false;
+        this.microAsignado = null;
+        this.cambios = new DynamicStackADT<CambioPrioridad>();
+    }
+
+    public void cambiarPrioridad(CambioPrioridad cambio) {
+        this.cambios.add(cambio);
+        this.prioridadActual = cambio.getPrioridad();
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Viaje) {
+            Viaje aux = (Viaje) obj;
+            return this.idViaje == aux.idViaje;
+        }
+        return false;
+    }
+
+    public void asignarMicro(Micro micro){
+        this.microAsignado = micro;
+    }
+
+    public int getIdViaje() {
+        return idViaje;
+    }
+
+    public void setIdViaje(int idViaje) {
+        this.idViaje = idViaje;
+    }
+
+    public Ruta getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(Ruta ruta) {
+        this.ruta = ruta;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public boolean isCompletado() {
+        return completado;
+    }
+
+    public void setCompletado(boolean completado) {
+        this.completado = completado;
+    }
+
+    public Micro getMicroAsignado() {
+        return microAsignado;
+    }
+
+    public void setMicroAsignado(Micro microAsignado) {
+        this.microAsignado = microAsignado;
+    }
+
+    public int getPrioridadActual() {
+        return prioridadActual;
+    }
+
+    public void setPrioridadActual(int prioridadActual) {
+        this.prioridadActual = prioridadActual;
+    }
+
+    public StackADT<CambioPrioridad> getCambios() {
+        return cambios;
+    }
+
+    public void setCambios(StackADT<CambioPrioridad> cambios) {
+        this.cambios = cambios;
+    }
+
+
+    @Override
+    public String toString() {
+        return "VIAJE " +
+                "id: " + idViaje +
+                " - Ruta:  " + ruta +
+                " - Fecha: " + fecha;
+    }
+}
+</file>
+
 <file path="algorithms-II/src/main/java/org/uade/structure/implementation/fixed/StaticQueueADT.java">
 package org.uade.structure.implementation.fixed;
 
@@ -2229,6 +3396,826 @@ public class StaticQueueADT<T> implements QueueADT<T> {
         return count == 0;
     }
 
+
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/view/FlotaModulo.java">
+package org.uade.view;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
+import org.uade.Exception.OpcionInvalida;
+import org.uade.entity.Micro;
+import org.uade.entity.Tipo;
+import org.uade.service.FlotaService;
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.util.ConsoleInput;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import static org.uade.util.LinkedListADTUtil.print;
+import static org.uade.util.SimpleDictionaryADTUtil.printDict;
+
+public class FlotaModulo {
+    private final FlotaService flotaService;
+
+    public FlotaModulo(FlotaService flotaService) {
+        this.flotaService = flotaService;
+    }
+
+    public void ejecutarMenuFlota() {
+        int opcionFlota;
+        do {
+            System.out.println("\n--- MÓDULO FLOTA ---");
+            System.out.println("1. Registrar nuevo micro");
+            System.out.println("2. Disponibilidad de micro");
+            System.out.println("3. Mostrar micros con viajes (pendientes/terminados)");
+            System.out.println("4. Mostrar todos los micros");
+            System.out.println("0. Volver al menú principal");
+
+            opcionFlota = ConsoleInput.readOption("Seleccione una opción:");
+
+            switch (opcionFlota) {
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
+                    ConsoleInput.waitEnter();
+                    break;
+                case 1:
+                    ejecutarRegistrarMicro();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 2:
+                    ejecutarEstaDisponible();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 3:
+                    ejecutarMostrarMicrosAsignados();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 4:
+                    ejecutarMostrarMicros();
+                    ConsoleInput.waitEnter();
+                    break;
+                default:
+                    System.out.println("❌ Opción no válida.");
+                    ConsoleInput.waitEnter();
+            }
+        } while (opcionFlota != 0);
+    }
+
+
+    private void ejecutarRegistrarMicro() {
+        try {
+            System.out.println("\n--- REGISTRAR NUEVO MICRO ---");
+
+            String patente = ConsoleInput.readString("Ingrese la patente del micro:");
+            int tipoInt = ConsoleInput.readInt("Tipo (1-Cama, 2-Semicama, 3-Ejecutivo):");
+
+            Tipo tipo;
+            if (tipoInt == 1) {
+                tipo = Tipo.CAMA;
+            } else if (tipoInt == 2) {
+                tipo = Tipo.SEMICAMA;
+            } else if (tipoInt == 3) {
+                tipo = Tipo.EJECUTIVO;
+            } else {
+                throw new OpcionInvalida("Tipo incorrecto.");
+            }
+
+            flotaService.registrarMicro(patente,tipo);
+            System.out.println("✅ Micro registrado exitosamente.");
+        } catch (OpcionInvalida | GenericADTException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarMostrarMicrosAsignados(){
+        try{
+            LinkedListADT<Micro> microsAsignados = flotaService.mostrarMicrosAsignados();
+            print(microsAsignados);
+        }catch (EmptyADTException e){
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarEstaDisponible(){
+        try{
+            String patente = ConsoleInput.readString("Ingrese la patente del micro:");
+            String fechaStr = ConsoleInput.readString("Ingrese la fecha del viaje (dd/MM/yyyy):");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fecha = LocalDate.parse(fechaStr, formatter);
+
+            if(flotaService.estaDisponible(patente, fecha)){
+                System.out.println("✅ El micro "+patente+" esta disponible el dia  "+fechaStr);
+            }
+            else{
+                System.out.println("❌ El micro "+patente+" esta ocupado el dia  "+fechaStr);
+            }
+
+        }catch (NotFoundException e){
+            System.out.println("❌ Error:  " + e.getMessage());
+        } catch(DateTimeException e){
+            System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
+        }
+    }
+
+    private void ejecutarMostrarMicros(){
+        try{
+            SimpleDictionaryADT<String, Micro> micros = flotaService.getMicros();
+            printDict(micros);
+        }catch (EmptyADTException e){
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/view/Menu.java">
+package org.uade.view;
+
+import org.uade.service.FlotaService;
+import org.uade.service.RutaService;
+import org.uade.service.TerminalService;
+import org.uade.service.ViajeService;
+import org.uade.util.ConsoleInput;
+import org.uade.util.PrecargaDatos;
+
+
+public class Menu {
+    private final FlotaService flotaService;
+    private final ViajeService viajeService;
+    private final RutaService rutaService;
+    private final TerminalService terminalService;
+    private final FlotaModulo flotaModulo;
+    private final ViajesModulo viajesModulo;
+    private final RutaModulo rutaModulo;
+    private final TerminalModulo terminalModulo;
+
+
+    public Menu() {
+        this.terminalService = new TerminalService();
+        this.flotaService = new FlotaService();
+        this.viajeService = new ViajeService();
+        this.rutaService = new RutaService();
+
+        this.flotaModulo = new FlotaModulo(this.flotaService);
+        this.viajesModulo = new ViajesModulo(this.flotaService, this.viajeService, this.rutaService);
+        this.rutaModulo = new RutaModulo(this.rutaService,this.terminalService);
+        this.terminalModulo = new TerminalModulo(this.terminalService,this.rutaService);
+
+
+        PrecargaDatos demo = new PrecargaDatos(terminalService, flotaService, rutaService, viajeService);
+        demo.cargar();
+    }
+
+    public void launch() {
+        int opcion;
+        do {
+            System.out.println("\n=== GESTIÓN DE TRANSPORTE ===");
+            System.out.println("1. Flota");
+            System.out.println("2. Viajes");
+            System.out.println("3. Rutas");
+            System.out.println("4. Terminales");
+            System.out.println("0. Salir");
+
+            opcion = ConsoleInput.readOption("Seleccione una opción:");
+
+            switch (opcion) {
+                case 0:
+                    System.out.println("Saliendo del sistema...");
+                    break;
+                case 1:
+                    flotaModulo.ejecutarMenuFlota();
+                    break;
+                case 2:
+                    viajesModulo.ejecutarMenuViajes();
+                    break;
+                case 3:
+                    rutaModulo.ejecutarMenuRutas();
+                    break;
+                case 4:
+                    terminalModulo.ejecutarMenuTerminales();
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+                    ConsoleInput.waitEnter();
+            }
+        } while (opcion != 0);
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/Main.java">
+package org.uade;
+
+import org.uade.entity.Micro;
+import org.uade.entity.Ruta;
+import org.uade.entity.Tipo;
+import org.uade.entity.Viaje;
+import org.uade.service.*;
+import org.uade.util.ConsoleInput;
+import org.uade.view.Menu;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Menu menu = new Menu();
+        menu.launch();
+
+
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Micro.java">
+package org.uade.entity;
+
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
+
+import java.time.LocalDate;
+
+public class Micro {
+    private String patente;
+    private Tipo tipo;
+    private LinkedListADT<Viaje> viajes;
+
+    public Micro(String patente, Tipo tipo) {
+        this.patente = patente;
+        this.tipo = tipo;
+        this.viajes = new DynamicLinkedListADT<>();
+    }
+
+    public boolean estaDisponible(LocalDate fechaBusqueda) {
+        for (int i = 0; i < this.viajes.size(); i++) {
+            Viaje viajeActual = this.viajes.get(i);
+            if (viajeActual.getFecha().equals(fechaBusqueda)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean esAsignado() {
+        return getCantViajes()>0;
+    }
+
+    public void agregarViaje(Viaje viaje) {
+        this.viajes.add(viaje);
+    }
+
+    public void removerViaje(Viaje viaje) {
+        for (int i = 0; i < this.viajes.size(); i++) {
+            if (this.viajes.get(i).equals(viaje)) {
+                this.viajes.remove(i);
+                return;
+            }
+        }
+    }
+
+    public int getCantViajes() { return this.viajes.size(); }
+
+    public String getPatente() { return patente; }
+    public Tipo getTipo() { return tipo; }
+
+
+    @Override
+    public String toString() {
+        return  "patente: "+this.patente + " " + this.tipo.toString();
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/entity/Ruta.java">
+package org.uade.entity;
+
+import org.uade.structure.definition.QueueADT;
+import org.uade.structure.implementation.dynamic.DynamicQueueADT;
+
+public class Ruta {
+    private Terminal origen;
+    private Terminal destino;
+    private QueueADT<Terminal> paradasIntermedias;
+
+
+    public Ruta(Terminal origen, Terminal destino, QueueADT<Terminal> paradasIntermedias) {
+        this.origen = origen;
+        this.destino = destino;
+        this.paradasIntermedias = paradasIntermedias;
+    }
+
+    public Terminal getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(Terminal origen) {
+        this.origen = origen;
+    }
+
+    public Terminal getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Terminal destino) {
+        this.destino = destino;
+    }
+
+    public QueueADT<Terminal> getParadasIntermedias() {
+        return paradasIntermedias;
+    }
+
+    public void setParadasIntermedias(QueueADT<Terminal> paradasIntermedias) {
+        this.paradasIntermedias = paradasIntermedias;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Ruta ruta = (Ruta) obj;
+        return origen.equals(ruta.origen) && destino.equals(ruta.destino);
+    }
+
+    @Override
+    public String toString() {
+        return "Ruta{" +
+                "codigoOrigen=" + origen.getCodigo() +
+                ", codigoDestino=" + destino.getCodigo() +
+                ", paradasIntermedias=" + paradasIntermedias +
+                '}';
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/structure/implementation/dynamic/DynamicLinkedListADT.java">
+package org.uade.structure.implementation.dynamic;
+
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.InvalidIndexException;
+import org.uade.structure.implementation.Node;
+
+public class DynamicLinkedListADT<T> implements org.uade.structure.definition.LinkedListADT<T> {
+    private Node<T> node;
+    private int count;
+
+    @Override
+    public void add(T value) {
+        if(this.isEmpty()) {//si es el primero, seteo el value
+            this.node = new Node<>(value);
+        }
+
+        else{
+            Node<T> aux = this.node; //busco desde el primer nodo
+            while(aux.getNext() != null) {//voy cambiando aux hasta encontrar el q no tenga next
+                aux = aux.getNext();
+            }
+            aux.setNext(new Node<>(value));//seteo el valor del auxiliar porque es el ultimo nodo.
+        }
+        this.count++;
+    }
+
+    @Override
+    public void insert(int index, T value) {
+        if(index<= count && index >= 0){
+            int auxCount = 0;
+            Node<T> aux = this.node;
+            if (index != 0){
+                while(auxCount!=(index-1)){
+                    auxCount++;
+                    aux = aux.getNext();
+                }
+                Node<T> newNode = new Node<>(value);
+                newNode.setNext(aux.getNext());
+                aux.setNext(newNode);
+            }
+            else{
+                Node<T> newNode = new Node<>(value);
+                newNode.setNext(aux);
+                this.node = newNode;
+            }
+            this.count++;
+
+        }
+        else{
+            throw new InvalidIndexException("Indice inexistente");
+        }
+    }
+
+    @Override
+    public void remove(int index) throws GenericADTException {
+        if(index< count && index >= 0){
+            int auxCount = 0;
+            Node<T> aux = this.node;
+
+            if(index!=0){
+                while(auxCount != (index-1)){
+                    auxCount++;
+                    aux = aux.getNext();
+                }
+                Node<T> remove = aux.getNext();
+                aux.setNext(remove.getNext());
+                remove.setNext(null);
+            }
+            else{ //caso especial si index es 0
+                this.node = aux.getNext();
+                aux.setNext(null);
+            }
+            this.count--;
+
+        }
+        else{
+            throw new GenericADTException("Indice inexistente");
+        }
+    }
+
+    @Override
+    public T get(int index) throws GenericADTException {
+        T valor;
+        if (index < count && index >= 0) {
+            int auxCount = 0;
+            Node<T> auxNode = this.node;
+            while(index != auxCount){
+                auxCount++;
+                auxNode = auxNode.getNext();
+            }
+            valor = auxNode.getValue();
+
+        }
+        else{
+            throw new GenericADTException("Indice inexistente");
+        }
+
+        return valor;
+    }
+
+    @Override
+    public int size() {
+        return this.count;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return node == null;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                node +
+                '}';
+    }
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/view/ViajesModulo.java">
+package org.uade.view;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
+import org.uade.Exception.OpcionInvalida;
+import org.uade.Exception.UnavailableDateException;
+import org.uade.entity.*;
+import org.uade.service.FlotaService;
+import org.uade.service.RutaService;
+import org.uade.service.ViajeService;
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicQueueADT;
+import org.uade.util.ConsoleInput;
+import org.uade.util.LinkedListADTUtil;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import static org.uade.util.PriorityQueueADTUtil.print;
+
+public class ViajesModulo {
+    private final FlotaService flotaService;
+    private final ViajeService viajeService;
+    private final RutaService rutaService;
+
+    public ViajesModulo(FlotaService flotaService, ViajeService viajeService, RutaService rutaService) {
+        this.flotaService = flotaService;
+        this.viajeService = viajeService;
+        this.rutaService = rutaService;
+    }
+
+    public void ejecutarMenuViajes() {
+        int opcionViajes;
+        do {
+            System.out.println("\n--- MÓDULO VIAJES ---");
+            System.out.println("1. Registrar nuevo viaje");
+            System.out.println("2. Asignar micro a viaje");
+            System.out.println("3. Reprogramar viaje");
+            System.out.println("4. Despachar próximo viaje");
+            System.out.println("5. Mostrar viajes pendientes");
+            System.out.println("6. Cambiar prioridad de viaje");
+            System.out.println("7. Mostrar historial de viajes despachados");
+            System.out.println("0. Volver al menú principal");
+
+            opcionViajes = ConsoleInput.readOption("Seleccione una opción:");
+
+            switch (opcionViajes) {
+                case 0:
+                    System.out.println("Volviendo al menú principal...");
+                    ConsoleInput.waitEnter();
+                    break;
+                case 1:
+                    ejecutarRegistrarViaje();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 2:
+                    ejecutarAsignarMicro();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 3:
+                    ejecutarReprogramarViaje();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 4:
+                    ejecutarDespacharProximoViaje();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 5:
+                    ejecutarMostrarViajes();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 6:
+                    ejecutarCambioPrioridad();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 7:
+                    ejecutarMostrarHistorial();
+                    ConsoleInput.waitEnter();
+                    break;
+                default:
+                    System.out.println("❌ Opción no válida.");
+                    ConsoleInput.waitEnter();
+            }
+        } while (opcionViajes != 0);
+    }
+
+
+    private void ejecutarRegistrarViaje() {
+        try {
+            System.out.println("\n--- REGISTRAR NUEVO VIAJE ---");
+
+            String codOrigen = ConsoleInput.readString("Ingrese el código de la terminal origen:");
+            Terminal origen = new Terminal(codOrigen, codOrigen);
+
+            String codDestino = ConsoleInput.readString("Ingrese el código de la terminal destino:");
+            Terminal destino = new Terminal(codDestino, codDestino);
+
+            Ruta ruta = rutaService.buscarRuta(origen, destino);
+
+            String fechaStr = ConsoleInput.readString("Ingrese la fecha del viaje (dd/MM/yyyy):");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate fecha = LocalDate.parse(fechaStr, formatter);
+
+            int prioridad = ConsoleInput.readInt("Ingrese prioridad de viaje: ");
+
+            viajeService.programarViaje(ruta, fecha, prioridad);
+            System.out.println("✅ Viaje registrado exitosamente con fecha: " + fecha);
+
+        } catch(DateTimeException e){
+            System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
+        } catch (NotFoundException | GenericADTException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarAsignarMicro() {
+        try {
+            System.out.println("\n--- ASIGNAR MICRO A UN VIAJE ---");
+            int idViaje = ConsoleInput.readInt("Ingrese el ID del viaje:");
+            Viaje viaje = viajeService.findViajeById(idViaje);
+
+            if (viaje.getMicroAsignado() != null) {
+                System.out.println("⚠️ Advertencia: El viaje ID: " + idViaje + " ya tiene un micro asignado (" + viaje.getMicroAsignado().getPatente() + ").");
+                return;
+            }
+
+            String patente = ConsoleInput.readString("Ingrese la patente del micro:");
+            Micro micro = flotaService.getMicroDisponible(patente, viaje.getFecha());
+            viajeService.asignarMicroAViaje(viaje, micro);
+            
+            System.out.println(viaje.toString());
+            System.out.println("✅ Micro " + micro.toString() + " asignado correctamente.");
+
+        } catch (NotFoundException | UnavailableDateException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarReprogramarViaje() {
+        try {
+            System.out.println("\n--- REPROGRAMAR VIAJE ---");
+            int idViaje = ConsoleInput.readInt("Ingrese el ID del viaje a reprogramar:");
+            Viaje viaje = viajeService.findViajeById(idViaje);
+
+            String fechaStr = ConsoleInput.readString("Ingrese la nueva fecha del viaje (dd/MM/yyyy):");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate nuevaFecha = LocalDate.parse(fechaStr, formatter);
+
+            Micro microActual = viaje.getMicroAsignado();
+            if (microActual != null) {
+                String patenteActual = microActual.getPatente();
+                if (!flotaService.estaDisponible(patenteActual, nuevaFecha)) {
+                    System.out.println("⚠️ Aviso: El micro " + patenteActual + " está ocupado en la nueva fecha.");
+                    System.out.println("🔄 Desvinculando el micro... El viaje quedará pendiente de nueva asignación.");
+
+                    flotaService.eliminarViaje(microActual,viaje);
+                    viajeService.desvincularMicro(viaje);
+                }
+            }
+
+            viaje.setFecha(nuevaFecha);
+            System.out.println("✅ Viaje ID: " + idViaje + " reprogramado exitosamente para la fecha: " + nuevaFecha);
+
+        } catch (DateTimeException e) {
+            System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
+        } catch (NotFoundException | GenericADTException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarDespacharProximoViaje() {
+        try {
+            System.out.println("\n--- DESPACHAR PRÓXIMO VIAJE ---");
+            Viaje viaje = viajeService.despacharSiguienteViaje();
+            System.out.println("✅ Viaje ID: " + viaje.getIdViaje() + " despachado con éxito.");
+        } catch (EmptyADTException | GenericADTException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarMostrarViajes(){
+        try{
+            print(viajeService.getColaViajes());
+        }catch (EmptyADTException e){
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarCambioPrioridad() {
+        try {
+            System.out.println("\n--- CAMBIAR PRIORIDAD DE VIAJE ---");
+
+            int idViaje = ConsoleInput.readInt("Ingrese el ID del viaje:");
+            int nuevaPrioridad = ConsoleInput.readInt("Ingrese la nueva prioridad:");
+
+            Motivo motivo = null;
+            boolean motivoValido = false;
+            do {
+                System.out.println("\nMotivos de cambio:");
+                System.out.println("1. LLUVIA");
+                System.out.println("2. VISIBILIDAD");
+                System.out.println("3. OTRO");
+                int opcionMotivo = ConsoleInput.readInt("Seleccione una opción:");
+
+                switch (opcionMotivo) {
+                    case 1:
+                        motivo = Motivo.LLUVIA;
+                        motivoValido = true;
+                        break;
+                    case 2:
+                        motivo = Motivo.VISIBILIDAD;
+                        motivoValido = true;
+                        break;
+                    case 3:
+                        motivo = Motivo.OTRO;
+                        motivoValido = true;
+                        break;
+                    default:
+                        System.out.println("❌ Opción no válida. Intente nuevamente.");
+                }
+            } while (!motivoValido);
+
+            viajeService.cambiarPrioridad(idViaje, nuevaPrioridad, motivo);
+
+            System.out.println("✅ Prioridad cambiada correctamente.");
+
+        } catch (NotFoundException | OpcionInvalida e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarMostrarHistorial() {
+        try {
+            LinkedListADT<Viaje> historial = viajeService.getHistorialDespachados();
+            System.out.println("\n--- HISTORIAL DE VIAJES DESPACHADOS ---");
+            LinkedListADTUtil.print(historial);
+        } catch (EmptyADTException e) {
+            System.out.println("❌ Error: " + e.getMessage());
+        }
+    }
+
+
+
+
+}
+</file>
+
+<file path="algorithms-II/src/main/java/org/uade/service/FlotaService.java">
+package org.uade.service;
+
+import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
+import org.uade.Exception.NotFoundException;
+import org.uade.Exception.UnavailableDateException;
+import org.uade.entity.Micro;
+import org.uade.entity.Tipo;
+import org.uade.entity.Viaje;
+import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.SetADT;
+import org.uade.structure.definition.SimpleDictionaryADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
+import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
+import java.time.LocalDate;
+
+
+public class FlotaService {
+    private SimpleDictionaryADT<String, Micro> micros;
+
+
+    public FlotaService() {
+        this.micros = new DynamicSimpleDictionaryADT<String, Micro>();
+    }
+
+    public void registrarMicro(String patente, Tipo tipo) {
+        if(!micros.isEmpty() && patenteExiste(patente)) {
+            throw new GenericADTException("Ya existe un micro con esa patente.");
+        }
+        // TODO: add validacion de patente segun formato que quiera.
+        Micro micro = new Micro(patente, tipo);
+        this.micros.add(patente, micro);
+    }
+
+    public LinkedListADT<Micro> mostrarMicrosAsignados() {
+        LinkedListADT<Micro> microsAsignados = new DynamicLinkedListADT<Micro>();
+        SetADT<String> patentes = micros.getKeys();
+        if(patentes.isEmpty()){
+            throw new EmptyADTException("No hay micros registrados.");
+        }
+        while(!patentes.isEmpty()) {
+            String patente = patentes.choose();
+            Micro micro = micros.get(patente);
+            if(micro.esAsignado()){
+                microsAsignados.add(micro);
+            }
+            patentes.remove(patente);
+        }
+        return microsAsignados;
+    }
+
+    public SimpleDictionaryADT<String,Micro> getMicros() {
+        if(micros.isEmpty()){
+            throw new EmptyADTException("No hay micros registrados.");
+        }
+        return this.micros;
+    }
+
+    public boolean estaDisponible(String patente, LocalDate fecha) {
+        if(patenteExiste(patente)) {
+            Micro micro = this.micros.get(patente);
+            return micro.estaDisponible(fecha);
+        }
+        else{
+            throw new NotFoundException("No se encontro el micro.");
+        }
+    }
+
+    private boolean patenteExiste(String patente) {
+        SetADT<String> patentes = micros.getKeys();
+        return patentes.exist(patente.toUpperCase());
+    }
+
+    public Micro getMicroDisponible(String patente, LocalDate fecha) {
+        Micro micro = this.micros.get(patente);
+        if (micro == null) {
+            throw new NotFoundException("El micro " + patente + " no existe");
+        }
+        if (!estaDisponible(patente, fecha)) {
+            throw new UnavailableDateException("El micro no esta disponible en la fecha solicitada.");
+        }
+        return micro;
+    }
+
+    public void eliminarViaje(Micro micro, Viaje viaje) {
+        micro.removerViaje(viaje);
+    }
 
 
 

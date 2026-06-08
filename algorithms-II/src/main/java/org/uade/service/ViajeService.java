@@ -1,9 +1,12 @@
 package org.uade.service;
 
 import org.uade.Exception.EmptyADTException;
+import org.uade.Exception.GenericADTException;
 import org.uade.Exception.NotFoundException;
 import org.uade.entity.*;
+import org.uade.structure.definition.LinkedListADT;
 import org.uade.structure.definition.PriorityQueueADT;
+import org.uade.structure.implementation.dynamic.DynamicLinkedListADT;
 import org.uade.structure.implementation.dynamic.DynamicPriorityQueueADT;
 
 import java.time.LocalDate;
@@ -12,9 +15,11 @@ import static org.uade.util.PriorityQueueADTUtil.copy;
 
 public class ViajeService {
     private PriorityQueueADT<Viaje> colaViajes;
+    private LinkedListADT<Viaje> historialDespachados;
 
     public ViajeService() {
         this.colaViajes = new DynamicPriorityQueueADT<>();
+        this.historialDespachados = new DynamicLinkedListADT<>();
     }
 
     public void programarViaje(Ruta ruta, LocalDate fecha, int prioridadBase) {
@@ -53,7 +58,7 @@ public class ViajeService {
         }
     }
 
-    private Viaje findViajeById(int idViaje){
+    public Viaje findViajeById(int idViaje){
         PriorityQueueADT<Viaje> copy = copy(this.colaViajes);
         while(!copy.isEmpty()){
             if(copy.getElement().getIdViaje() == idViaje){
@@ -83,7 +88,14 @@ public class ViajeService {
             throw new EmptyADTException("No hay viajes en cola");
         }
         Viaje viaje = this.colaViajes.getElement();
+
+        if (viaje.getMicroAsignado() == null) {
+            throw new GenericADTException("No se puede despachar el viaje ID: " + viaje.getIdViaje() + " porque no tiene un micro asignado.");
+        }
+
         this.colaViajes.remove();
+        viaje.setCompletado(true);
+        this.historialDespachados.add(viaje);
         return viaje;
     }
 
@@ -92,11 +104,22 @@ public class ViajeService {
         micro.agregarViaje(viaje);
     }
 
+    public void desvincularMicro(Viaje viaje) {
+        viaje.asignarMicro(null);
+    }
+
     public PriorityQueueADT<Viaje> getColaViajes() {
         if(this.colaViajes.isEmpty()) {
             throw new EmptyADTException("No hay viajes pendientes.");
         }
         return this.colaViajes;
+    }
+
+    public LinkedListADT<Viaje> getHistorialDespachados() {
+        if (this.historialDespachados.isEmpty()) {
+            throw new EmptyADTException("El historial de viajes está vacío.");
+        }
+        return this.historialDespachados;
     }
 
 

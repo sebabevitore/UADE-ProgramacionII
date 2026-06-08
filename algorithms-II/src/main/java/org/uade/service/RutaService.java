@@ -196,6 +196,8 @@ public class RutaService {
         return desconectadas;
     }
 
+
+
     public GraphADT<Terminal, Integer> getGrafoTerminales() {
         return this.grafoTerminales;
     }

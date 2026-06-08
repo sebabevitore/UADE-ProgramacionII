@@ -16,7 +16,6 @@ public class Viaje {
     private StackADT<CambioPrioridad> cambios;
 
     public Viaje(Ruta ruta, LocalDate fecha, int prioridadBase) {
-        contadorId++;
         this.idViaje = contadorId++;
         this.ruta = ruta;
         this.fecha = fecha;

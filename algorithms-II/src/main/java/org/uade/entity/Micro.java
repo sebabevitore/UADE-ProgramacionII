@@ -34,6 +34,15 @@ public class Micro {
         this.viajes.add(viaje);
     }
 
+    public void removerViaje(Viaje viaje) {
+        for (int i = 0; i < this.viajes.size(); i++) {
+            if (this.viajes.get(i).equals(viaje)) {
+                this.viajes.remove(i);
+                return;
+            }
+        }
+    }
+
     public int getCantViajes() { return this.viajes.size(); }
 
     public String getPatente() { return patente; }

@@ -32,7 +32,10 @@ public class RutaModulo {
             System.out.println("2. Eliminar conexion entre terminales");
             System.out.println("3. Ver rutas posibles entre dos terminales");
             System.out.println("4. Crear ruta");
-            System.out.println("5. Mostrar terminales aisladas");
+            System.out.println("5. Reportes");
+            // mostrar rutas aisladas,
+            // mostrar Terminales con mayor número de salidas y de llegadas y
+            // Terminales con más conexiones directas con otras terminales
             System.out.println("0. Volver al menú principal");
 
             opcionRutas = ConsoleInput.readOption("Seleccione una opción:");
@@ -168,6 +171,10 @@ public class RutaModulo {
         } else {
             printSet(desconectadas);
         }
+    }
+
+    private void ejecutarMostrarReporte() {
+
     }
 
 }
