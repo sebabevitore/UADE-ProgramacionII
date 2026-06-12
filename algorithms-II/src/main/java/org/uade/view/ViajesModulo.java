@@ -10,9 +10,8 @@ import org.uade.service.FlotaService;
 import org.uade.service.RutaService;
 import org.uade.service.ViajeService;
 import org.uade.structure.definition.LinkedListADT;
-import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 import org.uade.util.ConsoleInput;
-import org.uade.util.LinkedListADTUtil;
+import org.uade.util.ValidacionesUtil;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -86,30 +85,42 @@ public class ViajesModulo {
         } while (opcionViajes != 0);
     }
 
-
     private void ejecutarRegistrarViaje() {
         try {
             System.out.println("\n--- REGISTRAR NUEVO VIAJE ---");
 
-            String codOrigen = ConsoleInput.readString("Ingrese el código de la terminal origen:");
+            String codOrigen = ConsoleInput.readRegexStringUpper(
+                    "Ingrese el código de la terminal origen (Ej: BUE):",
+                    ValidacionesUtil.REGEX_CODIGO_TERMINAL,
+                    "Código de terminal inválido."
+            );
             Terminal origen = new Terminal(codOrigen, codOrigen);
 
-            String codDestino = ConsoleInput.readString("Ingrese el código de la terminal destino:");
+            String codDestino = ConsoleInput.readRegexStringUpper(
+                    "Ingrese el código de la terminal destino (Ej: BUE):",
+                    ValidacionesUtil.REGEX_CODIGO_TERMINAL,
+                    "Código de terminal inválido."
+            );
             Terminal destino = new Terminal(codDestino, codDestino);
 
             Ruta ruta = rutaService.buscarRuta(origen, destino);
 
-            String fechaStr = ConsoleInput.readString("Ingrese la fecha del viaje (dd/MM/yyyy):");
+            String fechaStr = ConsoleInput.readRegexString(
+                    "Ingrese la fecha del viaje (dd/MM/yyyy):",
+                    ValidacionesUtil.REGEX_FECHA,
+                    "El formato de la fecha debe ser estrictamente dd/MM/yyyy."
+            );
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate fecha = LocalDate.parse(fechaStr, formatter);
 
-            int prioridad = ConsoleInput.readInt("Ingrese prioridad de viaje: ");
+            // Validamos que no ingrese 0 ni negativos
+            int prioridad = ConsoleInput.readPositiveInt("Ingrese prioridad de viaje (mayor a 0):");
 
             viajeService.programarViaje(ruta, fecha, prioridad);
             System.out.println("✅ Viaje registrado exitosamente con fecha: " + fecha);
 
         } catch(DateTimeException e){
-            System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
+            System.out.println("❌ Error: La fecha ingresada no existe en el calendario.");
         } catch (NotFoundException | GenericADTException e) {
             System.out.println("❌ Error: " + e.getMessage());
         }
@@ -118,7 +129,7 @@ public class ViajesModulo {
     private void ejecutarAsignarMicro() {
         try {
             System.out.println("\n--- ASIGNAR MICRO A UN VIAJE ---");
-            int idViaje = ConsoleInput.readInt("Ingrese el ID del viaje:");
+            int idViaje = ConsoleInput.readPositiveInt("Ingrese el ID del viaje:");
             Viaje viaje = viajeService.findViajeById(idViaje);
 
             if (viaje.getMicroAsignado() != null) {
@@ -126,12 +137,16 @@ public class ViajesModulo {
                 return;
             }
 
-            String patente = ConsoleInput.readString("Ingrese la patente del micro:");
+            String patente = ConsoleInput.readRegexStringUpper(
+                    "Ingrese la patente del micro (Ej: AAA111 o AA111AA):",
+                    ValidacionesUtil.REGEX_PATENTE,
+                    "Formato de patente inválido."
+            );
             Micro micro = flotaService.getMicroDisponible(patente, viaje.getFecha());
             viajeService.asignarMicroAViaje(viaje, micro);
-            
+
             System.out.println(viaje.toString());
-            System.out.println("✅ Micro " + micro.toString() + " asignado correctamente.");
+            System.out.println("✅ Micro " + micro.getPatente() + " asignado correctamente.");
 
         } catch (NotFoundException | UnavailableDateException e) {
             System.out.println("❌ Error: " + e.getMessage());
@@ -141,10 +156,14 @@ public class ViajesModulo {
     private void ejecutarReprogramarViaje() {
         try {
             System.out.println("\n--- REPROGRAMAR VIAJE ---");
-            int idViaje = ConsoleInput.readInt("Ingrese el ID del viaje a reprogramar:");
+            int idViaje = ConsoleInput.readPositiveInt("Ingrese el ID del viaje a reprogramar:");
             Viaje viaje = viajeService.findViajeById(idViaje);
 
-            String fechaStr = ConsoleInput.readString("Ingrese la nueva fecha del viaje (dd/MM/yyyy):");
+            String fechaStr = ConsoleInput.readRegexString(
+                    "Ingrese la nueva fecha del viaje (dd/MM/yyyy):",
+                    ValidacionesUtil.REGEX_FECHA,
+                    "El formato de la fecha debe ser estrictamente dd/MM/yyyy."
+            );
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate nuevaFecha = LocalDate.parse(fechaStr, formatter);
 
@@ -164,7 +183,7 @@ public class ViajesModulo {
             System.out.println("✅ Viaje ID: " + idViaje + " reprogramado exitosamente para la fecha: " + nuevaFecha);
 
         } catch (DateTimeException e) {
-            System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
+            System.out.println("❌ Error: La fecha ingresada no existe en el calendario.");
         } catch (NotFoundException | GenericADTException e) {
             System.out.println("❌ Error: " + e.getMessage());
         }
@@ -192,8 +211,8 @@ public class ViajesModulo {
         try {
             System.out.println("\n--- CAMBIAR PRIORIDAD DE VIAJE ---");
 
-            int idViaje = ConsoleInput.readInt("Ingrese el ID del viaje:");
-            int nuevaPrioridad = ConsoleInput.readInt("Ingrese la nueva prioridad:");
+            int idViaje = ConsoleInput.readPositiveInt("Ingrese el ID del viaje:");
+            int nuevaPrioridad = ConsoleInput.readPositiveInt("Ingrese la nueva prioridad (mayor a 0):");
 
             Motivo motivo = null;
             boolean motivoValido = false;
@@ -235,13 +254,13 @@ public class ViajesModulo {
         try {
             LinkedListADT<Viaje> historial = viajeService.getHistorialDespachados();
             System.out.println("\n--- HISTORIAL DE VIAJES DESPACHADOS ---");
-            LinkedListADTUtil.print(historial);
+
+            for (int i = 0; i < historial.size(); i++) {
+                System.out.println(historial.get(i).toString());
+            }
+
         } catch (EmptyADTException e) {
             System.out.println("❌ Error: " + e.getMessage());
         }
     }
-
-
-
-
 }

@@ -10,6 +10,7 @@ import org.uade.service.FlotaService;
 import org.uade.structure.definition.LinkedListADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
 import org.uade.util.ConsoleInput;
+import org.uade.util.ValidacionesUtil;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -65,12 +66,16 @@ public class FlotaModulo {
         } while (opcionFlota != 0);
     }
 
-
     private void ejecutarRegistrarMicro() {
         try {
             System.out.println("\n--- REGISTRAR NUEVO MICRO ---");
 
-            String patente = ConsoleInput.readString("Ingrese la patente del micro:");
+            String patente = ConsoleInput.readRegexStringUpper(
+                    "Ingrese la patente del micro (Ej: AAA111 o AA111AA):",
+                    ValidacionesUtil.REGEX_PATENTE,
+                    "Formato de patente inválido."
+            );
+
             int tipoInt = ConsoleInput.readInt("Tipo (1-Cama, 2-Semicama, 3-Ejecutivo):");
 
             Tipo tipo;
@@ -102,8 +107,18 @@ public class FlotaModulo {
 
     private void ejecutarEstaDisponible(){
         try{
-            String patente = ConsoleInput.readString("Ingrese la patente del micro:");
-            String fechaStr = ConsoleInput.readString("Ingrese la fecha del viaje (dd/MM/yyyy):");
+            String patente = ConsoleInput.readRegexStringUpper(
+                    "Ingrese la patente del micro (Ej: AAA111 o AA111AA):",
+                    ValidacionesUtil.REGEX_PATENTE,
+                    "Formato de patente inválido."
+            );
+
+            String fechaStr = ConsoleInput.readRegexString(
+                    "Ingrese la fecha del viaje (dd/MM/yyyy):",
+                    ValidacionesUtil.REGEX_FECHA,
+                    "El formato de la fecha debe ser estrictamente dd/MM/yyyy."
+            );
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate fecha = LocalDate.parse(fechaStr, formatter);
 
@@ -117,7 +132,7 @@ public class FlotaModulo {
         }catch (NotFoundException e){
             System.out.println("❌ Error:  " + e.getMessage());
         } catch(DateTimeException e){
-            System.out.println("❌ Error: Formato de fecha incorrecto. Debe ser dd/MM/yyyy.");
+            System.out.println("❌ Error: La fecha ingresada no existe en el calendario.");
         }
     }
 
@@ -129,5 +144,4 @@ public class FlotaModulo {
             System.out.println("❌ Error: " + e.getMessage());
         }
     }
-
 }

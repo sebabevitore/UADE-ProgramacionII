@@ -3,6 +3,8 @@ package org.uade.entity;
 import org.uade.structure.definition.QueueADT;
 import org.uade.structure.implementation.dynamic.DynamicQueueADT;
 
+import static org.uade.util.QueueADTUtil.copy;
+
 public class Ruta {
     private Terminal origen;
     private Terminal destino;
@@ -49,10 +51,24 @@ public class Ruta {
 
     @Override
     public String toString() {
-        return "Ruta{" +
-                "codigoOrigen=" + origen.getCodigo() +
-                ", codigoDestino=" + destino.getCodigo() +
-                ", paradasIntermedias=" + paradasIntermedias +
-                '}';
+        String paradas = "";
+
+        QueueADT<Terminal> copia = copy(this.paradasIntermedias);
+
+        boolean esPrimera = true;
+        while (copia != null && !copia.isEmpty()) {
+            if (!esPrimera) {
+                paradas += ", ";
+            }
+            paradas += copia.getElement().getCodigo(); // Agrega el código de la terminal (ej: ROS)
+            esPrimera = false;
+            copia.remove();
+        }
+
+        if (paradas.isEmpty()) {
+            return origen.getCodigo() + " -> " + destino.getCodigo() + " (Directo)";
+        } else {
+            return origen.getCodigo() + " -> " + destino.getCodigo() + " [Paradas: " + paradas + "]";
+        }
     }
 }

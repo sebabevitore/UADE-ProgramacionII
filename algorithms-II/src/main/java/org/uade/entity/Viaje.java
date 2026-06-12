@@ -101,9 +101,9 @@ public class Viaje {
 
     @Override
     public String toString() {
-        return "VIAJE " +
-                "id: " + idViaje +
-                " - Ruta:  " + ruta +
-                " - Fecha: " + fecha;
+        String microStr = (microAsignado != null) ? microAsignado.getPatente() : "PENDIENTE";
+        return "🚐 [ID: " + idViaje + "] " + ruta.toString() +
+                " | Fecha: " + fecha +
+                " | Micro: " + microStr;
     }
 }

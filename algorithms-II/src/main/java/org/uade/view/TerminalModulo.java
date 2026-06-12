@@ -7,6 +7,7 @@ import org.uade.service.RutaService;
 import org.uade.service.TerminalService;
 import org.uade.structure.definition.SimpleDictionaryADT;
 import org.uade.util.ConsoleInput;
+import org.uade.util.ValidacionesUtil;
 
 import static org.uade.util.SimpleDictionaryADTUtil.printDict;
 
@@ -58,8 +59,18 @@ public class TerminalModulo {
         try {
             System.out.println("\n--- REGISTRAR NUEVA TERMINAL ---");
 
-            String codigo = ConsoleInput.readString("Ingrese el código de la terminal:");
-            String descripcion = ConsoleInput.readString("Ingrese la descripción de la terminal:");
+            String codigo = ConsoleInput.readRegexStringUpper(
+                    "Ingrese el código de la terminal (3 letras, Ej: BUE):",
+                    ValidacionesUtil.REGEX_CODIGO_TERMINAL,
+                    "El código debe ser de exactamente 3 letras."
+            );
+
+            String descripcion = ConsoleInput.readRegexString(
+                    "Ingrese la descripción (Solo letras, Ej: Buenos Aires):",
+                    ValidacionesUtil.REGEX_DESCRIPCION,
+                    "La descripción contiene caracteres inválidos o es muy corta."
+            );
+
             Terminal terminal = new Terminal(codigo, descripcion);
             terminalService.registrarTerminal(terminal);
             rutaService.registrarTerminal(terminal);
@@ -73,7 +84,12 @@ public class TerminalModulo {
     private void ejecutarEliminarTerminal() {
         try {
             System.out.println("\n--- ELIMINAR TERMINAL ---");
-            String codigo = ConsoleInput.readString("Ingrese el código de la terminal a eliminar:");
+            String codigo = ConsoleInput.readRegexStringUpper(
+                    "Ingrese el código de la terminal a eliminar (3 letras, Ej: BUE):",
+                    ValidacionesUtil.REGEX_CODIGO_TERMINAL,
+                    "El código debe ser de exactamente 3 letras."
+            );
+
             terminalService.eliminarTerminal(codigo);
             System.out.println("✅ Terminal eliminada exitosamente.");
         } catch (NotFoundException e) {
@@ -91,5 +107,4 @@ public class TerminalModulo {
         }
     }
 }
-
 

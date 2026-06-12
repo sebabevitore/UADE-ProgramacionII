@@ -25,86 +25,86 @@ public class PrecargaDatos {
             // ==========================================
             // 1. PRECARGAR 10 TERMINALES
             // ==========================================
-            Terminal t1 = new Terminal("BUE", "Buenos Aires");
-            Terminal t2 = new Terminal("ROS", "Rosario");
-            Terminal t3 = new Terminal("CBA", "Córdoba");
-            Terminal t4 = new Terminal("MDZ", "Mendoza");
-            Terminal t5 = new Terminal("SLA", "Salta");
-            Terminal t6 = new Terminal("TUC", "Tucumán");
-            Terminal t7 = new Terminal("BRB", "Bariloche");
-            Terminal t8 = new Terminal("NQN", "Neuquén");
-            Terminal t9 = new Terminal("PSS", "Posadas");
-            Terminal t10 = new Terminal("RES", "Resistencia");
-
-            Terminal[] terminales = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10};
+            Terminal[] terminales = {
+                    new Terminal("BUE", "Buenos Aires"), new Terminal("ROS", "Rosario"),
+                    new Terminal("CBA", "Córdoba"), new Terminal("MDZ", "Mendoza"),
+                    new Terminal("SLA", "Salta"), new Terminal("TUC", "Tucumán"),
+                    new Terminal("BRB", "Bariloche"), new Terminal("NQN", "Neuquén"),
+                    new Terminal("PSS", "Posadas"), new Terminal("RES", "Resistencia")
+            };
 
             for (Terminal t : terminales) {
                 terminalService.registrarTerminal(t);
-                rutaService.registrarTerminal(t); // Lo agregamos al grafo también
+                rutaService.registrarTerminal(t);
             }
 
             // ==========================================
-            // 2. PRECARGAR CONEXIONES (ARISTAS DEL GRAFO)
+            // 2. PRECARGAR CONEXIONES (ARISTAS)
             // ==========================================
-            rutaService.registrarConexion(t1, t2, 300);  // BUE -> ROS
-            rutaService.registrarConexion(t2, t3, 400);  // ROS -> CBA
-            rutaService.registrarConexion(t3, t5, 800);  // CBA -> SLA
-            rutaService.registrarConexion(t5, t6, 310);  // SLA -> TUC
-            rutaService.registrarConexion(t1, t4, 1050); // BUE -> MDZ
-            rutaService.registrarConexion(t1, t7, 1580); // BUE -> BRB
-            rutaService.registrarConexion(t7, t8, 430);  // BRB -> NQN
-            rutaService.registrarConexion(t1, t9, 1000); // BUE -> PSS
-            rutaService.registrarConexion(t9, t10, 350); // PSS -> RES
+            rutaService.registrarConexion(terminales[0], terminales[1], 300);  // BUE -> ROS
+            rutaService.registrarConexion(terminales[1], terminales[2], 400);  // ROS -> CBA
+            rutaService.registrarConexion(terminales[2], terminales[4], 800);  // CBA -> SLA
+            rutaService.registrarConexion(terminales[4], terminales[5], 310);  // SLA -> TUC
+            rutaService.registrarConexion(terminales[0], terminales[3], 1050); // BUE -> MDZ
+            rutaService.registrarConexion(terminales[0], terminales[6], 1580); // BUE -> BRB
+            rutaService.registrarConexion(terminales[6], terminales[7], 430);  // BRB -> NQN
+            rutaService.registrarConexion(terminales[0], terminales[8], 1000); // BUE -> PSS
+            rutaService.registrarConexion(terminales[8], terminales[9], 350);  // PSS -> RES
 
             // ==========================================
-            // 3. GENERAR Y CREAR RUTAS USANDO TU ALGORITMO DFS
+            // 3. CREAR RUTAS DEFINITIVAS
             // ==========================================
-            // Aprovechamos tu DFS para que arme las colas de paradas automáticamente
-            Ruta ruta1 = rutaService.rutasPosibles(t1, t3, 2).get(0); // BUE -> ROS -> CBA
-            Ruta ruta2 = rutaService.rutasPosibles(t1, t6, 3).get(0); // BUE -> ROS -> CBA -> SLA -> TUC
-            Ruta ruta3 = rutaService.rutasPosibles(t1, t4, 1).get(0); // BUE -> MDZ (Directo)
-            Ruta ruta4 = rutaService.rutasPosibles(t1, t8, 2).get(0); // BUE -> BRB -> NQN
-            Ruta ruta5 = rutaService.rutasPosibles(t1, t10, 2).get(0); // BUE -> PSS -> RES
+            Ruta ruta1 = rutaService.rutasPosibles(terminales[0], terminales[2], 2).get(0);
+            Ruta ruta2 = rutaService.rutasPosibles(terminales[0], terminales[5], 3).get(0);
+            Ruta ruta3 = rutaService.rutasPosibles(terminales[0], terminales[3], 1).get(0);
+            Ruta ruta4 = rutaService.rutasPosibles(terminales[0], terminales[7], 2).get(0);
+            Ruta ruta5 = rutaService.rutasPosibles(terminales[0], terminales[9], 2).get(0);
 
             Ruta[] rutasActivas = {ruta1, ruta2, ruta3, ruta4, ruta5};
-
-            for (Ruta r : rutasActivas) {
-                rutaService.crearRuta(r);
-            }
+            for (Ruta r : rutasActivas) rutaService.crearRuta(r);
 
             // ==========================================
             // 4. PRECARGAR 15 MICROS
             // ==========================================
             for (int i = 1; i <= 15; i++) {
-                String patente = String.format("MIC%03d", i); // Genera MIC001, MIC002, etc.
+                String patente = String.format("MIC%03d", i);
                 Tipo tipo = (i % 3 == 0) ? Tipo.EJECUTIVO : (i % 2 == 0) ? Tipo.CAMA : Tipo.SEMICAMA;
                 flotaService.registrarMicro(patente, tipo);
             }
 
             // ==========================================
-            // 5. PRECARGAR 20 VIAJES EN LA COLA DE PRIORIDAD
+            // 5. PRECARGAR 20 VIAJES (En Cola de Prioridad)
             // ==========================================
             LocalDate fechaBase = LocalDate.now();
-
             for (int i = 1; i <= 20; i++) {
-                // Asignamos las rutas de forma rotativa para que haya variedad
                 Ruta rutaAsignada = rutasActivas[i % 5];
-
-                // Variamos las fechas para que sean en los próximos 10 días
                 LocalDate fechaViaje = fechaBase.plusDays(i % 10);
-
-                // Variamos las prioridades de 1 a 10 (Donde 10 asumo es la más alta en tu sistema)
                 int prioridad = (i % 10) + 1;
-
                 viajeService.programarViaje(rutaAsignada, fechaViaje, prioridad);
             }
 
-            System.out.println("✅ Precarga finalizada con éxito. ¡Entorno Demo listo!");
-            System.out.println("--------------------------------------------------\n");
+            // ==========================================
+            // 6. SIMULAR DESPACHOS (Para generar historial)
+            // ==========================================
+            System.out.println("🚐 Despachando viajes para generar estadísticas...");
+            for (int i = 1; i <= 5; i++) {
+                // Agarramos el de mayor prioridad
+                Viaje viajeADespachar = viajeService.getColaViajes().getElement();
+
+                // Le asignamos un micro disponible
+                String patente = String.format("MIC%03d", i);
+                Micro micro = flotaService.getMicroDisponible(patente, viajeADespachar.getFecha());
+                viajeService.asignarMicroAViaje(viajeADespachar, micro);
+
+                // Lo mandamos a la ruta (esto lo guarda en historialDespachados)
+                viajeService.despacharSiguienteViaje();
+            }
+
+            System.out.println("✅ Precarga finalizada. ¡El historial tiene datos para reportes!");
+            System.out.println("----------------------------------------------------------------------\n");
 
         } catch (Exception e) {
-            System.out.println("⚠️ Hubo un error durante la precarga de datos: " + e.getMessage());
-            e.printStackTrace(); // Útil para debugear si algo falla en el arranque
+            System.out.println("⚠️ Hubo un error durante la precarga: " + e.getMessage());
         }
     }
 }

@@ -35,9 +35,6 @@ public class Terminal {
 
     @Override
     public String toString() {
-        return "Terminal{" +
-                "codigo=" + codigo +
-                ", descripcion='" + descripcion + '\'' +
-                '}';
+        return codigo + " (" + descripcion + ")";
     }
 }
