@@ -1,85 +1,15 @@
 # UADE: Algoritmos Y Estructuras De Datos II - Programación II
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+> ⚠️ **Aviso importante para la corrección:**
+> * El desarrollo completo y la entrega de este TPO se encuentran alojados en la rama **[`ESTRUCTURAS-TPO`](https://github.com/sebabevitore/tu-repo/tree/estructuras-tpo)**. Por favor, cambiar a esa rama para evaluar el trabajo.
+> * La rama **`main`** se utilizó como entorno de práctica y contiene las implementaciones de los TDAs (Pilas, Colas, Listas Enlazadas, Colas de Prioridad, etc.) que usé como base y repaso para el parcial.
 
-Este repositorio contiene todo lo necesario para poder seguir la materia desde el inicio hasta el final.
+## 🗂️ Estructura de Ramas
 
-## Tabla de contenidos
+* **`ESTRUCTURAS-TPO`**: Rama destinada exclusivamente a la evaluación del TPO. Contiene la lógica del negocio, las estructuras requeridas para el TP y el código ejecutable final.
+* **`main`**: Archivo histórico de código. Contiene las implementaciones estáticas (con arreglos) y dinámicas de distintas estructuras desarrolladas durante la cursada para la preparación del parcial.
 
-Los siguientes son los puntos más importantes en este archivo:
-- [Requisitos](#requisitos)
-- [Comprobar requisitos](#comprobar-requisitos)
-- [FAQ](#faq)
-
-## Requisitos
-
-Para poder realizar el curso necesitas tener instalado en tu computadora las siguientes herramientas:
-- [Java](http://jdk.java.net/)
-- [Git](https://git-scm.com/)
-
-Si no tienes algunas de estas herramientas instaladas en tu computadora, sigue las instrucciones en la documentación oficial de cada herramienta o los videos creados como guía para esta materia.
-
-## Comprobar requisitos
-
-Si instalaste en tu computadora algunas de estas herramientas anteriormente o lo acabas de hacer ahora, verifica si todo funciona bien.
-
-- Comprueba si la versión de Java está correctamente instalada usando el siguiente comando:
-   ````
-   % java -version
-   openjdk 21.0.2 2024-01-16
-   OpenJDK Runtime Environment GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30)
-   OpenJDK 64-Bit Server VM GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30, mixed mode, sharing)
-   ````
-
-- Comprueba si tienes instalado de manera correcta en tu computadora Git usando el siguiente comando:
-   ````
-   % git --version
-   git version 2.34.1
-   ````
-
-## Estándares de código
-
-Java tiene una serie de reglas definidas para desarrollar algo, ya sea una aplicación o una librería, y que todos los desarrolladores usen los mismos criterios. Existen las siguientes formas de validar si se está siguiendo el formato correcto: 
-
-- **Code conventions**: Este [documento](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf) que fue creado en 1997 con el fin de definir los estándares de código que debería seguir cualquier desarrollador que usa Java.
-
-- **SonarLint**: Es un plugin que nos ayuda al código fuente, siga los estándares de Java y reducir los bugs que podrían generarse. Esta herramienta tiene soporte para casi todos los IDE existentes, dentro de los más conocidos tiene soporte en:
-    - [IntelliJ](https://plugins.jetbrains.com/plugin/7973-sonarlint)
-    - [Eclipse](https://marketplace.eclipse.org/content/sonarqube-ide)
-    - [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)
-
-## Estructura del proyecto
-
-El proyecto que se usara a lo largo de la cursada tiene estructura similar a la siguiente:
-
-````
-src/
-  └── main
-      └── java
-          └── org
-              └── uade
-                  ├── algorithm
-                  ├── exception
-                  ├── structure
-                  │   ├── definition
-                  │   └── implementation
-                  │       ├── dynamic
-                  │       │   └── extras
-                  │       └── fixed
-                  └── util
-````
-
-Como se puede ver en la estructura existen una serie de paquetes donde cada uno tiene una funcionalidad en particular. En la siguiente tabla se detalla cada uno de los paquetes como asi tambien si deben o no tener prefijos los archivos en su interior:
-
-| **Paquete**                  | **Descripción**                                                             |
-|------------------------------|-----------------------------------------------------------------------------|
-| `algorithm`                  | Contiene la implementación de algoritmos que utilizan los TDA.              |
-| `exception`                  | Define las excepciones personalizadas usadas en el proyecto.                |
-| `structure`                  | Paquete general que agrupa las estructuras de datos.                        |
-| `structure.definition`       | Contiene las interfaces o definiciones de los TDA.                          |
-| `structure.implementation`   | Implementaciones concretas de los TDA.                                      |
-| `structure.implementation.dynamic` | Implementaciones de estructuras de datos dinámicas (ej.: listas enlazadas). |
-| `structure.implementation.dynamic.extras` | Componentes auxiliares o complementarios para las estructuras dinámicas.    |
-| `structure.implementation.fixed`   | Implementaciones de estructuras de datos de tamaño fijo (ej.: arrays).      |
-| `util`                       | Clases utilitarias y funciones auxiliares usadas en todo el proyecto.       |
-
+## 👨‍💻 Alumno
+* **Nombre:** Bevitore Sebastian Ivan
+* **Legajo:** 1211500
+* **Institución:** UADE
