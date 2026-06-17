@@ -1,7 +1,7 @@
 # UADE: Algoritmos Y Estructuras De Datos II - Programación II
 
 > ⚠️ **Aviso importante para la corrección:**
-> * El desarrollo completo y la entrega de este TPO se encuentran alojados en la rama **[`ESTRUCTURAS-TPO`](https://github.com/sebabevitore/tu-repo/tree/estructuras-tpo)**. Por favor, cambiar a esa rama para evaluar el trabajo.
+> * El desarrollo completo y la entrega de este TPO se encuentran alojados en la rama **[`ESTRUCTURAS-TPO`](https://github.com/sebabevitore/UADE-ProgramacionII/tree/estructuras-tpo)**
 > * La rama **`main`** se utilizó como entorno de práctica y contiene las implementaciones de los TDAs (Pilas, Colas, Listas Enlazadas, Colas de Prioridad, etc.) que usé como base y repaso para el parcial.
 
 ## 🗂️ Estructura de Ramas
