@@ -23,7 +23,7 @@ public class Menu {
         this.flotaService = new FlotaService();
         this.viajeService = new ViajeService();
         this.rutaService = new RutaService();
-        this.reporteService = new ReporteService(this.rutaService, this.viajeService);
+        this.reporteService = new ReporteService(this.flotaService, this.rutaService, this.viajeService);
 
         this.flotaModulo = new FlotaModulo(this.flotaService);
         this.viajesModulo = new ViajesModulo(this.flotaService, this.viajeService, this.rutaService);

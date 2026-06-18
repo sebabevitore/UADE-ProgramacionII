@@ -27,7 +27,6 @@ public class FlotaService {
         if(!micros.isEmpty() && patenteExiste(patente)) {
             throw new GenericADTException("Ya existe un micro con esa patente.");
         }
-        // TODO: add validacion de patente segun formato que quiera.
         Micro micro = new Micro(patente, tipo);
         this.micros.add(patente, micro);
     }
@@ -67,6 +66,9 @@ public class FlotaService {
     }
 
     private boolean patenteExiste(String patente) {
+        if(micros.isEmpty()) {
+            return false;
+        }
         SetADT<String> patentes = micros.getKeys();
         return patentes.exist(patente.toUpperCase());
     }

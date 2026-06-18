@@ -115,7 +115,7 @@ public class RutaService {
      * Descripcion: devuelve una lista de vecinos del vertice,
      * es decir, los que tienen una arista directa
      */
-    private LinkedListADT<Terminal> obtenerVecinos(Terminal actual) {
+    public LinkedListADT<Terminal> obtenerVecinos(Terminal actual) {
         LinkedListADT<Terminal> vecinos = new DynamicLinkedListADT<>();
 
         SetADT<Terminal> vertices = grafoTerminales.getVertxs();

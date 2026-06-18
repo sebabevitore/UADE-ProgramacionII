@@ -23,7 +23,6 @@ public class ViajeService {
     }
 
     public void programarViaje(Ruta ruta, LocalDate fecha, int prioridadBase) {
-        //TODO: add validaciones
         Viaje viaje = new Viaje(ruta, fecha, prioridadBase);
         this.colaViajes.add(viaje, prioridadBase);
     }

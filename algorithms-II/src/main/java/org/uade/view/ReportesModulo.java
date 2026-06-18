@@ -22,6 +22,8 @@ public class ReportesModulo {
             System.out.println("3. Terminal con mayor disponibilidad de llegadas");
             System.out.println("4. Ruta más utilizada (Historial)");
             System.out.println("5. Ruta menos utilizada (Historial)");
+            System.out.println("6. Micro con mayor cantidad de asignaciones");
+            System.out.println("7. Utilización promedio de cada micro");
             System.out.println("0. Volver al menú principal");
 
             opcion = ConsoleInput.readOption("Seleccione una opción:");
@@ -49,6 +51,14 @@ public class ReportesModulo {
                     break;
                 case 5:
                     mostrarRutaMenosUtilizada();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 6:
+                    mostrarMicroMasAsignado();
+                    ConsoleInput.waitEnter();
+                    break;
+                case 7:
+                    mostrarUtilizacionPromedio();
                     ConsoleInput.waitEnter();
                     break;
                 default:
@@ -103,6 +113,26 @@ public class ReportesModulo {
             System.out.println("\n--- EVALUANDO USO DE RUTA MÍNIMA ---");
             String resultado = reporteService.obtenerRutaMenosUtilizada();
             System.out.println("📊 " + resultado);
+        } catch (EmptyADTException | GenericADTException e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
+    private void mostrarMicroMasAsignado() {
+        try {
+            System.out.println("\n--- EVALUANDO MICRO MÁS ASIGNADO ---");
+            String resultado = reporteService.obtenerMicroMasAsignado();
+            System.out.println("📊 " + resultado);
+        } catch (EmptyADTException | GenericADTException e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
+
+    private void mostrarUtilizacionPromedio() {
+        try {
+            System.out.println("\n--- EVALUANDO UTILIZACIÓN PROMEDIO DE MICROS ---");
+            String resultado = reporteService.obtenerUtilizacionPromedioMicros();
+            System.out.println("📊 Resultados:\n" + resultado);
         } catch (EmptyADTException | GenericADTException e) {
             System.out.println("❌ " + e.getMessage());
         }

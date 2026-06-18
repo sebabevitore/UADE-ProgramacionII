@@ -2,21 +2,26 @@ package org.uade.service;
 
 import org.uade.Exception.EmptyADTException;
 import org.uade.Exception.GenericADTException;
+import org.uade.entity.Micro;
 import org.uade.entity.Ruta;
 import org.uade.entity.Terminal;
 import org.uade.entity.Viaje;
 import org.uade.structure.definition.GraphADT;
 import org.uade.structure.definition.LinkedListADT;
+import org.uade.structure.definition.PriorityQueueADT;
 import org.uade.structure.definition.SetADT;
 import org.uade.structure.definition.SimpleDictionaryADT;
 import org.uade.structure.implementation.dynamic.DynamicSimpleDictionaryADT;
+import org.uade.util.PriorityQueueADTUtil;
 import org.uade.util.SetADTUtil;
 
 public class ReporteService {
+    private final FlotaService flotaService;
     private final RutaService rutaService;
     private final ViajeService viajeService;
 
-    public ReporteService(RutaService rutaService, ViajeService viajeService) {
+    public ReporteService(FlotaService flotaService, RutaService rutaService, ViajeService viajeService) {
+        this.flotaService = flotaService;
         this.rutaService = rutaService;
         this.viajeService = viajeService;
     }
@@ -208,5 +213,106 @@ public class ReporteService {
         return "Ruta menos utilizada: " + menosUsadaStr + " (" + minUsos + " veces)";
     }
 
+    public String obtenerMicroMasAsignado() {
+        SimpleDictionaryADT<String, Micro> micros = flotaService.getMicros();
+        if (micros.isEmpty()) {
+            throw new EmptyADTException("No hay micros registrados.");
+        }
 
+        SetADT<String> patentes = SetADTUtil.copy(micros.getKeys());
+        Micro microMax = null;
+        int maxAsignaciones = -1;
+
+        while (!patentes.isEmpty()) {
+            String patente = patentes.choose();
+            patentes.remove(patente);
+            
+            Micro microActual = micros.get(patente);
+            int cantidad = microActual.getCantViajes();
+            
+            if (maxAsignaciones == -1 || cantidad > maxAsignaciones) {
+                maxAsignaciones = cantidad;
+                microMax = microActual;
+            }
+        }
+
+        if (microMax == null || maxAsignaciones == 0) {
+            return "Ningún micro tiene viajes asignados aún.";
+        }
+
+        return "Micro más asignado: " + microMax.getPatente() + " con " + maxAsignaciones + " viaje(s).";
+    }
+
+    public String obtenerUtilizacionPromedioMicros() {
+        PriorityQueueADT<Viaje> colaOriginal;
+        try {
+            colaOriginal = viajeService.getColaViajes();
+        } catch (EmptyADTException e) {
+            return "No hay viajes en la cola para calcular utilización.";
+        }
+
+        PriorityQueueADT<Viaje> colaCopia = PriorityQueueADTUtil.copy(colaOriginal);
+        
+        SimpleDictionaryADT<String, Integer> viajesPorMicro = new DynamicSimpleDictionaryADT<>();
+        int totalViajesEnCola = 0;
+
+        // Contar total de viajes en cola y cuántos pertenecen a cada patente
+        while (!colaCopia.isEmpty()) {
+            Viaje viaje = colaCopia.getElement();
+            totalViajesEnCola++;
+            
+            if (viaje.getMicroAsignado() != null) {
+                String patente = viaje.getMicroAsignado().getPatente();
+                
+                int count = 0;
+                if (!viajesPorMicro.isEmpty()) {
+                    SetADT<String> keys = viajesPorMicro.getKeys();
+                    if (keys != null && keys.exist(patente)) {
+                        count = viajesPorMicro.get(patente);
+                    }
+                }
+                viajesPorMicro.add(patente, count + 1);
+            }
+            colaCopia.remove();
+        }
+
+        if (totalViajesEnCola == 0) {
+            return "La cola de viajes está vacía.";
+        }
+
+        SimpleDictionaryADT<String, Micro> todosLosMicros;
+        try {
+            todosLosMicros = flotaService.getMicros();
+        } catch (EmptyADTException e) {
+            return "No hay micros registrados en la flota.";
+        }
+
+        return construirReporteUtilizacion(viajesPorMicro, totalViajesEnCola, todosLosMicros);
+    }
+
+    private String construirReporteUtilizacion(SimpleDictionaryADT<String, Integer> viajesPorMicro, int totalViajesEnCola, SimpleDictionaryADT<String, Micro> todosLosMicros) {
+        String resultado = "";
+        SetADT<String> patentes = SetADTUtil.copy(todosLosMicros.getKeys());
+        
+        while (!patentes.isEmpty()) {
+            String patente = patentes.choose();
+            patentes.remove(patente);
+            
+            int asignados = 0;
+            if (!viajesPorMicro.isEmpty()) {
+                SetADT<String> keys = viajesPorMicro.getKeys();
+                if (keys != null && keys.exist(patente)) {
+                    asignados = viajesPorMicro.get(patente);
+                }
+            }
+            
+            double porcentaje = (asignados / (double) totalViajesEnCola) * 100.0;
+            // Formatear a 2 decimales manualmente
+            porcentaje = Math.round(porcentaje * 100.0) / 100.0;
+            
+            resultado += "- Micro " + patente + ": " + porcentaje + "% de utilización en la cola\n";
+        }
+
+        return resultado;
+    }
 }
