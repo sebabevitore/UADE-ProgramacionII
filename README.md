@@ -1,6 +1,9 @@
-# UADE: Algoritmos Y Estructuras De Datos II - Trabajo Práctico Obligatorio
+# UADE: Algoritmos Y Estructuras De Datos II - Trabajo Práctico I
 
-**Sistema de Operaciones para Empresa de Transporte Terrestre**
+**Sistema de Operaciones para Empresa de Transporte**
+
+## 👥 
+* Bevitore Sebastian Ivan (LU: 1211500)
 
 ---
 
@@ -14,28 +17,35 @@ El desarrollo se realizó cumpliendo estrictamente con las normas de la cátedra
 
 ---
 
-## 🏗️ TDAs Utilizados y Justificación Arquitectónica
+## TDAs Utilizados 
 
-Para resolver los distintos requerimientos del dominio, se seleccionaron y adaptaron las siguientes estructuras de datos:
+Para resolver los distintos requerimientos del dominio, cada estructura se eligió basándose estrictamente en lo solicitado por el enunciado del Trabajo Práctico:
 
 ### 1. Grafo Dinámico Dirigido (`DynamicGraphADT`)
-* Modelado del mapa de Terminales (Vértices) y las Rutas/Conexiones entre ellas (Aristas con peso en Km).
+* **Uso:** Red de terminales y conexiones (rutas).
+* **Justificación:** El TP exige *"representar los terminales y sus posibles conexiones"* y *"determinar todas las rutas posibles [...] considerando un máximo de paradas"*. El grafo permite modelar esta red de vías y aplicar algoritmos de búsqueda para detectar terminales desconectadas.
 
-### 2. Diccionario Simple Dinámico (`DynamicSimpleDictionaryADT`)
-* 1. Catálogo de Micros y Terminales (Clave: Patente / Código, Valor: Objeto).
-* 2. Motor de Reportes Estadísticos (Mapas de Frecuencias).
+### 2. Diccionario Simple (`DynamicSimpleDictionaryADT`)
+* **Uso:** Catálogo de Micros y Terminales.
+* **Justificación:** La consigna solicita explícitamente *"utilizar una estructura que permita, dados los identificadores de los micros, identificar qué micros fueron asignados"* a partir de su *"identificador único (patente)"*. El Diccionario mapea Clave-Valor resolviendo este requerimiento de forma nativa y eficiente.
 
-### 3. Cola con Prioridad Dinámica (`DynamicPriorityQueueADT`)
-* Gestión de la cola de Viajes Pendientes de despacho.
+### 3. Cola con Prioridad (`DynamicPriorityQueueADT`)
+* **Uso:** Gestión de viajes pendientes.
+* **Justificación:** El requerimiento indica *"gestionar los viajes de los micros teniendo en cuenta la prioridad de los mismos"* y *"modificar la prioridad por cuestiones meteorológicas"*. Esta estructura garantiza que al despachar, siempre se atienda primero el viaje más urgente de forma automática.
 
-### 4. Conjunto Dinámico (`DynamicSetADT`)
-* Almacenamiento de Rutas Activas del sistema, control de nodos visitados en el Backtracking, y extracción de claves únicas de los diccionarios.
+### 4. Conjunto (`DynamicSetADT`)
+* **Uso:** Almacenamiento de rutas registradas y control de nodos.
+* **Justificación:** El enunciado establece como regla de negocio que *"no es posible tener rutas repetidas, es decir, el mismo origen-destino"*. El Conjunto, impide la existencia de elementos duplicados.
 
-### 5. Lista Enlazada Dinámica (`DynamicLinkedListADT`)
-* Historial de viajes despachados y almacenamiento de resultados de consultas (vecinos de un nodo, lista de rutas encontradas).
+### 5. Lista Enlazada (`DynamicLinkedListADT`)
+* **Uso:** Historial de despachos y recolección de datos.
+* **Justificación:** Necesaria para cumplir con *"Generar reportes detallados"* y *"Mostrar los micros con la mayor cantidad de asignaciones"*, agrupando y almacenando resultados de longitud dinámica para su posterior análisis.
 
-### 6. Cola Dinámica Pura (`DynamicQueueADT`)
-* Almacenamiento de las "Paradas Intermedias" de una Ruta.
+### 6. Cola Simple (`DynamicQueueADT`)
+* **Uso:** Paradas intermedias de una ruta.
+* **Justificación:** El enunciado pide planificar rutas y sus *"conexiones/paradas"*. La Cola respeta el orden cronológico estricto (FIFO) en el que el micro recorrerá geográficamente las ciudades.
 
-### 7. Pila Dinámica (`DynamicStackADT`)
-* Historial de "Cambios de Prioridad" (Auditoría) dentro de un Viaje.
+### 7. Pila (`DynamicStackADT`)
+* **Uso:** Historial de motivos en los cambios de prioridad.
+* **Justificación:** Como el TP exige *"modificar la prioridad de un viaje por cuestiones meteorológicas, de visibilidad, etc."*, la Pila permite guardar el historial de motivos (LIFO), manteniendo siempre el último cambio (el más reciente e importante) en la cima para su rápida consulta.
+
