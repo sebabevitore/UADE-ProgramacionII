@@ -1,4 +1,4 @@
-# UADE: Algoritmos Y Estructuras De Datos II - Trabajo Práctico I
+# UADE: Algoritmos Y Estructuras De Datos II - Trabajo Práctico Obligatorio
 
 **Sistema de Operaciones para Empresa de Transporte Terrestre**
 
