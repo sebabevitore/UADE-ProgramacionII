@@ -1,85 +1,41 @@
-# UADE: Algoritmos Y Estructuras De Datos II - Programación II
+# UADE: Algoritmos Y Estructuras De Datos II - Trabajo Práctico I
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+**Sistema de Operaciones para Empresa de Transporte Terrestre**
 
-Este repositorio contiene todo lo necesario para poder seguir la materia desde el inicio hasta el final.
+---
 
-## Tabla de contenidos
+## 📌 Descripción del Proyecto
+Este proyecto es un sistema de gestión integral para una empresa de transporte terrestre. Permite la planificación y búsqueda de rutas, la gestión de una flota de micros, la programación de viajes con sistema de prioridades variables, y un motor de reportes estadísticos avanzados.
 
-Los siguientes son los puntos más importantes en este archivo:
-- [Requisitos](#requisitos)
-- [Comprobar requisitos](#comprobar-requisitos)
-- [FAQ](#faq)
+El desarrollo se realizó cumpliendo estrictamente con las normas de la cátedra: 
+- **Ausencia total de colecciones nativas de Java** (`java.util.*`). Todo el sistema se apoya sobre Tipos de Datos Abstractos (TDA) propios construidos desde cero.
+- **Implementaciones Dinámicas y Genéricas:** Uso de nodos enlazados y clases parametrizadas (`<T>`, `<K,V>`) para optimizar el uso de memoria RAM y asegurar la escalabilidad.
+- **Manejo de Excepciones:** Creación de un paquete de excepciones personalizadas (`EmptyADTException`, `NotFoundException`, etc.) para controlar el flujo de errores de negocio.
 
-## Requisitos
+---
 
-Para poder realizar el curso necesitas tener instalado en tu computadora las siguientes herramientas:
-- [Java](http://jdk.java.net/)
-- [Git](https://git-scm.com/)
+## 🏗️ TDAs Utilizados y Justificación Arquitectónica
 
-Si no tienes algunas de estas herramientas instaladas en tu computadora, sigue las instrucciones en la documentación oficial de cada herramienta o los videos creados como guía para esta materia.
+Para resolver los distintos requerimientos del dominio, se seleccionaron y adaptaron las siguientes estructuras de datos:
 
-## Comprobar requisitos
+### 1. Grafo Dinámico Dirigido (`DynamicGraphADT`)
+* Modelado del mapa de Terminales (Vértices) y las Rutas/Conexiones entre ellas (Aristas con peso en Km).
 
-Si instalaste en tu computadora algunas de estas herramientas anteriormente o lo acabas de hacer ahora, verifica si todo funciona bien.
+### 2. Diccionario Simple Dinámico (`DynamicSimpleDictionaryADT`)
+* 1. Catálogo de Micros y Terminales (Clave: Patente / Código, Valor: Objeto).
+* 2. Motor de Reportes Estadísticos (Mapas de Frecuencias).
 
-- Comprueba si la versión de Java está correctamente instalada usando el siguiente comando:
-   ````
-   % java -version
-   openjdk 21.0.2 2024-01-16
-   OpenJDK Runtime Environment GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30)
-   OpenJDK 64-Bit Server VM GraalVM CE 21.0.2+13.1 (build 21.0.2+13-jvmci-23.1-b30, mixed mode, sharing)
-   ````
+### 3. Cola con Prioridad Dinámica (`DynamicPriorityQueueADT`)
+* Gestión de la cola de Viajes Pendientes de despacho.
 
-- Comprueba si tienes instalado de manera correcta en tu computadora Git usando el siguiente comando:
-   ````
-   % git --version
-   git version 2.34.1
-   ````
+### 4. Conjunto Dinámico (`DynamicSetADT`)
+* Almacenamiento de Rutas Activas del sistema, control de nodos visitados en el Backtracking, y extracción de claves únicas de los diccionarios.
 
-## Estándares de código
+### 5. Lista Enlazada Dinámica (`DynamicLinkedListADT`)
+* Historial de viajes despachados y almacenamiento de resultados de consultas (vecinos de un nodo, lista de rutas encontradas).
 
-Java tiene una serie de reglas definidas para desarrollar algo, ya sea una aplicación o una librería, y que todos los desarrolladores usen los mismos criterios. Existen las siguientes formas de validar si se está siguiendo el formato correcto: 
+### 6. Cola Dinámica Pura (`DynamicQueueADT`)
+* Almacenamiento de las "Paradas Intermedias" de una Ruta.
 
-- **Code conventions**: Este [documento](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf) que fue creado en 1997 con el fin de definir los estándares de código que debería seguir cualquier desarrollador que usa Java.
-
-- **SonarLint**: Es un plugin que nos ayuda al código fuente, siga los estándares de Java y reducir los bugs que podrían generarse. Esta herramienta tiene soporte para casi todos los IDE existentes, dentro de los más conocidos tiene soporte en:
-    - [IntelliJ](https://plugins.jetbrains.com/plugin/7973-sonarlint)
-    - [Eclipse](https://marketplace.eclipse.org/content/sonarqube-ide)
-    - [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode)
-
-## Estructura del proyecto
-
-El proyecto que se usara a lo largo de la cursada tiene estructura similar a la siguiente:
-
-````
-src/
-  └── main
-      └── java
-          └── org
-              └── uade
-                  ├── algorithm
-                  ├── exception
-                  ├── structure
-                  │   ├── definition
-                  │   └── implementation
-                  │       ├── dynamic
-                  │       │   └── extras
-                  │       └── fixed
-                  └── util
-````
-
-Como se puede ver en la estructura existen una serie de paquetes donde cada uno tiene una funcionalidad en particular. En la siguiente tabla se detalla cada uno de los paquetes como asi tambien si deben o no tener prefijos los archivos en su interior:
-
-| **Paquete**                  | **Descripción**                                                             |
-|------------------------------|-----------------------------------------------------------------------------|
-| `algorithm`                  | Contiene la implementación de algoritmos que utilizan los TDA.              |
-| `exception`                  | Define las excepciones personalizadas usadas en el proyecto.                |
-| `structure`                  | Paquete general que agrupa las estructuras de datos.                        |
-| `structure.definition`       | Contiene las interfaces o definiciones de los TDA.                          |
-| `structure.implementation`   | Implementaciones concretas de los TDA.                                      |
-| `structure.implementation.dynamic` | Implementaciones de estructuras de datos dinámicas (ej.: listas enlazadas). |
-| `structure.implementation.dynamic.extras` | Componentes auxiliares o complementarios para las estructuras dinámicas.    |
-| `structure.implementation.fixed`   | Implementaciones de estructuras de datos de tamaño fijo (ej.: arrays).      |
-| `util`                       | Clases utilitarias y funciones auxiliares usadas en todo el proyecto.       |
-
+### 7. Pila Dinámica (`DynamicStackADT`)
+* Historial de "Cambios de Prioridad" (Auditoría) dentro de un Viaje.
