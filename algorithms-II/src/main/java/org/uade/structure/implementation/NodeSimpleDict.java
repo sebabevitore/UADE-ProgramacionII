@@ -5,7 +5,7 @@ public class NodeSimpleDict {
     private int key;
     private NodeSimpleDict next;
 
-    public NodeSimpleDict(int value, int key) {
+    public NodeSimpleDict(int key, int value) {
         this.value = value;
         this.key = key;
     }
